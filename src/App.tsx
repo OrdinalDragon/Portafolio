@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, 
   Backpack, 
@@ -19,37 +19,71 @@ import {
   Layers,
   Code2,
   Coffee,
+  Linkedin,
+  Github,
   ChevronRight,
   CheckCircle2,
   School,
   BookMarked,
   X,
-  ExternalLink
+  ExternalLink,
+  Hammer,
+  FileText
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 // --- Types ---
-type Screen = 'personaje' | 'habilidades' | 'misiones' | 'historia' | 'bestiario' | 'contacto';
+type Screen = 'personaje' | 'habilidades' | 'misiones' | 'historia' | 'bestiario' | 'contacto' | 'proyectos' | 'estadisticas';
 
 // --- Components ---
 
 const Sidebar = ({ activeScreen, setScreen }: { activeScreen: Screen, setScreen: (s: Screen) => void }) => {
+  const [showDragon, setShowDragon] = useState(false);
+  const profileImg = "https://lh3.googleusercontent.com/aida/ADBb0ujoxFR9nWzFBZIpsZyAk9g9ceCgacFrRgml8IujafVhJAcjR4yMqohH3oBeXSXkfM68UJUmM2CiIhtwVuIyAk6vS8GBu5m-Pi_mM5mYkweZ8rsTClt9KmktGA0OtfR0ExT3LawmIW4BuYYNESDlGlly0cfF-gGWM_Wb45Ni7o0S0UfrzKwNLWFY5LbCO44JsMOBZx-x0VNgzgX1sm2vTV6llJuPMe81cGtI8S1PFCSr_UUmhbj7t42KIUGcctJAdx0nWSXI_8Xr_Q";
+  const dragonImg = "/dragon.png";
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowDragon(prev => !prev);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   const navItems = [
     { id: 'personaje', label: 'Personaje', icon: User },
     { id: 'habilidades', label: 'Árbol de Habilidades', icon: Layers },
     { id: 'misiones', label: 'Registro de Misiones', icon: Swords },
     { id: 'historia', label: 'Historia', icon: History },
     { id: 'bestiario', label: 'Bestiario', icon: BookOpen },
+    { id: 'proyectos', label: 'Forja de Artefactos', icon: Hammer },
   ];
 
   return (
     <aside className="fixed left-0 top-20 h-[calc(100vh-5rem)] w-64 bg-surface-container-lowest border-r border-outline-variant/15 flex flex-col pt-8 hidden lg:flex z-40">
       <div className="px-6 mb-10 flex flex-col items-center">
-        <img 
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY5XkjYWDVUkzC8Pskg90qEpV6f93MhT1E01_G2UeVr-fscs_VtBt2jxRyOAB89S98AWU6D-qkU4aud_eLfVCmE6gYVZ-CClDuRJQWsdMLxuCtg2Z2QZCyrsCGVnoOi9s6h8h9vznKndfGhSA6QG-PhIVS2QuNZOKM0rFQ37iV-ZrgU0o46z9SHL9_2bMbwz8RGlLekJZPuYR0SqinPHlRzu4zcPa1DRySzxqGkcHZcyi6thlh8P0Bv0I0_Yx9NEHkc521GC2nCGI" 
-          alt="Avatar" 
-          className="w-20 h-20 rounded-full border-2 border-primary-container shadow-lg mb-4 object-cover"
-        />
+        <div className="w-20 h-20 rounded-full border-2 border-primary-container shadow-lg mb-4 overflow-hidden relative bg-surface-container-highest">
+          <motion.img 
+            src={profileImg} 
+            animate={{ opacity: showDragon ? 0 : 1 }}
+            transition={{ duration: 0.8 }}
+            alt="Profile" 
+            className="w-full h-full object-cover absolute inset-0"
+            referrerPolicy="no-referrer"
+          />
+          <motion.img 
+            src={dragonImg} 
+            animate={{ opacity: showDragon ? 1 : 0 }}
+            transition={{ duration: 0.8 }}
+            alt="Dragon" 
+            className="w-full h-full object-cover absolute inset-0"
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+            }}
+          />
+        </div>
+        <p className="font-label text-primary text-[10px] uppercase tracking-widest mb-1">Nicolas Schernetzki</p>
         <h3 className="font-headline text-on-surface font-bold text-lg">FullStack Hero</h3>
         <p className="font-label text-on-surface-variant text-xs uppercase tracking-widest">Level 30 Architect</p>
       </div>
@@ -71,7 +105,14 @@ const Sidebar = ({ activeScreen, setScreen }: { activeScreen: Screen, setScreen:
         ))}
       </nav>
 
-      <div className="p-6 border-t border-outline-variant/10">
+      <div className="p-6 border-t border-outline-variant/10 space-y-3">
+        <button 
+          onClick={() => setScreen('estadisticas')}
+          className="w-full py-3 border border-primary/40 text-primary font-bold text-xs tracking-widest uppercase rounded-sm hover:bg-primary/5 transition-all cursor-pointer flex items-center justify-center gap-2"
+        >
+          <FileText size={16} />
+          Hoja de Estadísticas
+        </button>
         <button 
           onClick={() => setScreen('contacto')}
           className="w-full py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-xs tracking-widest uppercase rounded-sm hover:shadow-[0_0_15px_rgba(255,145,0,0.4)] transition-all cursor-pointer"
@@ -87,11 +128,11 @@ const TopNav = ({ activeScreen, setScreen }: { activeScreen: Screen, setScreen: 
   return (
     <nav className="fixed top-0 w-full flex justify-between items-center px-8 h-20 bg-surface-container-lowest z-50 border-b border-outline-variant/15 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.7)]">
       <div className="font-headline font-black text-primary-container drop-shadow-[0_2px_4px_rgba(255,145,0,0.5)] text-2xl tracking-tighter cursor-pointer" onClick={() => setScreen('personaje')}>
-        DRAGON_STACK
+        ORDINAL DRAGON_STACK
       </div>
       
       <div className="hidden md:flex items-center gap-8 font-headline uppercase tracking-widest text-sm">
-        {(['personaje', 'habilidades', 'misiones', 'historia', 'bestiario'] as Screen[]).map((s) => (
+        {(['personaje', 'habilidades', 'misiones', 'historia', 'bestiario', 'proyectos'] as Screen[]).map((s) => (
           <button
             key={s}
             onClick={() => setScreen(s)}
@@ -101,15 +142,31 @@ const TopNav = ({ activeScreen, setScreen }: { activeScreen: Screen, setScreen: 
                 : 'text-on-surface opacity-70 hover:text-primary'
             }`}
           >
-            {s === 'personaje' ? 'Inicio' : s.charAt(0).toUpperCase() + s.slice(1)}
+            {s === 'personaje' ? 'Inicio' : s === 'proyectos' ? 'Proyectos' : s.charAt(0).toUpperCase() + s.slice(1)}
           </button>
         ))}
       </div>
 
-      <div className="flex items-center gap-4">
-        <Flame className="text-primary cursor-pointer hover:scale-110 transition-transform" size={24} />
-        <Zap className="text-primary cursor-pointer hover:scale-110 transition-transform" size={24} />
-        <div className="w-10 h-10 rounded-sm border-2 border-outline-variant overflow-hidden">
+      <div className="flex items-center gap-6">
+        <a 
+          href="https://www.linkedin.com/in/nicolas-schernetzki-518b28212/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-on-surface/60 hover:text-primary transition-all hover:scale-110"
+          title="LinkedIn Profile"
+        >
+          <Linkedin size={22} />
+        </a>
+        <a 
+          href="https://github.com/OrdinalDragon" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-on-surface/60 hover:text-primary transition-all hover:scale-110"
+          title="GitHub Forge"
+        >
+          <Github size={22} />
+        </a>
+        <div className="w-10 h-10 rounded-sm border-2 border-outline-variant overflow-hidden ml-2">
           <img 
             src="https://lh3.googleusercontent.com/aida/ADBb0ujoxFR9nWzFBZIpsZyAk9g9ceCgacFrRgml8IujafVhJAcjR4yMqohH3oBeXSXkfM68UJUmM2CiIhtwVuIyAk6vS8GBu5m-Pi_mM5mYkweZ8rsTClt9KmktGA0OtfR0ExT3LawmIW4BuYYNESDlGlly0cfF-gGWM_Wb45Ni7o0S0UfrzKwNLWFY5LbCO44JsMOBZx-x0VNgzgX1sm2vTV6llJuPMe81cGtI8S1PFCSr_UUmhbj7t42KIUGcctJAdx0nWSXI_8Xr_Q" 
             alt="User" 
@@ -123,18 +180,18 @@ const TopNav = ({ activeScreen, setScreen }: { activeScreen: Screen, setScreen: 
 
 const Bestiario = () => {
   const skills = [
-    { name: 'React', class: 'UI_WEAVER', icon: Layers, desc: '"Sus hilos invisibles mantienen el estado de la materia en un flujo constante de reconciliación divina."', mastery: 95, rank: 'MASTER' },
-    { name: 'Next.js', class: 'GATE_MASTER', icon: Globe, desc: '"Abre caminos instantáneos entre el servidor y el cliente, eliminando las esperas con la magia del renderizado estático."', mastery: 90, rank: 'EXPERT' },
-    { name: 'JavaScript', class: 'DOM_SORCERER', icon: Wand2, desc: '"La lengua vernácula de la red. Sus conjuros asíncronos dan vida a la arquitectura inanimada."', mastery: 98, rank: 'ARCHMAGE' },
-    { name: 'TypeScript', class: 'TYPE_SENTINEL', icon: Shield, desc: '"Impone el orden sagrado sobre el caos del lenguaje, previniendo desastres antes de que ocurran."', mastery: 92, rank: 'EXPERT' },
-    { name: 'C# / .NET', class: 'FORGE_ENG', icon: Cpu, desc: '"Robusto y metódico, construye las catedrales de lógica corporativa sobre las que descansa el imperio digital."', mastery: 85, rank: 'VETERAN' },
-    { name: 'Python', class: 'SERPENT_TAMER', icon: Terminal, desc: '"Susurrador de datos. Su elegancia esconde la fuerza necesaria para procesar océanos de información con una sola orden."', mastery: 88, rank: 'ELITE' },
-    { name: 'Java', class: 'COFFEE_MAGE', icon: Coffee, desc: '"Escribe una vez, conjura en cualquier lugar. Un pilar antiguo de la magia de sistemas."', mastery: 82, rank: 'VETERAN' },
-    { name: 'Tailwind CSS', class: 'STYLE_SMITH', icon: Wand2, desc: '"Teje armaduras visuales con hilos de utilidad, creando interfaces hermosas a la velocidad del pensamiento."', mastery: 95, rank: 'MASTER' },
-    { name: 'C++', class: 'SYS_SMITH', icon: Settings, desc: '"Forja la propia armadura del hardware. Solo los valientes se atreven a gestionar manualmente el alma de su memoria."', mastery: 80, rank: 'KNIGHT' },
-    { name: 'MongoDB', class: 'DOC_GUARDIAN', icon: Database, desc: '"Protector de lo desestructurado. Almacena pergaminos infinitos de JSON en las bóvedas sin esquemas del olvido."', mastery: 92, rank: 'EXPERT' },
-    { name: 'MySQL', class: 'REL_LORD', icon: Database, desc: '"Mantiene el orden sagrado de las tablas. Sus claves foráneas son los contratos que unen el mundo conocido."', mastery: 94, rank: 'EXPERT' },
-    { name: 'Git / GitHub', class: 'TIME_WEAVER', icon: History, desc: '"Controla las líneas temporales del código, permitiendo viajar al pasado y fusionar realidades alternativas."', mastery: 90, rank: 'EXPERT' },
+    { name: 'React', class: 'UI_WEAVER', icon: Layers, desc: '"Sus hilos invisibles mantienen el estado de la materia en un flujo constante de reconciliación divina."', mastery: 70, rank: 'VETERAN' },
+    { name: 'Next.js', class: 'GATE_MASTER', icon: Globe, desc: '"Abre caminos instantáneos entre el servidor y el cliente, eliminando las esperas con la magia del renderizado estático."', mastery: 60, rank: 'KNIGHT' },
+    { name: 'JavaScript', class: 'DOM_SORCERER', icon: Wand2, desc: '"La lengua vernácula de la red. Sus conjuros asíncronos dan vida a la arquitectura inanimada."', mastery: 80, rank: 'EXPERT' },
+    { name: 'TypeScript', class: 'TYPE_SENTINEL', icon: Shield, desc: '"Impone el orden sagrado sobre el caos del lenguaje, previniendo desastres antes de que ocurran."', mastery: 70, rank: 'VETERAN' },
+    { name: 'C# / .NET', class: 'FORGE_ENG', icon: Cpu, desc: '"Robusto y metódico, construye las catedrales de lógica corporativa sobre las que descansa el imperio digital."', mastery: 75, rank: 'ELITE' },
+    { name: 'Python', class: 'SERPENT_TAMER', icon: Terminal, desc: '"Susurrador de datos. Su elegancia esconde la fuerza necesaria para procesar océanos de información con una sola orden."', mastery: 55, rank: 'KNIGHT' },
+    { name: 'Java', class: 'COFFEE_MAGE', icon: Coffee, desc: '"Escribe una vez, conjura en cualquier lugar. Un pilar antiguo de la magia de sistemas."', mastery: 50, rank: 'INITIATE' },
+    { name: 'Tailwind CSS', class: 'STYLE_SMITH', icon: Wand2, desc: '"Teje armaduras visuales con hilos de utilidad, creando interfaces hermosas a la velocidad del pensamiento."', mastery: 50, rank: 'INITIATE' },
+    { name: 'C++', class: 'SYS_SMITH', icon: Settings, desc: '"Forja la propia armadura del hardware. Solo los valientes se atreven a gestionar manualmente el alma de su memoria."', mastery: 70, rank: 'VETERAN' },
+    { name: 'MongoDB', class: 'DOC_GUARDIAN', icon: Database, desc: '"Protector de lo desestructurado. Almacena pergaminos infinitos de JSON en las bóvedas sin esquemas del olvido."', mastery: 65, rank: 'VETERAN' },
+    { name: 'MySQL', class: 'REL_LORD', icon: Database, desc: '"Mantiene el orden sagrado de las tablas. Sus claves foráneas son los contratos que unen el mundo conocido."', mastery: 65, rank: 'VETERAN' },
+    { name: 'Git / GitHub', class: 'TIME_WEAVER', icon: History, desc: '"Controla las líneas temporales del código, permitiendo viajar al pasado y fusionar realidades alternativas."', mastery: 80, rank: 'EXPERT' },
   ];
 
   return (
@@ -656,7 +713,7 @@ const Habilidades = () => {
   );
 };
 
-const Personaje = () => {
+const Personaje = ({ onStart }: { onStart: () => void }) => {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 dragon-texture min-h-screen flex flex-col items-center justify-center text-center">
       <div className="max-w-4xl w-full">
@@ -675,7 +732,7 @@ const Personaje = () => {
             </div>
             <div className="flex-1">
               <h3 className="font-headline text-2xl text-on-surface mb-1 uppercase tracking-wider">NICOLÁS SCHERNETZKI</h3>
-              <p className="font-label text-secondary text-xs uppercase tracking-widest mb-4">Maestro de los Reinos React</p>
+              <p className="font-label text-secondary text-xs uppercase tracking-widest mb-4">Maestro de los Reinos Fullstack</p>
               <div className="space-y-1">
                 <div className="flex justify-between font-mono text-[10px] text-on-surface-variant">
                   <span>EXPERIENCIA</span>
@@ -694,10 +751,10 @@ const Personaje = () => {
                 <span className="font-mono text-xs text-on-surface-variant uppercase flex items-center gap-2">
                   <Flame size={14} className="text-primary" /> VITALIDAD
                 </span>
-                <span className="font-mono text-sm text-primary">750 / 1000</span>
+                <span className="font-mono text-sm text-primary">1000 / 1000</span>
               </div>
               <div className="h-4 bg-surface-container-highest border border-outline-variant/15 p-0.5">
-                <div className="h-full bg-gradient-to-r from-primary to-primary-container" style={{ width: '75%' }}></div>
+                <div className="h-full bg-gradient-to-r from-primary to-primary-container" style={{ width: '100%' }}></div>
               </div>
             </div>
             <div className="space-y-2">
@@ -716,22 +773,26 @@ const Personaje = () => {
           <div className="mt-8 flex justify-between gap-4">
             <div className="text-center p-3 bg-surface-container-low border border-outline-variant/10 flex-1">
               <p className="font-label text-[10px] text-on-surface-variant uppercase mb-1">Fuerza</p>
-              <p className="font-headline text-lg text-primary">18</p>
+              <p className="font-headline text-lg text-primary">22</p>
             </div>
             <div className="text-center p-3 bg-surface-container-low border border-outline-variant/10 flex-1">
               <p className="font-label text-[10px] text-on-surface-variant uppercase mb-1">Agilidad</p>
-              <p className="font-headline text-lg text-primary">14</p>
+              <p className="font-headline text-lg text-primary">20</p>
             </div>
             <div className="text-center p-3 bg-surface-container-low border border-outline-variant/10 flex-1">
               <p className="font-label text-[10px] text-on-surface-variant uppercase mb-1">Intelecto</p>
-              <p className="font-headline text-lg text-primary">25</p>
+              <p className="font-headline text-lg text-primary">32</p>
             </div>
           </div>
         </div>
 
         <div className="mt-16">
-          <button className="px-12 py-5 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline text-xl font-bold tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,145,0,0.4)] cursor-pointer">
-            COMENZAR AVENTURA
+          <button 
+            onClick={onStart}
+            className="px-12 py-5 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline text-xl font-bold tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,145,0,0.4)] cursor-pointer relative overflow-hidden group"
+          >
+            <span className="relative z-10">COMENZAR AVENTURA</span>
+            <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 skew-x-[-20deg]"></div>
           </button>
         </div>
       </div>
@@ -862,15 +923,235 @@ const Contacto = () => {
   );
 };
 
+const Proyectos = () => {
+  return (
+    <div className="max-w-6xl mx-auto py-12">
+      <header className="mb-16 text-center">
+        <h2 className="font-headline text-5xl font-black text-primary italic uppercase tracking-widest mb-4">La Forja de Artefactos</h2>
+        <div className="h-1 w-32 bg-primary mx-auto mb-6"></div>
+        <p className="font-body text-on-surface-variant max-w-2xl mx-auto text-lg leading-relaxed">
+          Aquí es donde los fragmentos de código se funden con la creatividad para dar vida a herramientas legendarias.
+        </p>
+      </header>
+
+      <div className="relative bg-surface-container-lowest border-2 border-dashed border-primary/30 p-12 md:p-20 flex flex-col items-center justify-center text-center overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute -top-10 -left-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
+        
+        <motion.div 
+          animate={{ 
+            rotate: [0, 10, -10, 0],
+            scale: [1, 1.05, 1]
+          }}
+          transition={{ 
+            duration: 4, 
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="mb-8 text-primary/40"
+        >
+          <Hammer size={120} strokeWidth={1} />
+        </motion.div>
+
+        <h3 className="font-headline text-3xl font-bold text-on-surface mb-4 uppercase tracking-widest">Forja en Mantenimiento</h3>
+        
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-2 h-2 rounded-full bg-primary animate-ping"></div>
+          <p className="font-label text-primary text-sm uppercase tracking-widest">Martillos golpeando el yunque...</p>
+        </div>
+
+        <p className="font-body text-on-surface-variant max-w-md mb-10 leading-relaxed italic">
+          "Los enanos del código están transcribiendo las runas de nuevos proyectos. Vuelve cuando el fuego de la creación haya templado el acero digital."
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl">
+          {[
+            { label: 'Planos de Diseño', status: 'En Pergamino' },
+            { label: 'Estructura de Datos', status: 'Fundiendo' },
+            { label: 'Magia de Interfaz', status: 'Encantando' }
+          ].map((item, i) => (
+            <div key={i} className="bg-surface-container-highest/50 p-4 border border-outline-variant/10 rounded-sm">
+              <p className="font-label text-[10px] text-on-surface-variant uppercase mb-1">{item.label}</p>
+              <p className="font-headline text-primary font-bold text-sm uppercase">{item.status}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Estadisticas = () => {
+  return (
+    <div className="max-w-4xl mx-auto py-12">
+      <header className="mb-12 text-center">
+        <h2 className="font-headline text-5xl font-black text-primary italic uppercase tracking-widest mb-4">Hoja de Estadísticas</h2>
+        <p className="font-label text-on-surface-variant text-xs uppercase tracking-[0.3em]">Resumen de Atributos y Experiencia</p>
+      </header>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Left Column: Core Stats */}
+        <div className="md:col-span-1 space-y-6">
+          <div className="bg-surface-container-lowest border border-outline-variant/20 p-6 rounded-sm shadow-lg">
+            <h3 className="font-headline text-primary font-bold uppercase text-sm mb-6 border-b border-primary/20 pb-2">Atributos Base</h3>
+            <div className="space-y-4">
+              {[
+                { label: 'Fuerza (Backend)', val: 88, color: 'bg-red-500' },
+                { label: 'Agilidad (Frontend)', val: 82, color: 'bg-blue-500' },
+                { label: 'Inteligencia (Lógica/POO)', val: 85, color: 'bg-purple-500' },
+                { label: 'Carisma (Ventas/Soft Skills)', val: 92, color: 'bg-yellow-500' },
+                { label: 'Destreza (Herramientas/Git)', val: 80, color: 'bg-green-500' }
+              ].map((stat, i) => (
+                <div key={i}>
+                  <div className="flex justify-between text-[10px] uppercase font-label mb-1">
+                    <span className="text-on-surface-variant">{stat.label}</span>
+                    <span className="text-primary font-bold">{stat.val}</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${stat.val}%` }}
+                      transition={{ duration: 1, delay: i * 0.1 }}
+                      className={`h-full ${stat.color}`}
+                    ></motion.div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-surface-container-lowest border border-outline-variant/20 p-6 rounded-sm shadow-lg">
+            <h3 className="font-headline text-primary font-bold uppercase text-sm mb-4 border-b border-primary/20 pb-2">Idiomas</h3>
+            <div className="space-y-2 font-body text-sm">
+              <div className="flex justify-between">
+                <span className="text-on-surface">Español</span>
+                <span className="text-primary italic">Nativo</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-on-surface">Inglés</span>
+                <span className="text-primary italic">C1+ Advanced</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-surface-container-lowest border border-outline-variant/20 p-6 rounded-sm shadow-lg">
+            <h3 className="font-headline text-primary font-bold uppercase text-sm mb-4 border-b border-primary/20 pb-2">Pergaminos de Poder</h3>
+            <div className="space-y-3 font-body text-[11px] text-on-surface-variant leading-tight">
+              <p>• Diplomatura Programación .NET (UTN.BA)</p>
+              <p>• Fundamentos de Programación (UTN.BA)</p>
+              <p>• Front-End (Ticmas / Arg. Programa)</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Experience & Education */}
+        <div className="md:col-span-2 space-y-8">
+          <div className="bg-surface-container-lowest border border-outline-variant/20 p-8 rounded-sm shadow-lg relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10">
+              <FileText size={80} />
+            </div>
+            
+            <h3 className="font-headline text-primary font-bold uppercase text-xl mb-8 flex items-center gap-3">
+              <History size={24} />
+              Crónicas de Experiencia
+            </h3>
+
+            <div className="space-y-8 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-0.5 before:bg-primary/20">
+              {[
+                { 
+                  title: 'Comerciante Errante (Viajante Vendedor)', 
+                  place: 'Múltiples Empresas de Materiales Eléctricos', 
+                  date: '2016 - Actualidad',
+                  desc: 'Automatización de campañas de mailing (100-500 contactos), creación de catálogos y gestión de cartera de más de 100 clientes con crecimiento del 25%.'
+                },
+                { 
+                  title: 'Forjador de Artefactos Digitales', 
+                  place: 'Proyectos Web Personales', 
+                  date: '2024 - Actualidad',
+                  desc: 'Desarrollo de aplicaciones full-stack utilizando JavaScript, HTML, CSS e integraciones back-end robustas.'
+                }
+              ].map((exp, i) => (
+                <div key={i} className="pl-10 relative">
+                  <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-background border-2 border-primary flex items-center justify-center z-10">
+                    <div className="w-2 h-2 rounded-full bg-primary"></div>
+                  </div>
+                  <h4 className="font-headline text-on-surface font-bold text-lg uppercase tracking-tight">{exp.title}</h4>
+                  <p className="font-label text-primary text-[10px] uppercase tracking-widest mb-2">{exp.place} | {exp.date}</p>
+                  <p className="font-body text-sm text-on-surface-variant leading-relaxed">{exp.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-surface-container-lowest border border-outline-variant/20 p-8 rounded-sm shadow-lg">
+            <h3 className="font-headline text-primary font-bold uppercase text-xl mb-8 flex items-center gap-3">
+              <School size={24} />
+              Academias de Magia
+            </h3>
+            <div className="space-y-6">
+              <div>
+                <h4 className="font-headline text-on-surface font-bold text-lg uppercase tracking-tight">Programación Full-Stack</h4>
+                <p className="font-label text-primary text-[10px] uppercase tracking-widest">Fundación Pescar / Desarrollar / Banco Nación | 2026 - Actualidad</p>
+                <p className="font-body text-xs text-on-surface-variant mt-1">Más de 345 hs de formación y 4+ proyectos grupales.</p>
+              </div>
+              <div className="pt-4 border-t border-outline-variant/10">
+                <h4 className="font-headline text-on-surface font-bold text-lg uppercase tracking-tight">Experto Universitario en Programación .NET</h4>
+                <p className="font-label text-primary text-[10px] uppercase tracking-widest">UTN.BA | 2023 - 2024</p>
+                <p className="font-body text-xs text-on-surface-variant mt-1">Orientación en C# y principios de POO.</p>
+              </div>
+              <div className="pt-4 border-t border-outline-variant/10">
+                <a 
+                  href="/CV.pdf" 
+                  download="CV_Nicolas_Schernetzki.pdf"
+                  className="group flex flex-col gap-1 text-primary hover:text-primary-container transition-colors cursor-pointer"
+                >
+                  <div className="flex items-center gap-2 font-label text-xs uppercase tracking-widest">
+                    <ExternalLink size={14} />
+                    Descargar Pergamino Completo (PDF)
+                  </div>
+                  <p className="font-body text-[10px] text-on-surface-variant italic group-hover:text-primary-container transition-colors">Curriculum vitae</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // --- Main App ---
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('personaje');
+  const [questAlert, setQuestAlert] = useState<string | null>(null);
+  const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | null>(null);
+
+  const startAdventure = () => {
+    setQuestAlert("¡MISIÓN INICIADA: EXPLORAR EL PORTAFOLIO!");
+    setScreen('habilidades');
+    setTimeout(() => setQuestAlert(null), 4000);
+  };
 
   return (
-    <div className="min-h-screen bg-background text-on-surface selection:bg-primary-container selection:text-on-primary">
+    <div className="min-h-screen bg-background text-on-surface selection:bg-primary-container selection:text-on-primary overflow-x-hidden">
       <TopNav activeScreen={screen} setScreen={setScreen} />
       
+      <AnimatePresence>
+        {questAlert && (
+          <motion.div 
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 20, opacity: 1 }}
+            exit={{ y: -100, opacity: 0 }}
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-[100] bg-primary text-on-primary px-6 py-3 font-headline font-bold tracking-[0.2em] shadow-[0_0_30px_rgba(255,145,0,0.6)] border-2 border-on-primary/20 flex items-center gap-3"
+          >
+            <Swords size={20} className="animate-pulse" />
+            {questAlert}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="flex pt-20">
         <Sidebar activeScreen={screen} setScreen={setScreen} />
         
@@ -883,11 +1164,13 @@ export default function App() {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              {screen === 'personaje' && <Personaje />}
+              {screen === 'personaje' && <Personaje onStart={startAdventure} />}
               {screen === 'habilidades' && <Habilidades />}
               {screen === 'misiones' && <Misiones />}
               {screen === 'historia' && <Historia />}
               {screen === 'bestiario' && <Bestiario />}
+              {screen === 'proyectos' && <Proyectos />}
+              {screen === 'estadisticas' && <Estadisticas />}
               {screen === 'contacto' && <Contacto />}
             </motion.div>
           </AnimatePresence>
@@ -916,20 +1199,121 @@ export default function App() {
           <BookOpen size={20} />
           <span className="text-[10px] uppercase font-label">Bestias</span>
         </button>
+        <button onClick={() => setScreen('proyectos')} className={`flex flex-col items-center gap-1 cursor-pointer ${screen === 'proyectos' ? 'text-primary' : 'text-on-surface/40'}`}>
+          <Hammer size={20} />
+          <span className="text-[10px] uppercase font-label">Forja</span>
+        </button>
       </nav>
 
       <footer className="w-full py-8 px-12 flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest border-t border-outline-variant/15 font-body text-xs tracking-tighter mt-20">
         <div className="text-primary-container font-bold mb-4 md:mb-0">
-          DRAGON_STACK
+          ORDINAL DRAGON_STACK
         </div>
         <div className="text-on-surface/40 text-center mb-4 md:mb-0">
           © 2026 The Obsidian Relic. Forged in Code.
         </div>
         <div className="flex gap-6">
-          <a className="text-on-surface/40 hover:text-primary transition-colors" href="#">Privacy Scroll</a>
-          <a className="text-on-surface/40 hover:text-primary transition-colors" href="#">Terms of Service</a>
+          <button 
+            onClick={() => setActiveModal('privacy')}
+            className="text-on-surface/40 hover:text-primary transition-colors cursor-pointer"
+          >
+            Privacy Scroll
+          </button>
+          <button 
+            onClick={() => setActiveModal('terms')}
+            className="text-on-surface/40 hover:text-primary transition-colors cursor-pointer"
+          >
+            Terms of Service
+          </button>
         </div>
       </footer>
+
+      {/* RPG Themed Modals */}
+      <AnimatePresence>
+        {activeModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
+            onClick={() => setActiveModal(null)}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-surface-container-lowest border-2 border-primary p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-[0_0_50px_rgba(255,145,0,0.3)] relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setActiveModal(null)}
+                className="absolute top-4 right-4 text-on-surface/40 hover:text-primary cursor-pointer"
+              >
+                <X size={24} />
+              </button>
+
+              {activeModal === 'privacy' ? (
+                <div className="space-y-6">
+                  <header className="border-b border-primary/20 pb-4">
+                    <h2 className="font-headline text-3xl font-bold text-primary italic uppercase tracking-widest">El Pergamino de Privacidad</h2>
+                    <p className="font-label text-[10px] text-on-surface-variant uppercase mt-2">Sellado por el Guardián del Código</p>
+                  </header>
+                  <div className="font-body text-sm text-on-surface-variant leading-relaxed space-y-4">
+                    <p>
+                      En los Reinos de Ordinal Dragon Stack, la protección de tu esencia digital es nuestra ley suprema. No recolectamos almas, solo datos mínimos para forjar una mejor experiencia.
+                    </p>
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-on-surface uppercase text-xs">I. Recolección de Esencia</h4>
+                      <p>Solo almacenamos los fragmentos de información que tú decides compartir voluntariamente a través de nuestros portales de contacto.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-on-surface uppercase text-xs">II. El Velo de Seguridad</h4>
+                      <p>Tus datos están protegidos por hechizos de cifrado de alto nivel. Ninguna entidad maliciosa o dragón oscuro tendrá acceso a tu información sin tu consentimiento expreso.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-on-surface uppercase text-xs">III. Tu Derecho al Olvido</h4>
+                      <p>En cualquier momento, puedes solicitar que tu rastro sea borrado de nuestras crónicas. Solo tienes que enviar un cuervo mensajero (o un correo electrónico).</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <header className="border-b border-primary/20 pb-4">
+                    <h2 className="font-headline text-3xl font-bold text-primary italic uppercase tracking-widest">Pacto de Servicio</h2>
+                    <p className="font-label text-[10px] text-on-surface-variant uppercase mt-2">Leyes de la Ciudadela de Código</p>
+                  </header>
+                  <div className="font-body text-sm text-on-surface-variant leading-relaxed space-y-4">
+                    <p>
+                      Al cruzar las puertas de este portafolio, aceptas los siguientes términos de convivencia en nuestra comunidad de aventureros.
+                    </p>
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-on-surface uppercase text-xs">I. Uso de la Magia</h4>
+                      <p>El código y diseño aquí presentes son propiedad intelectual del Gran Maestro Nicolás. Puedes admirarlos, pero no reclamarlos como propios sin el debido tributo.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-on-surface uppercase text-xs">II. Conducta del Aventurero</h4>
+                      <p>Se prohíbe el uso de hechizos oscuros (hacking), ataques de denegación de servicio o cualquier acto que perturbe la paz de la Ciudadela.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-on-surface uppercase text-xs">III. Limitación de Responsabilidad</h4>
+                      <p>El Gran Maestro no se hace responsable por misiones fallidas, bugs inesperados o pérdida de maná resultante del uso de las herramientas aquí mostradas.</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-8 pt-6 border-t border-primary/10 text-center">
+                <button 
+                  onClick={() => setActiveModal(null)}
+                  className="px-8 py-2 bg-primary text-on-primary font-headline font-bold uppercase tracking-widest hover:scale-105 transition-transform cursor-pointer"
+                >
+                  He leído el Pacto
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
