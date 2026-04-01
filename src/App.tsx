@@ -39,8 +39,8 @@ type Screen = 'personaje' | 'habilidades' | 'misiones' | 'historia' | 'bestiario
 
 const Sidebar = ({ activeScreen, setScreen, isOpen, onClose, setActiveModal }: { activeScreen: Screen, setScreen: (s: Screen) => void, isOpen: boolean, onClose: () => void, setActiveModal: (m: 'privacy' | 'terms' | null) => void }) => {
   const [showDragon, setShowDragon] = useState(false);
-  const profileImg = "https://lh3.googleusercontent.com/aida/ADBb0ujoxFR9nWzFBZIpsZyAk9g9ceCgacFrRgml8IujafVhJAcjR4yMqohH3oBeXSXkfM68UJUmM2CiIhtwVuIyAk6vS8GBu5m-Pi_mM5mYkweZ8rsTClt9KmktGA0OtfR0ExT3LawmIW4BuYYNESDlGlly0cfF-gGWM_Wb45Ni7o0S0UfrzKwNLWFY5LbCO44JsMOBZx-x0VNgzgX1sm2vTV6llJuPMe81cGtI8S1PFCSr_UUmhbj7t42KIUGcctJAdx0nWSXI_8Xr_Q";
-  const dragonImg = "/dragon.png";
+  const profileImg = `${import.meta.env.BASE_URL}profile.png`;
+  const dragonImg = `${import.meta.env.BASE_URL}dragon.png`;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -226,9 +226,10 @@ const TopNav = ({ activeScreen, setScreen, onMenuClick }: { activeScreen: Screen
         </a>
         <div className="w-7 h-7 md:w-10 md:h-10 rounded-sm border-2 border-outline-variant overflow-hidden ml-1 md:ml-2">
           <img 
-            src="https://lh3.googleusercontent.com/aida/ADBb0ujoxFR9nWzFBZIpsZyAk9g9ceCgacFrRgml8IujafVhJAcjR4yMqohH3oBeXSXkfM68UJUmM2CiIhtwVuIyAk6vS8GBu5m-Pi_mM5mYkweZ8rsTClt9KmktGA0OtfR0ExT3LawmIW4BuYYNESDlGlly0cfF-gGWM_Wb45Ni7o0S0UfrzKwNLWFY5LbCO44JsMOBZx-x0VNgzgX1sm2vTV6llJuPMe81cGtI8S1PFCSr_UUmhbj7t42KIUGcctJAdx0nWSXI_8Xr_Q" 
+            src={`${import.meta.env.BASE_URL}profile.png`} 
             alt="User" 
             className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
           />
         </div>
       </div>
@@ -785,9 +786,10 @@ const Personaje = ({ onStart }: { onStart: () => void }) => {
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center sm:items-start mb-6 md:mb-8 text-center sm:text-left">
             <div className="w-16 h-16 sm:w-24 sm:h-24 bg-surface-container-highest flex-shrink-0 relative border border-outline-variant/20">
               <img 
-                src="https://lh3.googleusercontent.com/aida/ADBb0ujoxFR9nWzFBZIpsZyAk9g9ceCgacFrRgml8IujafVhJAcjR4yMqohH3oBeXSXkfM68UJUmM2CiIhtwVuIyAk6vS8GBu5m-Pi_mM5mYkweZ8rsTClt9KmktGA0OtfR0ExT3LawmIW4BuYYNESDlGlly0cfF-gGWM_Wb45Ni7o0S0UfrzKwNLWFY5LbCO44JsMOBZx-x0VNgzgX1sm2vTV6llJuPMe81cGtI8S1PFCSr_UUmhbj7t42KIUGcctJAdx0nWSXI_8Xr_Q" 
+                src={`${import.meta.env.BASE_URL}profile.png`} 
                 alt="Perfil" 
                 className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
               />
               <div className="absolute -bottom-1 -right-1 bg-primary text-on-primary px-1.5 py-0.5 font-mono text-[8px] sm:text-xs font-bold">NIVEL 30</div>
             </div>
@@ -903,10 +905,20 @@ const Contacto = () => {
       } else {
         const errorData = await response.json().catch(() => ({}));
         console.error('Error del servidor:', response.status, errorData);
+        
+        // Special message for 404 on static hosts
+        if (response.status === 404 && endpoint === '/api/contact') {
+          console.error('ERROR: El servidor de Node.js no está disponible. Si estás en GitHub Pages, debes configurar VITE_FORMSPREE_ID.');
+          alert('Error: El servidor de contacto no está disponible en este entorno estático. Por favor, configura Formspree.');
+        }
+        
         setStatus('error');
       }
     } catch (error) {
       console.error('Error detallado de fetch:', error);
+      if (endpoint === '/api/contact' && window.location.hostname.includes('github.io')) {
+        alert('Error: No se pudo conectar con el servidor de contacto. En GitHub Pages debes usar Formspree.');
+      }
       setStatus('error');
     }
   };
