@@ -6,7 +6,8 @@ export default function Proyectos() {
   const { t } = useLanguage();
 
   return (
-    <div className="max-w-6xl mx-auto py-8 md:py-12 px-4 md:px-0">
+    <div className="forge-bg relative min-h-screen w-full">
+      <div className="max-w-6xl mx-auto py-8 md:py-12 px-4 md:px-0">
       <header className="mb-10 md:mb-16 text-center px-4">
         <span className="font-label text-primary uppercase tracking-[0.1em] sm:tracking-[0.3em] mb-2 block text-[10px] sm:text-xs">{t('proyectos.subtitle')}</span>
         <h1 className="font-headline text-2xl sm:text-5xl md:text-6xl font-black text-on-surface italic uppercase tracking-normal sm:tracking-widest mb-4 break-words text-center">{t('proyectos.title')}</h1>
@@ -124,6 +125,7 @@ export default function Proyectos() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

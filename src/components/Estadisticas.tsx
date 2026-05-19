@@ -7,7 +7,8 @@ export default function Estadisticas() {
   const { t, lang } = useLanguage();
 
   return (
-    <div className="max-w-4xl mx-auto py-8 md:py-12 px-4 md:px-0">
+    <div className="parchment-bg relative min-h-screen w-full">
+      <div className="max-w-4xl mx-auto py-8 md:py-12 px-4 md:px-0">
       <header className="mb-10 md:mb-12 text-center px-4">
         <h2 className="font-headline text-xl sm:text-4xl md:text-5xl font-black text-primary italic uppercase tracking-normal sm:tracking-widest mb-4 break-words">{t('estadisticas.title')}</h2>
         <p className="font-label text-on-surface-variant text-[9px] sm:text-xs uppercase tracking-[0.1em] sm:tracking-[0.3em]">{t('estadisticas.subtitle')}</p>
@@ -159,6 +160,7 @@ export default function Estadisticas() {
             <ExternalLink size={16} className="text-on-surface-variant/60 group-hover:text-primary transition-colors" />
           </a>
         </div>
+      </div>
       </div>
     </div>
   );

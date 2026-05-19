@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2, Wand2 } from 'lucide-react';
+import { CheckCircle2, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 
@@ -54,18 +54,45 @@ export default function Contacto() {
   };
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 max-w-2xl mx-auto px-4 md:px-0">
+    <div className="signal-bg relative min-h-screen w-full">
+      <div className="max-w-2xl mx-auto py-8 md:py-12 px-4 md:px-0 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <header className="mb-10 md:mb-12 text-center px-2">
         <span className="font-label text-primary uppercase tracking-[0.3em] mb-2 block text-[10px] md:text-xs">{t('contacto.subtitle')}</span>
         <h1 className="font-headline text-3xl md:text-6xl font-bold text-on-surface uppercase italic break-words">{t('contacto.title')}</h1>
         <div className="h-1 w-16 md:w-20 bg-primary mx-auto mt-4"></div>
       </header>
 
-      <div className="bg-surface-container-high p-6 md:p-12 border border-outline-variant/15 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-          <Wand2 size={100} className="text-primary" />
-        </div>
+      {/* Quick contact options */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+        <a
+          href="https://www.linkedin.com/in/nicolas-schernetzki-518b28212/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-4 p-5 bg-surface-container-high border border-outline-variant/10 hover:border-primary/30 transition-all group"
+        >
+          <div className="w-10 h-10 bg-primary/10 border border-primary/30 flex items-center justify-center flex-shrink-0">
+            <Linkedin className="text-primary" size={20} />
+          </div>
+          <div>
+            <p className="font-label text-xs uppercase tracking-widest text-primary font-bold">{t('contacto.linkedin')}</p>
+            <p className="text-[10px] text-on-surface-variant">linkedin.com/in/nicolas-schernetzki</p>
+          </div>
+        </a>
+        <a
+          href="mailto:ngsrepresentaciones@gmail.com"
+          className="flex items-center gap-4 p-5 bg-surface-container-high border border-outline-variant/10 hover:border-primary/30 transition-all group"
+        >
+          <div className="w-10 h-10 bg-surface-container-highest border border-outline-variant/30 flex items-center justify-center flex-shrink-0">
+            <Mail className="text-on-surface-variant" size={20} />
+          </div>
+          <div>
+            <p className="font-label text-xs uppercase tracking-widest text-on-surface font-bold">{t('contacto.direct')}</p>
+            <p className="text-[10px] text-on-surface-variant">ngsrepresentaciones@gmail.com</p>
+          </div>
+        </a>
+      </div>
 
+      <div className="bg-surface-container-high p-6 md:p-12 border border-outline-variant/15 shadow-2xl relative overflow-hidden">
         {status === 'sent' ? (
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
@@ -137,6 +164,7 @@ export default function Contacto() {
             </button>
           </form>
         )}
+      </div>
       </div>
     </div>
   );

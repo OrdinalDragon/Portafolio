@@ -50,7 +50,7 @@ export default function Habilidades() {
   ];
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 min-h-screen">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 min-h-screen constellation-bg relative">
       <header className="mb-10 md:mb-16 flex flex-col md:flex-row justify-between items-center md:items-end gap-6 md:gap-8 px-4">
         <div className="text-center md:text-left">
           <span className="font-label text-[10px] sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.3em] text-primary block mb-2">{t('habilidades.subtitle')}</span>

@@ -35,7 +35,7 @@ export default function Misiones() {
   }, [selectedPdf]);
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 grid-bg relative min-h-screen w-full">
       <header className="mb-12 md:mb-16 px-4 text-center md:text-left">
         <div className="flex items-center justify-center md:justify-start gap-4 mb-2">
           <span className="h-[2px] w-8 md:w-12 bg-primary"></span>

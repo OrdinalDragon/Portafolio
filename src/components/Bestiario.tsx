@@ -28,7 +28,7 @@ export default function Bestiario() {
   ];
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 rune-bg relative min-h-screen w-full">
       <header className="mb-10 md:mb-20 text-center lg:text-left relative px-4">
         <p className="font-label text-primary-container text-[10px] sm:text-sm font-bold tracking-[0.1em] sm:tracking-[0.3em] uppercase mb-2">{t('bestiario.subtitle')}</p>
         <h1 className="font-headline text-2xl sm:text-5xl md:text-7xl font-black text-on-surface leading-none mb-6 uppercase break-words text-center lg:text-left">{t('bestiario.title')}</h1>
