@@ -1,10 +1,38 @@
-import React from 'react';
-import { FileText, History, School, ExternalLink } from 'lucide-react';
-import { motion } from 'motion/react';
+import React, { useState, useEffect } from 'react';
+import { FileText, History, School, ExternalLink, Eye, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Estadisticas() {
   const { t, lang } = useLanguage();
+  const [previewPdf, setPreviewPdf] = useState<string | null>(null);
+  const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
+
+  const cvPdf = lang === 'en' ? '/Nicolas_Schernetzki_CV_Eng.pdf' : '/Nicolas_Schernetzki_CV_Esp.pdf';
+  const cvDocx = lang === 'en' ? '/Nicolas_Schernetzki_CV_Eng.docx' : '/Nicolas_Schernetzki_CV_Esp.docx';
+
+  useEffect(() => {
+    let currentUrl: string | null = null;
+    if (previewPdf) {
+      fetch(previewPdf)
+        .then(res => {
+          if (!res.ok) throw new Error(`Failed to fetch PDF: ${res.status}`);
+          return res.blob();
+        })
+        .then(blob => {
+          currentUrl = URL.createObjectURL(blob);
+          setPdfBlobUrl(currentUrl);
+        })
+        .catch(() => {
+          setPdfBlobUrl(previewPdf);
+        });
+    } else {
+      setPdfBlobUrl(null);
+    }
+    return () => {
+      if (currentUrl) URL.revokeObjectURL(currentUrl);
+    };
+  }, [previewPdf]);
 
   return (
     <div className="parchment-bg relative min-h-screen w-full">
@@ -129,12 +157,26 @@ export default function Estadisticas() {
         </div>
       </div>
 
-      {/* CV Download - Language aware */}
+      {/* CV Download & Preview - Language aware */}
       <div className="mt-8 space-y-4">
         <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant text-center">{t('estadisticas.download.sub')}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Preview Button */}
+          <button
+            onClick={() => setPreviewPdf(cvPdf)}
+            className="group flex items-center gap-4 bg-surface-container-highest border border-outline-variant/20 p-6 hover:border-secondary/40 transition-all cursor-pointer text-left"
+          >
+            <div className="w-12 h-12 bg-secondary/10 border border-secondary/30 flex items-center justify-center flex-shrink-0">
+              <Eye className="text-secondary" size={24} />
+            </div>
+            <div className="flex-1">
+              <p className="font-headline font-bold text-secondary uppercase tracking-widest text-sm">{t('estadisticas.download.preview')}</p>
+            </div>
+          </button>
+
+          {/* PDF Download */}
           <a
-            href={lang === 'en' ? '/Nicolas_Schernetzki_CV_English.pdf' : '/Nicolas_Schernetzki_CV_Español.pdf'}
+            href={cvPdf}
             download
             className="group flex items-center gap-4 bg-gradient-to-r from-primary/5 to-primary-container/5 border border-primary/30 p-6 hover:bg-primary/10 transition-all cursor-pointer"
           >
@@ -146,8 +188,10 @@ export default function Estadisticas() {
             </div>
             <ExternalLink size={16} className="text-primary/60 group-hover:text-primary transition-colors" />
           </a>
+
+          {/* DOCX Download */}
           <a
-            href={lang === 'en' ? '/Nicolas_Schernetzki_CV_English.docx' : '/Nicolas_Schernetzki_CV_Español.docx'}
+            href={cvDocx}
             download
             className="group flex items-center gap-4 bg-surface-container-lowest border border-outline-variant/30 p-6 hover:border-primary/30 transition-all cursor-pointer"
           >
@@ -162,6 +206,71 @@ export default function Estadisticas() {
         </div>
       </div>
       </div>
+
+      {/* CV Preview Modal */}
+      <AnimatePresence>
+        {previewPdf && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setPreviewPdf(null)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-5xl h-full max-h-[90vh] bg-surface-container-highest border border-outline-variant shadow-2xl overflow-hidden flex flex-col"
+            >
+              <div className="flex items-center justify-between p-4 border-b border-outline-variant bg-surface-container">
+                <div className="flex items-center gap-4">
+                  <h3 className="font-headline text-lg font-bold uppercase tracking-widest text-primary">{t('estadisticas.download.preview')}</h3>
+                  <a 
+                    href={cvPdf} 
+                    download
+                    className="flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded text-[10px] uppercase tracking-widest font-label text-primary hover:bg-primary/20 transition-all"
+                  >
+                    <ExternalLink size={12} /> {t('estadisticas.download.pdf')}
+                  </a>
+                </div>
+                <button 
+                  onClick={() => setPreviewPdf(null)}
+                  className="p-2 hover:bg-surface-container-highest rounded-full transition-colors text-on-surface-variant hover:text-primary cursor-pointer"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <div className="flex-1 bg-white relative overflow-hidden">
+                {pdfBlobUrl ? (
+                  <object 
+                    key={pdfBlobUrl}
+                    data={pdfBlobUrl} 
+                    type="application/pdf"
+                    className="w-full h-full border-none"
+                  >
+                    <div className="flex flex-col items-center justify-center h-full p-10 text-center">
+                      <p className="text-on-surface-variant mb-4">Browser cannot display PDF</p>
+                      <a 
+                        href={pdfBlobUrl} 
+                        download={previewPdf}
+                        className="px-6 py-2 bg-primary text-on-primary font-label uppercase tracking-widest hover:bg-primary/80 transition-all"
+                      >
+                        Download
+                      </a>
+                    </div>
+                  </object>
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-on-surface-variant font-label uppercase tracking-widest animate-pulse">Loading...</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

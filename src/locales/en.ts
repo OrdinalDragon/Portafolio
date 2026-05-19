@@ -195,6 +195,7 @@ export default {
   'estadisticas.download.pdf': 'Download CV (PDF)',
   'estadisticas.download.docx': 'Download CV (DOCX)',
   'estadisticas.download.sub': 'Curriculum vitae',
+  'estadisticas.download.preview': 'Preview CV',
 
   'common.footer': '© 2026 The Obsidian Relic. Forged in Code.',
   'common.brand': 'ORDINAL DRAGON_STACK',
