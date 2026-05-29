@@ -30,10 +30,10 @@ export default {
 
   'topnav.brand': 'ORDINAL DRAGON_STACK',
   'topnav.home': 'Inicio',
-  'topnav.skills': 'Skills',
-  'topnav.missions': 'Missions',
-  'topnav.story': 'Story',
-  'topnav.bestiary': 'Bestiary',
+  'topnav.skills': 'Habilidades',
+  'topnav.missions': 'Misiones',
+  'topnav.story': 'Historia',
+  'topnav.bestiary': 'Bestiario',
   'topnav.projects': 'Proyectos',
 
   'bestiario.subtitle': 'Compendio de Sabiduría',

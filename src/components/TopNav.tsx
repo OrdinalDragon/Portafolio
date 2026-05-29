@@ -13,6 +13,10 @@ export default function TopNav({ activeScreen, setScreen, onMenuClick }: { activ
   const getLabel = (s: string) => {
     switch (s) {
       case 'personaje': return t('topnav.home');
+      case 'habilidades': return t('topnav.skills');
+      case 'misiones': return t('topnav.missions');
+      case 'historia': return t('topnav.story');
+      case 'bestiario': return t('topnav.bestiary');
       case 'proyectos': return t('topnav.projects');
       default: return s.charAt(0).toUpperCase() + s.slice(1);
     }
