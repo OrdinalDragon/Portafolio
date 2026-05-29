@@ -29,6 +29,14 @@ export default function Bestiario() {
     { name: 'GitHub Actions', class: 'PIPELINE_ORACLE', icon: CheckCircle2, desc: t('bestiario.skill.githubactions.desc'), mastery: 40, rank: 'INITIATE' },
     { name: 'Linux / Bash', class: 'SHELL_WRITER', icon: Terminal, desc: t('bestiario.skill.linux.desc'), mastery: 60, rank: 'KNIGHT' },
     { name: 'AWS Cloud', class: 'SKY_SENTINEL', icon: Globe, desc: t('bestiario.skill.cloud.desc'), mastery: 20, rank: 'NOVICE' },
+    { name: 'ASP.NET Core', class: 'REST_FORGER', icon: Cpu, desc: t('bestiario.skill.aspnet.desc'), mastery: 65, rank: 'KNIGHT' },
+    { name: 'Entity Framework', class: 'DATA_BINDER', icon: Database, desc: t('bestiario.skill.efcore.desc'), mastery: 60, rank: 'KNIGHT' },
+    { name: 'Windows Forms', class: 'DESKTOP_ARTISAN', icon: Layers, desc: t('bestiario.skill.winforms.desc'), mastery: 55, rank: 'KNIGHT' },
+    { name: 'BCrypt / Security', class: 'SHADOW_WARD', icon: Shield, desc: t('bestiario.skill.bcrypt.desc'), mastery: 50, rank: 'INITIATE' },
+    { name: 'JWT Auth', class: 'TOKEN_KEEPER', icon: Shield, desc: t('bestiario.skill.jwt.desc'), mastery: 45, rank: 'INITIATE' },
+    { name: 'xUnit', class: 'TEST_ORACLE', icon: CheckCircle2, desc: t('bestiario.skill.xunit.desc'), mastery: 50, rank: 'INITIATE' },
+    { name: 'Moq', class: 'ILLUSIONIST', icon: Wand2, desc: t('bestiario.skill.moq.desc'), mastery: 45, rank: 'INITIATE' },
+    { name: 'Serilog', class: 'CHRONICLE_SCRIBE', icon: History, desc: t('bestiario.skill.serilog.desc'), mastery: 50, rank: 'INITIATE' },
   ];
 
   return (
@@ -43,7 +51,7 @@ export default function Bestiario() {
 
         {/* Tech Tags - scannable for recruiters */}
         <div className="flex flex-wrap justify-center lg:justify-start gap-2 mt-6">
-          {['React', 'TypeScript', 'C# / .NET', 'JavaScript', 'Node.js', 'Python', 'Java', 'Tailwind CSS', 'MongoDB', 'MySQL', 'Git', 'Docker', 'GitHub Actions', 'Linux', 'AWS'].map((tech) => (
+          {['React', 'TypeScript', 'C# / .NET', 'JavaScript', 'Node.js', 'Python', 'Java', 'Tailwind CSS', 'MongoDB', 'MySQL', 'Git', 'Docker', 'GitHub Actions', 'Linux', 'AWS', 'ASP.NET Core', 'Entity Framework', 'Windows Forms', 'JWT', 'xUnit'].map((tech) => (
             <span key={tech} className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
               {tech}
             </span>
