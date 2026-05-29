@@ -58,6 +58,10 @@ export default {
   'bestiario.skill.vba.desc': '"Conjuro del ámbito corporativo. Automatiza lo mundano, convirtiendo hojas de cálculo en artefactos vivientes de lógica."',
   'bestiario.skill.express.desc': '"El veloz mensajero de la red. Define caminos a través de la naturaleza salvaje del servidor con una sintaxis mínima pero poderosa."',
   'bestiario.skill.mariadb.desc': '"El oráculo de código abierto, rama de MySQL. Guarda datos relacionales con fiabilidad y rendimiento."',
+  'bestiario.skill.docker.desc': '"Invoca reinos aislados de ejecución, asegurando que ningún hechizo entre en conflicto entre entornos. El arte de la contenedorización."',
+  'bestiario.skill.githubactions.desc': '"Orquesta los sagrados pipelines CI/CD, probando y desplegando código automáticamente a través de flujos de trabajo automatizados."',
+  'bestiario.skill.linux.desc': '"La lengua antigua de los servidores. Domina la línea de comandos para domar las bestias salvajes de la infraestructura."',
+  'bestiario.skill.cloud.desc': '"Aprendiz del reino celeste. Aprendiendo a aprovechar el poder de cómputo infinito de los servicios AWS."',
 
   'misiones.subtitle': 'Viajes en curso',
   'misiones.title': 'Misiones Activas',

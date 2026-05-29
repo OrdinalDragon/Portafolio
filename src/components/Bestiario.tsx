@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   Layers, Globe, Wand2, Shield, Cpu, Terminal, Coffee, 
-  Settings, Database, History, BookOpen
+  Settings, Database, History, BookOpen, CheckCircle2
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -25,6 +25,10 @@ export default function Bestiario() {
     { name: 'MySQL', class: 'REL_LORD', icon: Database, desc: t('bestiario.skill.mysql.desc'), mastery: 65, rank: 'VETERAN' },
     { name: 'MariaDB', class: 'REL_SCOUT', icon: Database, desc: t('bestiario.skill.mariadb.desc'), mastery: 50, rank: 'INITIATE' },
     { name: 'Git / GitHub', class: 'TIME_WEAVER', icon: History, desc: t('bestiario.skill.git.desc'), mastery: 80, rank: 'EXPERT' },
+    { name: 'Docker', class: 'CONTAINER_MAGE', icon: Layers, desc: t('bestiario.skill.docker.desc'), mastery: 60, rank: 'KNIGHT' },
+    { name: 'GitHub Actions', class: 'PIPELINE_ORACLE', icon: CheckCircle2, desc: t('bestiario.skill.githubactions.desc'), mastery: 40, rank: 'INITIATE' },
+    { name: 'Linux / Bash', class: 'SHELL_WRITER', icon: Terminal, desc: t('bestiario.skill.linux.desc'), mastery: 60, rank: 'KNIGHT' },
+    { name: 'AWS Cloud', class: 'SKY_SENTINEL', icon: Globe, desc: t('bestiario.skill.cloud.desc'), mastery: 20, rank: 'NOVICE' },
   ];
 
   return (
@@ -39,7 +43,7 @@ export default function Bestiario() {
 
         {/* Tech Tags - scannable for recruiters */}
         <div className="flex flex-wrap justify-center lg:justify-start gap-2 mt-6">
-          {['React', 'TypeScript', 'C# / .NET', 'JavaScript', 'Node.js', 'Python', 'Java', 'Tailwind CSS', 'MongoDB', 'MySQL', 'Git'].map((tech) => (
+          {['React', 'TypeScript', 'C# / .NET', 'JavaScript', 'Node.js', 'Python', 'Java', 'Tailwind CSS', 'MongoDB', 'MySQL', 'Git', 'Docker', 'GitHub Actions', 'Linux', 'AWS'].map((tech) => (
             <span key={tech} className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
               {tech}
             </span>

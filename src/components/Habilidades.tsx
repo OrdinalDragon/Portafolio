@@ -42,8 +42,10 @@ export default function Habilidades() {
       glow: 'shadow-[0_0_20px_rgba(255,145,0,0.3)]',
       skills: [
         { id: 'git', name: 'Git / GitHub', icon: History, level: 4, max: 5, status: 'active' },
-        { id: 'docker', name: 'Docker', icon: Layers, level: 1, max: 5, status: 'locked' },
-        { id: 'cloud', name: 'Cloud Ops', icon: Globe, level: 0, max: 5, status: 'locked' },
+        { id: 'docker', name: 'Docker', icon: Layers, level: 3, max: 5, status: 'active' },
+        { id: 'githubactions', name: 'GitHub Actions', icon: CheckCircle2, level: 2, max: 5, status: 'active' },
+        { id: 'linux', name: 'Linux / Bash', icon: Terminal, level: 3, max: 5, status: 'active' },
+        { id: 'cloud', name: 'Cloud (AWS)', icon: Globe, level: 1, max: 5, status: 'active' },
         { id: 'testing', name: 'Unit Testing', icon: CheckCircle2, level: 2, max: 5, status: 'active' },
       ]
     }
