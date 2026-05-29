@@ -70,6 +70,16 @@ export default function Proyectos() {
           <p className="text-sm text-on-surface-variant leading-relaxed mb-6">
             {t('proyectos.bank.desc')}
           </p>
+          <div className="flex gap-4">
+            <a
+              href="https://github.com/OrdinalDragon/Banco.net"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-[10px] uppercase tracking-widest font-label hover:text-primary hover:border-primary/30 transition-all"
+            >
+              <Github size={12} /> {t('proyectos.bank.repo')}
+            </a>
+          </div>
         </div>
 
         {/* Portfolio */}
