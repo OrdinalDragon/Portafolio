@@ -8,8 +8,9 @@ export default function Estadisticas() {
   const [previewPdf, setPreviewPdf] = useState<string | null>(null);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
 
-  const cvPdf = lang === 'en' ? '/Nicolas_Schernetzki_CV_Eng.pdf' : '/Nicolas_Schernetzki_CV_Esp.pdf';
-  const cvDocx = lang === 'en' ? '/Nicolas_Schernetzki_CV_Eng.docx' : '/Nicolas_Schernetzki_CV_Esp.docx';
+  const base = import.meta.env.BASE_URL;
+  const cvPdf = lang === 'en' ? `${base}Nicolas_Schernetzki_CV_Eng.pdf` : `${base}Nicolas_Schernetzki_CV_Esp.pdf`;
+  const cvDocx = lang === 'en' ? `${base}Nicolas_Schernetzki_CV_Eng.docx` : `${base}Nicolas_Schernetzki_CV_Esp.docx`;
 
   const handleDownload = useCallback(async (url: string, _filename: string) => {
     window.open(url, '_blank');
