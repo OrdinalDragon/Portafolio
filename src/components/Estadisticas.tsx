@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FileText, History, School, ExternalLink, Eye, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -7,9 +7,30 @@ export default function Estadisticas() {
   const { t, lang } = useLanguage();
   const [previewPdf, setPreviewPdf] = useState<string | null>(null);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
+  const [downloading, setDownloading] = useState<string | null>(null);
 
   const cvPdf = lang === 'en' ? '/Nicolas_Schernetzki_CV_Eng.pdf' : '/Nicolas_Schernetzki_CV_Esp.pdf';
   const cvDocx = lang === 'en' ? '/Nicolas_Schernetzki_CV_Eng.docx' : '/Nicolas_Schernetzki_CV_Esp.docx';
+
+  const handleDownload = useCallback(async (url: string, filename: string) => {
+    setDownloading(filename);
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      window.open(url, '_blank');
+    } finally {
+      setDownloading(null);
+    }
+  }, []);
 
   useEffect(() => {
     let currentUrl: string | null = null;
@@ -175,34 +196,38 @@ export default function Estadisticas() {
           </button>
 
           {/* PDF Download */}
-          <a
-            href={cvPdf}
-            download
-            className="group flex items-center gap-4 bg-gradient-to-r from-primary/5 to-primary-container/5 border border-primary/30 p-6 hover:bg-primary/10 transition-all cursor-pointer"
+          <button
+            onClick={() => handleDownload(cvPdf, cvPdf.split('/').pop() || 'CV.pdf')}
+            disabled={downloading === cvPdf.split('/').pop()}
+            className="group flex items-center gap-4 bg-gradient-to-r from-primary/5 to-primary-container/5 border border-primary/30 p-6 hover:bg-primary/10 transition-all cursor-pointer text-left disabled:opacity-50"
           >
             <div className="w-12 h-12 bg-primary/10 border border-primary/30 flex items-center justify-center flex-shrink-0">
               <FileText className="text-primary" size={24} />
             </div>
             <div className="flex-1">
-              <p className="font-headline font-bold text-primary uppercase tracking-widest text-sm">{t('estadisticas.download.pdf')}</p>
+              <p className="font-headline font-bold text-primary uppercase tracking-widest text-sm">
+                {downloading === cvPdf.split('/').pop() ? '...' : t('estadisticas.download.pdf')}
+              </p>
             </div>
             <ExternalLink size={16} className="text-primary/60 group-hover:text-primary transition-colors" />
-          </a>
+          </button>
 
           {/* DOCX Download */}
-          <a
-            href={cvDocx}
-            download
-            className="group flex items-center gap-4 bg-surface-container-lowest border border-outline-variant/30 p-6 hover:border-primary/30 transition-all cursor-pointer"
+          <button
+            onClick={() => handleDownload(cvDocx, cvDocx.split('/').pop() || 'CV.docx')}
+            disabled={downloading === cvDocx.split('/').pop()}
+            className="group flex items-center gap-4 bg-surface-container-lowest border border-outline-variant/30 p-6 hover:border-primary/30 transition-all cursor-pointer text-left disabled:opacity-50"
           >
             <div className="w-12 h-12 bg-surface-container-highest border border-outline-variant/30 flex items-center justify-center flex-shrink-0">
               <FileText className="text-on-surface-variant" size={24} />
             </div>
             <div className="flex-1">
-              <p className="font-headline font-bold text-on-surface uppercase tracking-widest text-sm">{t('estadisticas.download.docx')}</p>
+              <p className="font-headline font-bold text-on-surface uppercase tracking-widest text-sm">
+                {downloading === cvDocx.split('/').pop() ? '...' : t('estadisticas.download.docx')}
+              </p>
             </div>
             <ExternalLink size={16} className="text-on-surface-variant/60 group-hover:text-primary transition-colors" />
-          </a>
+          </button>
         </div>
       </div>
       </div>
