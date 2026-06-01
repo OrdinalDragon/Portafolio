@@ -7,6 +7,8 @@ export default function Estadisticas() {
   const { t, lang } = useLanguage();
   const [previewPdf, setPreviewPdf] = useState<string | null>(null);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
+  const [selectedCertPdf, setSelectedCertPdf] = useState<string | null>(null);
+  const [certBlobUrl, setCertBlobUrl] = useState<string | null>(null);
 
   const base = import.meta.env.BASE_URL;
   const cvPdf = lang === 'en' ? `${base}Nicolas_Schernetzki_CV_Eng.pdf` : `${base}Nicolas_Schernetzki_CV_Esp.pdf`;
@@ -38,6 +40,30 @@ export default function Estadisticas() {
       if (currentUrl) URL.revokeObjectURL(currentUrl);
     };
   }, [previewPdf]);
+
+  useEffect(() => {
+    let currentUrl: string | null = null;
+    if (selectedCertPdf) {
+      const pdfPath = `${import.meta.env.BASE_URL}${selectedCertPdf}`;
+      fetch(pdfPath)
+        .then(res => {
+          if (!res.ok) throw new Error(`Failed to fetch PDF: ${res.status}`);
+          return res.blob();
+        })
+        .then(blob => {
+          currentUrl = URL.createObjectURL(blob);
+          setCertBlobUrl(currentUrl);
+        })
+        .catch(() => {
+          setCertBlobUrl(pdfPath);
+        });
+    } else {
+      setCertBlobUrl(null);
+    }
+    return () => {
+      if (currentUrl) URL.revokeObjectURL(currentUrl);
+    };
+  }, [selectedCertPdf]);
 
   return (
     <div className="parchment-bg relative min-h-screen w-full">
@@ -95,9 +121,27 @@ export default function Estadisticas() {
           <div className="bg-surface-container-lowest border border-outline-variant/20 p-6 rounded-sm shadow-lg">
             <h3 className="font-headline text-primary font-bold uppercase text-sm mb-4 border-b border-primary/20 pb-2">{t('estadisticas.power')}</h3>
             <div className="space-y-3 font-body text-[11px] text-on-surface-variant leading-tight">
-              <p>{t('estadisticas.cert1')}</p>
-              <p>{t('estadisticas.cert2')}</p>
-              <p>{t('estadisticas.cert3')}</p>
+              <button 
+                onClick={() => setSelectedCertPdf('net.pdf')}
+                className="w-full text-left hover:text-primary hover:bg-primary/5 p-2 -mx-2 rounded transition-colors cursor-pointer flex items-center gap-2"
+              >
+                <ExternalLink size={10} className="text-primary/60 flex-shrink-0" />
+                {t('estadisticas.cert1')}
+              </button>
+              <button 
+                onClick={() => setSelectedCertPdf('fundamentos.pdf')}
+                className="w-full text-left hover:text-primary hover:bg-primary/5 p-2 -mx-2 rounded transition-colors cursor-pointer flex items-center gap-2"
+              >
+                <ExternalLink size={10} className="text-primary/60 flex-shrink-0" />
+                {t('estadisticas.cert2')}
+              </button>
+              <button 
+                onClick={() => setSelectedCertPdf('ticmas.pdf')}
+                className="w-full text-left hover:text-primary hover:bg-primary/5 p-2 -mx-2 rounded transition-colors cursor-pointer flex items-center gap-2"
+              >
+                <ExternalLink size={10} className="text-primary/60 flex-shrink-0" />
+                {t('estadisticas.cert3')}
+              </button>
             </div>
           </div>
         </div>
@@ -258,6 +302,72 @@ export default function Estadisticas() {
                       <a 
                         href={pdfBlobUrl} 
                         download={previewPdf}
+                        className="px-6 py-2 bg-primary text-on-primary font-label uppercase tracking-widest hover:bg-primary/80 transition-all"
+                      >
+                        Download
+                      </a>
+                    </div>
+                  </object>
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-on-surface-variant font-label uppercase tracking-widest animate-pulse">Loading...</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Certificate PDF Modal */}
+      <AnimatePresence>
+        {selectedCertPdf && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedCertPdf(null)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-5xl h-full max-h-[90vh] bg-surface-container-highest border border-outline-variant shadow-2xl overflow-hidden flex flex-col"
+            >
+              <div className="flex items-center justify-between p-4 border-b border-outline-variant bg-surface-container">
+                <div className="flex items-center gap-4">
+                  <h3 className="font-headline text-lg font-bold uppercase tracking-widest text-primary">Certificate</h3>
+                  <a 
+                    href={certBlobUrl || `${import.meta.env.BASE_URL}${selectedCertPdf}`}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded text-[10px] uppercase tracking-widest font-label text-primary hover:bg-primary/20 transition-all"
+                  >
+                    <ExternalLink size={12} /> Open in new tab
+                  </a>
+                </div>
+                <button 
+                  onClick={() => setSelectedCertPdf(null)}
+                  className="p-2 hover:bg-surface-container-highest rounded-full transition-colors text-on-surface-variant hover:text-primary cursor-pointer"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <div className="flex-1 bg-white relative overflow-hidden">
+                {certBlobUrl ? (
+                  <object 
+                    key={certBlobUrl}
+                    data={certBlobUrl} 
+                    type="application/pdf"
+                    className="w-full h-full border-none"
+                  >
+                    <div className="flex flex-col items-center justify-center h-full p-10 text-center">
+                      <p className="text-on-surface-variant mb-4">Browser cannot display PDF</p>
+                      <a 
+                        href={certBlobUrl} 
+                        download={selectedCertPdf}
                         className="px-6 py-2 bg-primary text-on-primary font-label uppercase tracking-widest hover:bg-primary/80 transition-all"
                       >
                         Download
