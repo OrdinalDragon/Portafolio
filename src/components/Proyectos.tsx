@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wand2, Hammer, Cpu, Globe, Github, Settings } from 'lucide-react';
+import { Wand2, Hammer, Cpu, Globe, Github, Settings, ShoppingCart } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Proyectos() {
@@ -78,6 +78,42 @@ export default function Proyectos() {
               className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-[10px] uppercase tracking-widest font-label hover:text-primary hover:border-primary/30 transition-all"
             >
               <Github size={12} /> {t('proyectos.bank.repo')}
+            </a>
+          </div>
+        </div>
+
+        {/* EmotionShop (MERN + AWS) */}
+        <div className="bg-surface-container-high p-6 md:p-8 border border-outline-variant/10 hover:border-primary/30 transition-colors group relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <ShoppingCart size={80} />
+          </div>
+          <div className="flex items-start justify-between mb-6">
+            <div className="w-12 h-12 bg-primary/10 border border-primary/30 flex items-center justify-center">
+              <ShoppingCart className="text-primary" size={24} />
+            </div>
+            <span className="font-label text-[9px] uppercase tracking-widest text-primary border border-primary/30 px-2 py-1">COMPLETED</span>
+          </div>
+          <h3 className="font-headline text-2xl font-bold text-on-surface mb-2">{t('proyectos.emotionshop.name')}</h3>
+          <p className="font-label text-xs text-primary uppercase tracking-widest mb-4">{t('proyectos.emotionshop.tech')}</p>
+          <p className="text-sm text-on-surface-variant leading-relaxed mb-6">
+            {t('proyectos.emotionshop.desc')}
+          </p>
+          <div className="flex gap-4">
+            <a
+              href="https://emotionshop.jesrepresentaciones.com.ar/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 text-primary text-[10px] uppercase tracking-widest font-label hover:bg-primary/20 transition-all"
+            >
+              <Globe size={12} /> {t('proyectos.emotionshop.live')}
+            </a>
+            <a
+              href="https://github.com/OrdinalDragon/E-commerce"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-[10px] uppercase tracking-widest font-label hover:text-primary hover:border-primary/30 transition-all"
+            >
+              <Github size={12} /> {t('proyectos.emotionshop.repo')}
             </a>
           </div>
         </div>
