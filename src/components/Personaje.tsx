@@ -6,7 +6,7 @@ export default function Personaje({ onStart }: { onStart: () => void }) {
   const { t } = useLanguage();
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 dragon-texture h-dvh flex flex-col items-center justify-center text-center py-2 overflow-hidden w-full map-bg relative">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 dragon-texture h-full flex flex-col items-center justify-center text-center py-2 overflow-hidden w-full map-bg relative">
       <div className="max-w-4xl w-full px-4 flex flex-col items-center gap-2 sm:gap-3 md:gap-4">
         <span className="font-label text-primary uppercase tracking-[0.1em] sm:tracking-[0.4em] block text-[10px] sm:text-xs">{t('personaje.subtitle')}</span>
         <h1 className="font-headline text-lg sm:text-2xl md:text-4xl lg:text-5xl font-bold text-on-background drop-shadow-2xl leading-tight uppercase break-words px-2 max-w-full">
