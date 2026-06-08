@@ -8,14 +8,14 @@ export default function Personaje({ onStart }: { onStart: () => void }) {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 dragon-texture min-h-screen flex flex-col items-center justify-center text-center py-4 sm:py-6 overflow-x-hidden w-full map-bg relative">
       <div className="max-w-4xl w-full px-4 sm:px-6 flex flex-col items-center">
-        <span className="font-label text-primary uppercase tracking-[0.1em] sm:tracking-[0.4em] mb-2 sm:mb-4 block text-[10px] sm:text-sm">{t('personaje.subtitle')}</span>
-        <h1 className="font-headline text-xl sm:text-4xl md:text-8xl font-bold text-on-background mb-4 sm:mb-8 drop-shadow-2xl leading-tight uppercase break-words px-2 max-w-full">
+        <span className="font-label text-primary uppercase tracking-[0.1em] sm:tracking-[0.4em] mb-1 sm:mb-3 block text-[10px] sm:text-xs">{t('personaje.subtitle')}</span>
+        <h1 className="font-headline text-xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-on-background mb-3 sm:mb-6 drop-shadow-2xl leading-tight uppercase break-words px-2 max-w-full">
           {t('personaje.title.line1')} <br className="sm:hidden" /> {t('personaje.title.of')} <br className="hidden sm:block" /> <span className="text-primary-container">{t('personaje.title.programmer')}</span>
         </h1>
         
-        <div className="w-full max-w-md bg-surface-container-lowest border-l-4 border-primary p-4 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.7)] text-left relative overflow-hidden mx-auto">
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 items-center sm:items-start mb-4 sm:mb-6 text-center sm:text-left">
-            <div className="w-14 h-14 sm:w-24 sm:h-24 bg-surface-container-highest flex-shrink-0 relative border border-outline-variant/20">
+        <div className="w-full max-w-sm sm:max-w-md bg-surface-container-lowest border-l-4 border-primary p-4 sm:p-5 md:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.7)] text-left relative overflow-hidden mx-auto">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center sm:items-start mb-3 sm:mb-4 text-center sm:text-left">
+            <div className="w-14 h-14 sm:w-20 sm:h-20 bg-surface-container-highest flex-shrink-0 relative border border-outline-variant/20">
               <img 
                 src={`${import.meta.env.BASE_URL}profile.png`} 
                 alt="Profile" 
@@ -80,7 +80,7 @@ export default function Personaje({ onStart }: { onStart: () => void }) {
           </div>
         </div>
 
-        <div className="mt-6 sm:mt-10">
+        <div className="mt-4 sm:mt-6">
           <button 
             onClick={onStart}
             className="w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-5 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline text-base sm:text-xl font-bold tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,145,0,0.4)] cursor-pointer relative overflow-hidden group"
