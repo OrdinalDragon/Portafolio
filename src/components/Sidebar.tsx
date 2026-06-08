@@ -49,7 +49,7 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
         )}
       </AnimatePresence>
 
-      <aside className={`fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant/15 flex flex-col pt-8 z-[70] transition-transform duration-300 lg:translate-x-0 lg:top-20 lg:h-[calc(100vh-5rem)] ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant/15 flex flex-col pt-8 z-[70] transition-transform duration-300 lg:translate-x-0 lg:top-20 lg:h-[calc(100dvh-5rem)] ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="lg:hidden absolute top-4 right-4">
           <button onClick={onClose} className="text-on-surface/60 hover:text-primary cursor-pointer" aria-label="Close menu">
             <X size={24} />

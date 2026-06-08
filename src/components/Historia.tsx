@@ -6,7 +6,7 @@ export default function Historia() {
   const { t } = useLanguage();
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center scroll-bg relative min-h-screen w-full">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center scroll-bg relative h-full w-full">
       <header className="text-center mb-10 md:mb-16 max-w-2xl px-4">
         <span className="text-secondary font-label text-[10px] sm:text-xs uppercase tracking-[0.1em] sm:tracking-[0.3em] block mb-2">{t('historia.subtitle')}</span>
         <h1 className="text-2xl sm:text-5xl md:text-7xl font-headline font-bold text-on-surface tracking-tight leading-none mb-6 uppercase break-words text-center">{t('historia.title')}</h1>

@@ -6,7 +6,7 @@ export default function Proyectos() {
   const { t } = useLanguage();
 
   return (
-    <div className="forge-bg relative min-h-screen w-full">
+    <div className="forge-bg relative h-full w-full">
       <div className="max-w-6xl mx-auto py-8 md:py-12 px-4 md:px-0">
       <header className="mb-10 md:mb-16 text-center px-4">
         <span className="font-label text-primary uppercase tracking-[0.1em] sm:tracking-[0.3em] mb-2 block text-[10px] sm:text-xs">{t('proyectos.subtitle')}</span>

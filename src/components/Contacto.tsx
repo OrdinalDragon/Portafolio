@@ -54,7 +54,7 @@ export default function Contacto() {
   };
 
   return (
-    <div className="signal-bg relative min-h-screen w-full">
+    <div className="signal-bg relative h-full w-full">
       <div className="max-w-2xl mx-auto py-8 md:py-12 px-4 md:px-0 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <header className="mb-10 md:mb-12 text-center px-2">
         <span className="font-label text-primary uppercase tracking-[0.3em] mb-2 block text-[10px] md:text-xs">{t('contacto.subtitle')}</span>

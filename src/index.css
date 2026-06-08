@@ -32,6 +32,12 @@
     overflow-x: hidden;
   }
 
+  #root {
+    height: 100%;
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
   body {
     @apply bg-background text-on-surface font-body;
     height: 100%;

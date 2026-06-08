@@ -66,7 +66,7 @@ export default function Estadisticas() {
   }, [selectedCertPdf]);
 
   return (
-    <div className="parchment-bg relative min-h-screen w-full">
+    <div className="parchment-bg relative h-full w-full">
       <div className="max-w-4xl mx-auto py-8 md:py-12 px-4 md:px-0">
       <header className="mb-10 md:mb-12 text-center px-4">
         <h2 className="font-headline text-xl sm:text-4xl md:text-5xl font-black text-primary italic uppercase tracking-normal sm:tracking-widest mb-4 break-words">{t('estadisticas.title')}</h2>
