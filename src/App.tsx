@@ -45,7 +45,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div className="flex-1 flex pt-16 sm:pt-20 overflow-hidden">
+      <div className="flex-1 flex min-h-0 pt-16 sm:pt-20 overflow-hidden">
         <Sidebar 
           activeScreen={screen} 
           setScreen={setScreen} 
@@ -54,7 +54,7 @@ export default function App() {
           setActiveModal={() => {}} 
         />
         
-        <main className="flex-1 lg:ml-64 p-0 overflow-auto">
+        <main className="flex-1 min-h-0 lg:ml-64 p-0 overflow-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={screen}
