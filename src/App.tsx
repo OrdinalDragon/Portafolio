@@ -54,7 +54,7 @@ export default function App() {
           setActiveModal={() => {}} 
         />
         
-        <main className="flex-1 lg:ml-64 p-2 sm:p-4 md:p-6 lg:p-8 mb-20 lg:mb-0">
+        <main className="flex-1 lg:ml-64 p-0 mb-20 lg:mb-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={screen}
