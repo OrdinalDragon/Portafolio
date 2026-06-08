@@ -45,7 +45,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div className="flex">
+      <div className="flex pt-16 sm:pt-20">
         <Sidebar 
           activeScreen={screen} 
           setScreen={setScreen} 
