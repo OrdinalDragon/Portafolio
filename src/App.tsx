@@ -45,7 +45,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div className="flex pt-20">
+      <div className="flex">
         <Sidebar 
           activeScreen={screen} 
           setScreen={setScreen} 
@@ -54,7 +54,7 @@ export default function App() {
           setActiveModal={() => {}} 
         />
         
-        <main className="flex-1 lg:ml-64 p-0 mb-20 lg:mb-0">
+        <main className="flex-1 lg:ml-64 p-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={screen}
@@ -98,7 +98,7 @@ export default function App() {
         </button>
       </nav>
 
-      <footer className="w-full py-8 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest border-t border-outline-variant/15 font-body text-xs tracking-tighter mt-20 overflow-hidden min-w-0">
+      <footer className="w-full py-6 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest border-t border-outline-variant/15 font-body text-xs tracking-tighter overflow-hidden min-w-0">
         <div className="text-primary-container font-bold mb-4 md:mb-0">
           {t('common.brand')}
         </div>
