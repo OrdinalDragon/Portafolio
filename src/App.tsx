@@ -98,7 +98,7 @@ export default function App() {
         </button>
       </nav>
 
-      <footer className="w-full py-8 px-12 flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest border-t border-outline-variant/15 font-body text-xs tracking-tighter mt-20">
+      <footer className="w-full py-8 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest border-t border-outline-variant/15 font-body text-xs tracking-tighter mt-20 overflow-hidden min-w-0">
         <div className="text-primary-container font-bold mb-4 md:mb-0">
           {t('common.brand')}
         </div>
