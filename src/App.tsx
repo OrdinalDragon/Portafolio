@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Swords } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from './i18n/LanguageContext';
@@ -20,6 +20,11 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>('personaje');
   const [questAlert, setQuestAlert] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    mainRef.current?.scrollTo({ top: 0 });
+  }, [screen]);
 
   const startAdventure = () => {
     setQuestAlert(t('common.start.quest'));
@@ -54,7 +59,7 @@ export default function App() {
           setActiveModal={() => {}} 
         />
         
-        <main className="flex-1 min-h-0 lg:ml-64 p-0 overflow-auto">
+        <main ref={mainRef} className="flex-1 min-h-0 lg:ml-64 p-0 overflow-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={screen}
