@@ -28,7 +28,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-surface selection:bg-primary-container selection:text-on-primary overflow-x-hidden">
+    <div className="h-dvh flex flex-col bg-background text-on-surface selection:bg-primary-container selection:text-on-primary overflow-hidden">
       <TopNav activeScreen={screen} setScreen={setScreen} onMenuClick={() => setIsSidebarOpen(true)} />
       
       <AnimatePresence>
@@ -45,7 +45,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div className="flex pt-16 sm:pt-20">
+      <div className="flex-1 flex pt-16 sm:pt-20 overflow-hidden">
         <Sidebar 
           activeScreen={screen} 
           setScreen={setScreen} 
@@ -54,7 +54,7 @@ export default function App() {
           setActiveModal={() => {}} 
         />
         
-        <main className="flex-1 lg:ml-64 p-0">
+        <main className="flex-1 lg:ml-64 p-0 overflow-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={screen}
@@ -98,11 +98,11 @@ export default function App() {
         </button>
       </nav>
 
-      <footer className="w-full py-6 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest border-t border-outline-variant/15 font-body text-xs tracking-tighter overflow-hidden min-w-0">
-        <div className="text-primary-container font-bold mb-4 md:mb-0">
+      <footer className="shrink-0 w-full py-4 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest border-t border-outline-variant/15 font-body text-xs tracking-tighter overflow-hidden min-w-0">
+        <div className="text-primary-container font-bold mb-2 md:mb-0">
           {t('common.brand')}
         </div>
-        <div className="text-on-surface/40 text-center mb-4 md:mb-0">
+        <div className="text-on-surface/40 text-center mb-2 md:mb-0">
           {t('common.footer')}
         </div>
       </footer>
