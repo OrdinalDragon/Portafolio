@@ -23,7 +23,7 @@ export default function TopNav({ activeScreen, setScreen, onMenuClick }: { activ
   };
 
   return (
-    <nav className="fixed top-0 w-full flex justify-between items-center px-2 sm:px-4 md:px-8 h-16 sm:h-20 bg-surface-container-lowest z-50 border-b border-outline-variant/15 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.7)]">
+    <nav className="fixed top-0 left-0 w-full flex justify-between items-center px-2 sm:px-4 md:px-8 h-16 sm:h-20 bg-surface-container-lowest z-50 border-b border-outline-variant/15 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.7)] overflow-hidden">
       <div className="flex items-center gap-2 sm:gap-3">
         <button 
           onClick={onMenuClick}
@@ -32,7 +32,7 @@ export default function TopNav({ activeScreen, setScreen, onMenuClick }: { activ
         >
           <LayoutDashboard size={20} />
         </button>
-        <div className="font-headline font-black text-primary-container drop-shadow-[0_2px_4px_rgba(255,145,0,0.5)] text-[10px] sm:text-lg md:text-2xl tracking-tighter cursor-pointer leading-tight" onClick={() => setScreen('personaje')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setScreen('personaje')}>
+        <div className="font-headline font-black text-primary-container drop-shadow-[0_2px_4px_rgba(255,145,0,0.5)] text-[10px] sm:text-lg md:text-2xl tracking-tighter cursor-pointer leading-tight min-w-0 truncate" onClick={() => setScreen('personaje')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setScreen('personaje')}>
           {t('topnav.brand')}
         </div>
       </div>
