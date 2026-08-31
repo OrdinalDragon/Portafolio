@@ -285,8 +285,8 @@ export default {
   'portfolio.emotionshop.metric': 'Role-based access, S3 image storage, sales analytics',
 
   'portfolio.portfolio.name': 'Portfolio (Ordinal Dragon)',
-  'portfolio.portfolio.desc': 'Personal portfolio with a dark RPG theme. React, TypeScript, Vite, Tailwind and Motion, deployed on GitHub Pages.',
-  'portfolio.portfolio.metric': 'This site — dark RPG theme with games identity',
+  'portfolio.portfolio.desc': 'Personal portfolio built in two versions: a professional scrolling portfolio (default) with a dark 8-bit aesthetic for recruiters and clients, and an interactive RPG mode with my gamer identity. React, TypeScript, Vite, Tailwind CSS and Motion, with ES/EN language support and HashRouter routing for GitHub Pages.',
+  'portfolio.portfolio.metric': 'This site — dual mode: professional (default) and RPG, with ES/EN support',
 
   'portfolio.commerce.name': 'Commerce Manager',
   'portfolio.commerce.desc': 'Web app for price list management, product catalogs, budgets and customer tracking. TypeScript full-stack.',
