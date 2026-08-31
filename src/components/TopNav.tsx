@@ -1,10 +1,12 @@
 import React from 'react';
-import { LayoutDashboard, Globe, Linkedin, Github } from 'lucide-react';
+import { LayoutDashboard, Globe, Linkedin, Github, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 import type { Screen } from '../types';
 
 export default function TopNav({ activeScreen, setScreen, onMenuClick }: { activeScreen: Screen, setScreen: (s: Screen) => void, onMenuClick: () => void }) {
   const { t, lang, setLanguage } = useLanguage();
+  const navigate = useNavigate();
 
   const toggleLanguage = () => {
     setLanguage(lang === 'en' ? 'es' : 'en');
@@ -55,6 +57,14 @@ export default function TopNav({ activeScreen, setScreen, onMenuClick }: { activ
       </div>
 
       <div className="flex items-center gap-2 md:gap-6">
+        <button
+          onClick={() => navigate('/')}
+          className="text-on-surface/60 hover:text-primary transition-all hover:scale-105 cursor-pointer flex items-center gap-1 font-label text-xs uppercase tracking-widest"
+          aria-label={t('topnav.back')}
+        >
+          <ArrowLeft size={18} className="md:w-[22px] md:h-[22px]" aria-hidden="true" />
+          <span className="hidden md:inline">{t('topnav.back')}</span>
+        </button>
         <button
           onClick={toggleLanguage}
           className="text-on-surface/60 hover:text-primary transition-all hover:scale-110 cursor-pointer flex items-center gap-1 font-label text-xs uppercase tracking-widest"

@@ -35,6 +35,7 @@ export default {
   'topnav.story': 'Story',
   'topnav.bestiary': 'Bestiary',
   'topnav.projects': 'Projects',
+  'topnav.back': 'Back to Portfolio',
 
   'bestiario.subtitle': 'Compendium of Wisdom',
   'bestiario.title': 'TECHNICAL BESTIARY',
