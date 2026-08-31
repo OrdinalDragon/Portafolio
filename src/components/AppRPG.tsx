@@ -63,6 +63,7 @@ export default function AppRPG() {
           <AnimatePresence mode="wait">
             <motion.div
               key={screen}
+              className="min-h-full"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
