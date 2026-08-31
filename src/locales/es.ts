@@ -161,8 +161,8 @@ export default {
   'proyectos.title': 'La Forja de Artefactos',
   'proyectos.description': 'Aquí es donde los fragmentos de código se funden con la creatividad para dar vida a herramientas legendarias.',
   'proyectos.moodapp.name': 'Mood App',
-  'proyectos.moodapp.desc': 'Aplicación web full-stack para seguimiento de estados de ánimo. Construida con Node.js y Tailwind CSS en el front-end, Python y MariaDB en el back-end. Desplegada en un dominio en vivo con manejo end-to-end.',
-  'proyectos.moodapp.tech': 'Node.js · Tailwind CSS · Python · MariaDB',
+  'proyectos.moodapp.desc': 'Plataforma web de eventos en Buenos Aires con búsqueda y recomendaciones según tu estado de ánimo. Frontend con React 19, TypeScript, Vite y Tailwind CSS; backend con Python y FastAPI sobre MongoDB. Incluye chat con IA (Gemini) que recomienda eventos, un scraper automático de eventos, mapa interactivo, favoritos, reseñas, notificaciones por email, login con Google, modo claro/oscuro y un panel de administración con analíticas detalladas. Desplegada con Docker, Nginx y Cloudflare.',
+  'proyectos.moodapp.tech': 'React 19 · TypeScript · FastAPI · MongoDB · Gemini IA · Docker',
   'proyectos.moodapp.live': 'Demo en Vivo',
   'proyectos.moodapp.repo': 'Repositorio',
   'proyectos.portfolio.name': 'Portafolio (Ordinal Dragon)',
@@ -273,8 +273,8 @@ export default {
   'portfolio.projects.status.progress': 'En Progreso',
 
   'portfolio.mood.name': 'Mood App',
-  'portfolio.mood.desc': 'Aplicación web full-stack para registrar estados emocionales. Node.js y Tailwind en el front, Python y MariaDB en el back, desplegada en un dominio en vivo.',
-  'portfolio.mood.metric': 'Ciclo completo: construida, desplegada y mantenida en un dominio real',
+  'portfolio.mood.desc': 'Plataforma web de eventos en Buenos Aires con búsqueda y recomendaciones según tu estado de ánimo. Frontend con React 19, TypeScript, Vite y Tailwind CSS; backend con Python y FastAPI sobre MongoDB. Incluye chat con IA (Gemini) que recomienda eventos, un scraper automático de eventos, mapa interactivo, favoritos, reseñas, notificaciones por email, login con Google, modo claro/oscuro y un panel de administración con analíticas detalladas. Desplegada con Docker, Nginx y Cloudflare.',
+  'portfolio.mood.metric': 'Recomendaciones por estado de ánimo con IA, panel admin con métricas en tiempo real, deploy en dominio real con Cloudflare',
 
   'portfolio.bank.name': 'Simulación Bancaria',
   'portfolio.bank.desc': 'Sistema bancario full-stack con .NET 8 y C# 12: gestión de cuentas, transacciones, EF Core + MariaDB, autenticación JWT, Docker y pruebas xUnit.',

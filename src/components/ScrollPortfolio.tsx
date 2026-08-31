@@ -39,7 +39,7 @@ const PROJECTS: Project[] = [
     nameKey: 'portfolio.mood.name',
     descKey: 'portfolio.mood.desc',
     metricKey: 'portfolio.mood.metric',
-    tags: ['Node.js', 'Tailwind CSS', 'Python', 'MariaDB'],
+    tags: ['React 19', 'TypeScript', 'Vite', 'Tailwind CSS', 'FastAPI', 'MongoDB', 'Gemini IA', 'Docker', 'Nginx', 'Cloudflare'],
     live: 'https://prototipomood.jesrepresentaciones.com.ar/',
     repo: 'https://github.com/OrdinalDragon/Mood',
     status: 'completed',

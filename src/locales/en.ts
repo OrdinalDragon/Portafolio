@@ -161,8 +161,8 @@ export default {
   'proyectos.title': 'The Artifact Forge',
   'proyectos.description': 'Here, fragments of code merge with creativity to bring legendary tools to life.',
   'proyectos.moodapp.name': 'Mood App',
-  'proyectos.moodapp.desc': 'Full-stack web application for tracking emotional states. Built with Node.js and Tailwind CSS on the front-end, Python and MariaDB on the back-end. Deployed on a live domain with end-to-end management.',
-  'proyectos.moodapp.tech': 'Node.js · Tailwind CSS · Python · MariaDB',
+  'proyectos.moodapp.desc': 'A Buenos Aires events web platform with search and recommendations based on your mood. Frontend with React 19, TypeScript, Vite and Tailwind CSS; backend with Python and FastAPI on MongoDB. It includes an AI chat (Gemini) that recommends events, an automatic event scraper, an interactive map, favorites, reviews, email notifications, Google login, light/dark mode and an admin panel with detailed analytics. Deployed with Docker, Nginx and Cloudflare.',
+  'proyectos.moodapp.tech': 'React 19 · TypeScript · FastAPI · MongoDB · Gemini AI · Docker',
   'proyectos.moodapp.live': 'Live Demo',
   'proyectos.moodapp.repo': 'Repository',
   'proyectos.portfolio.name': 'Portfolio (Ordinal Dragon)',
@@ -273,8 +273,8 @@ export default {
   'portfolio.projects.status.progress': 'In Progress',
 
   'portfolio.mood.name': 'Mood App',
-  'portfolio.mood.desc': 'Full-stack web app for tracking emotional states. Node.js and Tailwind on the front, Python and MariaDB on the back, deployed on a live domain.',
-  'portfolio.mood.metric': 'Full lifecycle: build, deploy & maintain on a live domain',
+  'portfolio.mood.desc': 'A Buenos Aires events web platform with search and recommendations based on your mood. Frontend with React 19, TypeScript, Vite and Tailwind CSS; backend with Python and FastAPI on MongoDB. It includes an AI chat (Gemini) that recommends events, an automatic event scraper, an interactive map, favorites, reviews, email notifications, Google login, light/dark mode and an admin panel with detailed analytics. Deployed with Docker, Nginx and Cloudflare.',
+  'portfolio.mood.metric': 'AI mood-based recommendations, admin panel with real-time metrics, live deployment with Cloudflare',
 
   'portfolio.bank.name': 'Bank Simulation',
   'portfolio.bank.desc': 'Full-stack banking system with .NET 8 and C# 12: account management, transactions, EF Core + MariaDB, JWT auth, Docker, and xUnit tests.',
