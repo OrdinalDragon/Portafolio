@@ -18,6 +18,7 @@ interface Project {
   tags: string[];
   live?: string;
   repo?: string;
+  screenshot?: string;
   status: ProjectStatus;
   accent: string;
 }
@@ -31,6 +32,7 @@ const PROJECTS: Project[] = [
     tags: ['React', 'Node.js', 'MongoDB', 'Express', 'AWS', 'Docker'],
     live: 'https://emotionshop.jesrepresentaciones.com.ar/',
     repo: 'https://github.com/OrdinalDragon/E-commerce',
+    screenshot: 'projects/emotionshop.png',
     status: 'completed',
     accent: '#f9abff',
   },
@@ -42,6 +44,7 @@ const PROJECTS: Project[] = [
     tags: ['React 19', 'TypeScript', 'Vite', 'Tailwind CSS', 'FastAPI', 'MongoDB', 'Gemini IA', 'Docker', 'Nginx', 'Cloudflare'],
     live: 'https://prototipomood.jesrepresentaciones.com.ar/',
     repo: 'https://github.com/OrdinalDragon/Mood',
+    screenshot: 'projects/mood.png',
     status: 'completed',
     accent: '#ff9100',
   },
@@ -52,6 +55,7 @@ const PROJECTS: Project[] = [
     metricKey: 'portfolio.bank.metric',
     tags: ['C#', '.NET 8', 'EF Core', 'MariaDB', 'WinForms', 'Docker'],
     repo: 'https://github.com/OrdinalDragon/Banco.net',
+    screenshot: 'projects/bank.png',
     status: 'completed',
     accent: '#4fc3f7',
   },
@@ -62,6 +66,7 @@ const PROJECTS: Project[] = [
     metricKey: 'portfolio.portfolio.metric',
     tags: ['React', 'TypeScript', 'Vite', 'Tailwind', 'Motion'],
     repo: 'https://github.com/OrdinalDragon/Portafolio',
+    screenshot: 'projects/portfolio.png',
     status: 'completed',
     accent: '#ffb97c',
   },
@@ -71,10 +76,45 @@ const PROJECTS: Project[] = [
     descKey: 'portfolio.commerce.desc',
     metricKey: 'portfolio.commerce.metric',
     tags: ['React', 'Node.js', 'MongoDB'],
+    screenshot: 'projects/commerce.png',
     status: 'progress',
     accent: '#81c784',
   },
 ];
+
+function ProjectScreenshot({ screenshot, accent, status }: { screenshot?: string; accent: string; status: ProjectStatus }) {
+  const [failed, setFailed] = React.useState(false);
+  const src = screenshot ? `${import.meta.env.BASE_URL}${screenshot}` : '';
+  const showImage = Boolean(screenshot) && !failed;
+
+  return (
+    <div className="relative h-44 sm:h-52 overflow-hidden border-b-2 border-outline-variant/20" style={{ background: `linear-gradient(135deg, rgba(255,145,0,0.06), rgba(0,0,0,0.4))` }}>
+      {showImage ? (
+        <img
+          src={src}
+          alt=""
+          loading="lazy"
+          onError={() => setFailed(true)}
+          className="absolute inset-0 w-full h-full object-cover object-top pixel-shadow"
+        />
+      ) : (
+        <>
+          <div className="absolute inset-0 scanlines pointer-events-none" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-16 h-16 flex items-center justify-center border-4 border-black/30 pixel-shadow" style={{ background: `${accent}22`, boxShadow: `5px 5px 0 0 ${accent}55` }}>
+              <Code2 size={28} style={{ color: accent }} />
+            </div>
+          </div>
+        </>
+      )}
+      {status === 'progress' && (
+        <div className="absolute top-3 right-3 px-2 py-1 font-pixel text-[8px] bg-secondary text-black">
+          WIP
+        </div>
+      )}
+    </div>
+  );
+}
 
 const TECH_TAGS = [
   'React', 'TypeScript', 'JavaScript', 'Next.js', 'Node.js', 'Express',
@@ -281,20 +321,7 @@ export default function ScrollPortfolio() {
             {PROJECTS.map((p) => (
               <Reveal key={p.id}>
                 <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full">
-                  {/* Screenshot placeholder */}
-                  <div className="relative h-44 sm:h-52 overflow-hidden border-b-2 border-outline-variant/20" style={{ background: `linear-gradient(135deg, rgba(255,145,0,0.06), rgba(0,0,0,0.4))` }}>
-                    <div className="absolute inset-0 scanlines pointer-events-none" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 flex items-center justify-center border-4 border-black/30 pixel-shadow" style={{ background: `${p.accent}22`, boxShadow: `5px 5px 0 0 ${p.accent}55` }}>
-                        <Code2 size={28} style={{ color: p.accent }} />
-                      </div>
-                    </div>
-                    {p.status === 'progress' && (
-                      <div className="absolute top-3 right-3 px-2 py-1 font-pixel text-[8px] bg-secondary text-black">
-                        WIP
-                      </div>
-                    )}
-                  </div>
+                  <ProjectScreenshot screenshot={p.screenshot} accent={p.accent} status={p.status} />
 
                   <div className="p-5 sm:p-6 flex-1 flex flex-col">
                     <div className="flex items-center justify-between mb-2">
