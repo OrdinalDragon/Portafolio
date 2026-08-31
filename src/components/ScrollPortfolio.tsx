@@ -78,10 +78,12 @@ const PROJECTS: Project[] = [
 
 const TECH_TAGS = [
   'React', 'TypeScript', 'JavaScript', 'Next.js', 'Node.js', 'Express',
-  'C# / .NET', 'ASP.NET Core', 'Entity Framework', 'Python', 'Java', 'C++',
-  'Tailwind CSS', 'HTML', 'CSS', 'MongoDB', 'MySQL', 'MariaDB', 'PostgreSQL',
-  'Git', 'GitHub Actions', 'Docker', 'Linux / Bash', 'AWS', 'VBA',
-  'REST APIs', 'JWT', 'BCrypt', 'xUnit', 'Moq', 'Serilog', 'Scrum', 'Agile'
+  'C# / .NET', 'ASP.NET Core', 'Entity Framework', 'Python', 'Java', 'C++', 'PHP', 'Laravel',
+  'Tailwind CSS', 'HTML', 'CSS', 'MongoDB', 'MongoDB Atlas', 'MySQL', 'MariaDB', 'Oracle', 'PostgreSQL',
+  'Redux Toolkit', 'TypeScript', 'Vite',
+  'Git', 'GitHub Actions', 'Docker', 'Linux / Bash', 'AWS S3', 'CloudFront', 'EC2', 'VBA', 'Postman',
+  'REST APIs', 'JWT', 'BCrypt', 'xUnit', 'Moq', 'Serilog', 'Scrum', 'Agile',
+  'AI Coding', 'Copilot', 'Claude', 'Ollama'
 ];
 
 const SOFT_SKILLS = ['Business Acumen', 'Client Focus', 'Communication', 'Self-Taught', 'Teamwork', 'Problem Solving'];
@@ -357,7 +359,7 @@ export default function ScrollPortfolio() {
           {/* Stat counters */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
             {[
-              { value: '345+', label: t('portfolio.stack.stat.hours') },
+              { value: '391+', label: t('portfolio.stack.stat.hours') },
               { value: '5', label: t('portfolio.stack.stat.projects') },
               { value: '100+', label: t('portfolio.stack.stat.clients') },
             ].map((s, i) => (
@@ -490,9 +492,9 @@ export default function ScrollPortfolio() {
                 <Linkedin className="text-primary" size={24} />
                 <span className="font-label text-xs uppercase tracking-widest text-on-surface/80 group-hover:text-primary transition-colors">LinkedIn</span>
               </a>
-              <a href="mailto:ngsrepresentaciones@gmail.com" className="flex items-center gap-4 p-5 bg-surface-container-low border-2 border-outline-variant/20 pixel-corners hover:border-primary/50 transition-colors group">
+              <a href="mailto:schernetzki96@gmail.com" className="flex items-center gap-4 p-5 bg-surface-container-low border-2 border-outline-variant/20 pixel-corners hover:border-primary/50 transition-colors group">
                 <Mail className="text-primary" size={24} />
-                <span className="font-label text-xs uppercase tracking-widest text-on-surface/80 group-hover:text-primary transition-colors break-all">ngsrepresentaciones@gmail.com</span>
+                <span className="font-label text-xs uppercase tracking-widest text-on-surface/80 group-hover:text-primary transition-colors break-all">schernetzki96@gmail.com</span>
               </a>
               <a href={cvPdf} target="_blank" rel="noopener noreferrer" download className="flex items-center gap-4 p-5 bg-surface-container-low border-2 border-outline-variant/20 pixel-corners hover:border-primary/50 transition-colors group">
                 <Download className="text-primary" size={24} />

@@ -79,7 +79,7 @@ export default function Contacto() {
           </div>
         </a>
         <a
-          href="mailto:ngsrepresentaciones@gmail.com"
+          href="mailto:schernetzki96@gmail.com"
           className="flex items-center gap-4 p-5 bg-surface-container-high border border-outline-variant/10 hover:border-primary/30 transition-all group"
         >
           <div className="w-10 h-10 bg-surface-container-highest border border-outline-variant/30 flex items-center justify-center flex-shrink-0">
@@ -87,7 +87,7 @@ export default function Contacto() {
           </div>
           <div>
             <p className="font-label text-xs uppercase tracking-widest text-on-surface font-bold">{t('contacto.direct')}</p>
-            <p className="text-[10px] text-on-surface-variant">ngsrepresentaciones@gmail.com</p>
+            <p className="text-[10px] text-on-surface-variant">schernetzki96@gmail.com</p>
           </div>
         </a>
       </div>
