@@ -411,6 +411,17 @@ export default function ScrollPortfolio() {
           </nav>
 
           <div className="flex items-center gap-3">
+            <a
+              href={cvPdf}
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 font-label text-xs uppercase tracking-widest text-primary border-2 border-primary/50 hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
+              aria-label={t('portfolio.contact.download')}
+            >
+              <Download size={14} />
+              <span className="hidden lg:inline">{t('portfolio.contact.download')}</span>
+            </a>
             <button
               onClick={() => setLanguage(lang === 'en' ? 'es' : 'en')}
               className="flex items-center gap-1 font-label text-xs uppercase tracking-widest text-on-surface/70 hover:text-primary transition-all hover:scale-105 cursor-pointer"
@@ -555,7 +566,7 @@ export default function ScrollPortfolio() {
                         </a>
                       )}
                       {p.repo && (
-                        <a href={p.repo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 border-2 border-outline-variant/40 text-on-surface/80 hover:border-primary/50 hover:text-primary font-label text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer">
+                        <a href={p.repo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 border-2 border-primary/50 text-primary hover:bg-primary hover:text-on-primary font-label text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer">
                           <Github size={14} />
                           {t('portfolio.projects.code')}
                         </a>
@@ -662,23 +673,6 @@ export default function ScrollPortfolio() {
                 <p className="text-on-surface-variant text-sm mt-2">{t('portfolio.exp.sales.desc2')}</p>
               </div>
             </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.55, ease: EASE, delay: 0.1 }}
-            >
-              <div className="relative">
-                <div className="pulse-dot absolute -left-[41px] top-1 w-3 h-3 bg-primary pixel-corners" />
-                <div className="flex items-center gap-2 text-on-surface-variant font-mono text-xs uppercase tracking-widest mb-1">
-                  <Code2 size={14} className="text-primary" />
-                  {t('portfolio.exp.freelance.date')}
-                </div>
-                <h3 className="font-headline text-lg sm:text-xl font-bold text-on-surface">{t('portfolio.exp.freelance.role')}</h3>
-                <p className="text-primary text-sm mb-3">{t('portfolio.exp.freelance.company')}</p>
-                <p className="text-on-surface-variant text-sm">{t('portfolio.exp.freelance.desc')}</p>
-              </div>
-            </motion.div>
           </div>
         </div>
       </section>
@@ -738,7 +732,10 @@ export default function ScrollPortfolio() {
             <SectionHeading kicker="// connect" title={t('portfolio.contact.title')} />
           </Reveal>
           <Reveal>
-            <p className="text-center text-on-surface-variant mb-10">{t('portfolio.contact.subtitle')}</p>
+            <p className="text-center text-on-surface-variant mb-2">{t('portfolio.contact.subtitle')}</p>
+            <p className="text-center text-primary font-label text-xs sm:text-sm uppercase tracking-widest mb-10">
+              {t('portfolio.contact.cta')}
+            </p>
           </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

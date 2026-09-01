@@ -307,10 +307,6 @@ export default {
   'portfolio.exp.sales.date': '2016 — 2026',
   'portfolio.exp.sales.desc1': 'Automaticé listas de precios y gestión de pedidos con macros VBA — mi primera aplicación real de programación en el negocio.',
   'portfolio.exp.sales.desc2': 'Gestioné más de 100 clientes B2B con un crecimiento del 25%, ejecuté más de 500 campañas de email segmentadas y mantuve 3+ catálogos de productos.',
-  'portfolio.exp.freelance.role': 'Desarrollador Full-Stack Freelance',
-  'portfolio.exp.freelance.company': 'Proyectos Personales y de Clientes',
-  'portfolio.exp.freelance.date': '2024 — Presente',
-  'portfolio.exp.freelance.desc': 'Desarrollo full-stack con JavaScript, HTML, CSS e integraciones de back-end robustas.',
 
   'portfolio.education.title': 'Educación',
   'portfolio.edu.pescar.name': 'Desarrollador Web Full Stack',
@@ -329,6 +325,7 @@ export default {
 
   'portfolio.contact.title': 'Contacto',
   'portfolio.contact.subtitle': 'Construyamos algo juntos.',
+  'portfolio.contact.cta': '¿Trabajamos juntos? Escribime a schernetzki96@gmail.com.',
   'portfolio.contact.name': 'Nombre',
   'portfolio.contact.email': 'Email',
   'portfolio.contact.subject': 'Asunto',
