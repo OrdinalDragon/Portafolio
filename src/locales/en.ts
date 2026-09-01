@@ -340,4 +340,5 @@ export default {
   'portfolio.contact.download': 'Download CV',
 
   'portfolio.footer.rights': 'All rights reserved.',
+  'portfolio.backToTop': 'Back to top',
 };

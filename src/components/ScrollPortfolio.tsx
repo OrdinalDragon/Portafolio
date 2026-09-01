@@ -1,10 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   FolderGit2, Code2, Rocket, Github,
   Globe, Mail, Download, ChevronRight, CheckCircle2,
-  Award, Briefcase, GraduationCap, Send, Gamepad2, Languages, Linkedin
+  Award, Briefcase, GraduationCap, Send, Gamepad2, Languages, Linkedin, ArrowUp
 } from 'lucide-react';
-import { motion, useInView } from 'motion/react';
+import {
+  motion, AnimatePresence, useInView, useScroll, useSpring, useTransform, useMotionValue, useReducedMotion
+} from 'motion/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 
@@ -82,21 +84,148 @@ const PROJECTS: Project[] = [
   },
 ];
 
+/* ---------- animation helpers ---------- */
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const heroContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+};
+
+const heroItem = {
+  hidden: { opacity: 0, y: 28 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
+};
+
+// Scroll progress for the pixelated top bar (0 → 1)
+function usePageProgress() {
+  const { scrollYProgress } = useScroll();
+  return useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
+}
+
+// Tracks whether the page has scrolled past a threshold (header shrink + back-to-top)
+function useScrolledPast(threshold: number) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > threshold);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [threshold]);
+  return scrolled;
+}
+
+// Terminal typewriter effect
+function useTypewriter(text: string, speed = 42) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const started = useInView(ref, { once: true, amount: 0.6 });
+  const [output, setOutput] = useState('');
+  useEffect(() => {
+    if (!started) return;
+    let i = 0;
+    const id = window.setInterval(() => {
+      i++;
+      setOutput(text.slice(0, i));
+      if (i >= text.length) window.clearInterval(id);
+    }, speed);
+    return () => window.clearInterval(id);
+  }, [started, text, speed]);
+  return { ref, output };
+}
+
+// Count-up number when it enters the viewport
+function useCountUp(target: number, inView: boolean, duration = 1400) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setValue(Math.round(target * eased));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, target, duration]);
+  return value;
+}
+
+// Scrollspy: returns the id of the section currently in the middle of the viewport
+function useScrollSpy(ids: string[]) {
+  const [active, setActive] = useState(ids[0]);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      },
+      { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [ids]);
+  return active;
+}
+
+// 3D tilt on hover (disabled on touch + reduced-motion)
+function TiltCard({ children, className = '', max = 4 }: { children: React.ReactNode; className?: string; max?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+  const mx = useMotionValue(0.5);
+  const my = useMotionValue(0.5);
+  const rX = useSpring(useTransform(my, [0, 1], [max, -max]), { stiffness: 180, damping: 20 });
+  const rY = useSpring(useTransform(mx, [0, 1], [-max, max]), { stiffness: 180, damping: 20 });
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    mx.set((e.clientX - rect.left) / rect.width);
+    my.set((e.clientY - rect.top) / rect.height);
+  };
+  const onMouseLeave = () => {
+    mx.set(0.5);
+    my.set(0.5);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      className={className}
+      style={reduced ? undefined : { rotateX: rX, rotateY: rY, transformPerspective: 900, transformStyle: 'preserve-3d' }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 function ProjectScreenshot({ screenshot, accent, status }: { screenshot?: string; accent: string; status: ProjectStatus }) {
   const [failed, setFailed] = React.useState(false);
   const src = screenshot ? `${import.meta.env.BASE_URL}${screenshot}` : '';
   const showImage = Boolean(screenshot) && !failed;
 
   return (
-    <div className="relative h-44 sm:h-52 overflow-hidden border-b-2 border-outline-variant/20" style={{ background: `linear-gradient(135deg, rgba(255,145,0,0.06), rgba(0,0,0,0.4))` }}>
+    <div className="group/shot relative h-44 sm:h-52 overflow-hidden border-b-2 border-outline-variant/20" style={{ background: `linear-gradient(135deg, rgba(255,145,0,0.06), rgba(0,0,0,0.4))` }}>
       {showImage ? (
-        <img
-          src={src}
-          alt=""
-          loading="lazy"
-          onError={() => setFailed(true)}
-          className="absolute inset-0 w-full h-full object-cover object-top pixel-shadow"
-        />
+        <>
+          <img
+            src={src}
+            alt=""
+            loading="lazy"
+            onError={() => setFailed(true)}
+            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 ease-out group-hover/shot:scale-105"
+          />
+          <div className="absolute inset-0 scanlines pointer-events-none opacity-40" />
+          <div className="project-sweep absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent -skew-x-12 pointer-events-none opacity-0" />
+        </>
       ) : (
         <>
           <div className="absolute inset-0 scanlines pointer-events-none" />
@@ -164,6 +293,29 @@ function SectionHeading({ kicker, title }: { kicker: string; title: string }) {
   );
 }
 
+function StatCounter({ value, suffix, label, delay = 0 }: { value: number; suffix?: string; label: string; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.6 });
+  const count = useCountUp(value, inView);
+  const reduced = useReducedMotion();
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.55, ease: EASE as [number, number, number, number], delay }}
+      className="text-center bg-surface-container-low border-2 border-outline-variant/20 pixel-corners p-6"
+    >
+      <p className="font-pixel text-2xl sm:text-3xl text-primary">
+        {reduced ? value : count}{suffix}
+      </p>
+      <p className="mt-2 font-label text-[11px] uppercase tracking-widest text-on-surface-variant">{label}</p>
+    </motion.div>
+  );
+}
+
 export default function ScrollPortfolio() {
   const { t, lang, setLanguage } = useLanguage();
   const navigate = useNavigate();
@@ -215,25 +367,45 @@ export default function ScrollPortfolio() {
     }
   };
 
+  const pageProgress = usePageProgress();
+  const scrolledPast = useScrolledPast(60);
+  const activeSection = useScrollSpy(SECTION_LINKS.map((s) => s.id));
+  const { ref: typeRef, output: typewriterLine } = useTypewriter('> hello_world.init()', 35);
+  // Hero parallax
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroY = useTransform(heroProgress, [0, 1], [0, 120]);
+  const heroOpacity = useTransform(heroProgress, [0, 0.6], [1, 0]);
+
   return (
     <div className="min-h-screen bg-background text-on-surface font-body relative overflow-x-hidden">
       {/* Sticky header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur border-b-[3px] border-primary/40 pixel-corners">
-        <div className="max-w-6xl mx-auto flex items-center justify-between px-4 sm:px-6 h-16">
-          <div className="flex items-center gap-2 font-pixel text-primary text-[10px] sm:text-xs tracking-tight">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur border-b-[3px] border-primary/40 pixel-corners transition-all duration-300"
+        style={{ height: scrolledPast ? '3.5rem' : '4rem' }}>
+        <motion.div
+          style={{ scaleX: pageProgress }}
+          className="absolute top-0 left-0 right-0 h-[3px] origin-left bg-gradient-to-r from-primary to-primary-container"
+        />
+        <div className="max-w-6xl mx-auto flex items-center justify-between px-4 sm:px-6 h-full">
+          <button onClick={() => scrollTo('home')} className="flex items-center gap-2 font-pixel text-primary text-[10px] sm:text-xs tracking-tight cursor-pointer">
             <span className="hidden sm:inline">N.</span>
             <span>SCHERNETZKI</span>
             <span className="blink-cursor text-on-surface-variant">_</span>
-          </div>
+          </button>
 
           <nav className="hidden md:flex items-center gap-6">
             {SECTION_LINKS.map((s) => (
               <button
                 key={s.id}
                 onClick={() => scrollTo(s.id)}
-                className="font-label text-xs uppercase tracking-widest text-on-surface/70 hover:text-primary transition-colors cursor-pointer"
+                className={`relative font-label text-xs uppercase tracking-widest transition-colors cursor-pointer ${
+                  activeSection === s.id ? 'text-primary' : 'text-on-surface/70 hover:text-primary'
+                }`}
               >
                 {t(s.label)}
+                {activeSection === s.id && (
+                  <motion.span layoutId="nav-underline" className="absolute -bottom-1.5 left-0 right-0 h-[3px] bg-primary" transition={{ type: 'spring', stiffness: 350, damping: 30 }} />
+                )}
               </button>
             ))}
           </nav>
@@ -259,53 +431,74 @@ export default function ScrollPortfolio() {
       </header>
 
       {/* ============ HERO ============ */}
-      <section id="home" className="relative min-h-[100dvh] flex items-center justify-center px-4 pt-20 overflow-hidden">
+      <section id="home" ref={heroRef} className="relative min-h-[100dvh] flex items-center justify-center px-4 pt-20 overflow-hidden">
         <div className="absolute inset-0 scanlines pointer-events-none" />
-        <div className="relative z-10 max-w-3xl text-center">
-          <Reveal>
-            <p className="font-pixel text-primary text-[10px] sm:text-xs uppercase tracking-widest mb-6">
-              &gt; hello_world.init()
-            </p>
-          </Reveal>
-          <Reveal>
-            <h1 className="font-headline text-4xl sm:text-6xl md:text-7xl font-bold text-on-surface uppercase leading-tight">
+
+        {/* Floating 8-bit particles */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden>
+          {[
+            { left: '8%', size: 3, delay: 0, dur: 14, color: '#ff9100' },
+            { left: '20%', size: 2, delay: 3, dur: 16, color: '#f9abff' },
+            { left: '33%', size: 2, delay: 6, dur: 13, color: '#ffb97c' },
+            { left: '55%', size: 3, delay: 1.5, dur: 18, color: '#ff9100' },
+            { left: '70%', size: 2, delay: 8, dur: 15, color: '#f9abff' },
+            { left: '82%', size: 3, delay: 4, dur: 17, color: '#ffb97c' },
+            { left: '92%', size: 2, delay: 9.5, dur: 12, color: '#ff9100' },
+            { left: '48%', size: 2, delay: 11, dur: 16, color: '#f9abff' },
+          ].map((p, i) => (
+            <span
+              key={i}
+              className="particle"
+              style={{ left: p.left, width: p.size, height: p.size, background: p.color, boxShadow: `0 0 6px ${p.color}`, animationDelay: `${p.delay}s`, animationDuration: `${p.dur}s`, opacity: 0.7 }}
+            />
+          ))}
+        </div>
+
+        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 w-full max-w-3xl">
+          <motion.div
+            variants={heroContainer}
+            initial="hidden"
+            animate="show"
+            className="text-center"
+          >
+            <motion.p variants={heroItem} ref={typeRef} className="font-pixel text-primary text-[10px] sm:text-xs uppercase tracking-widest mb-6">
+              {typewriterLine}
+            </motion.p>
+            <motion.h1 variants={heroItem} className="font-headline text-4xl sm:text-6xl md:text-7xl font-bold text-on-surface uppercase leading-tight">
               Nicolas<br />
               <span className="text-primary-container">Schernetzki</span>
-            </h1>
-          </Reveal>
-          <Reveal>
-            <p className="mt-4 font-mono text-primary text-sm sm:text-base uppercase tracking-widest">
+            </motion.h1>
+            <motion.p variants={heroItem} className="mt-4 font-mono text-primary text-sm sm:text-base uppercase tracking-widest">
               {t('portfolio.hero.title')}
               <span className="blink-cursor">_</span>
-            </p>
-          </Reveal>
-          <Reveal>
-            <p className="mt-6 text-on-surface-variant text-base sm:text-lg max-w-xl mx-auto font-body">
+            </motion.p>
+            <motion.p variants={heroItem} className="mt-6 text-on-surface-variant text-base sm:text-lg max-w-xl mx-auto font-body">
               {t('portfolio.hero.tagline')}
-            </p>
-          </Reveal>
-          <Reveal className="mt-10">
-            <div className="flex flex-wrap justify-center gap-4">
-              <button onClick={() => scrollTo('projects')} className="flex items-center gap-2 px-6 sm:px-8 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-label font-bold uppercase tracking-widest text-sm pixel-shadow cursor-pointer">
-                <FolderGit2 size={18} />
-                {t('portfolio.hero.cta.projects')}
-              </button>
-              <button onClick={() => scrollTo('contact')} className="flex items-center gap-2 px-6 sm:px-8 py-3 border-2 border-primary/40 text-primary font-label font-bold uppercase tracking-widest text-sm hover:bg-primary/5 transition-colors cursor-pointer">
-                <Send size={18} />
-                {t('portfolio.hero.cta.contact')}
-              </button>
-            </div>
-          </Reveal>
-          <Reveal className="mt-6">
-            <a href={cvPdf} target="_blank" rel="noopener noreferrer" download className="inline-flex items-center gap-2 font-label text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
-              <Download size={16} />
-              {t('portfolio.hero.cta.cv')}
-            </a>
-          </Reveal>
-          <Reveal className="mt-14">
-            <ChevronRight className="mx-auto text-primary animate-bounce rotate-90" size={28} />
-          </Reveal>
-        </div>
+            </motion.p>
+            <motion.div variants={heroItem} className="mt-10">
+              <div className="flex flex-wrap justify-center gap-4">
+                <button onClick={() => scrollTo('projects')} className="glow-pulse flex items-center gap-2 px-6 sm:px-8 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-label font-bold uppercase tracking-widest text-sm pixel-shadow cursor-pointer">
+                  <FolderGit2 size={18} />
+                  {t('portfolio.hero.cta.projects')}
+                </button>
+                <button onClick={() => scrollTo('contact')} className="flex items-center gap-2 px-6 sm:px-8 py-3 border-2 border-primary/40 text-primary font-label font-bold uppercase tracking-widest text-sm hover:bg-primary/5 transition-colors cursor-pointer">
+                  <Send size={18} />
+                  {t('portfolio.hero.cta.contact')}
+                </button>
+              </div>
+            </motion.div>
+            <motion.div variants={heroItem} className="mt-6">
+              <a href={cvPdf} target="_blank" rel="noopener noreferrer" download className="inline-flex items-center gap-2 font-label text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+                <Download size={16} />
+                {t('portfolio.hero.cta.cv')}
+              </a>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4, duration: 1 }} className="absolute bottom-8 left-1/2 -translate-x-1/2">
+          <ChevronRight className="text-primary animate-bounce rotate-90" size={28} />
+        </motion.div>
       </section>
 
       {/* ============ PROJECTS ============ */}
@@ -317,10 +510,17 @@ export default function ScrollPortfolio() {
           <Reveal>
             <p className="text-center text-on-surface-variant mb-12">{t('portfolio.projects.subtitle')}</p>
           </Reveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {PROJECTS.map((p) => (
-              <Reveal key={p.id}>
-                <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8" style={{ transformStyle: 'preserve-3d' }}>
+            {PROJECTS.map((p, i) => (
+              <motion.div
+                key={p.id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.55, ease: EASE, delay: (i % 2) * 0.1 }}
+              >
+                <TiltCard>
+                  <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full group">
                   <ProjectScreenshot screenshot={p.screenshot} accent={p.accent} status={p.status} />
 
                   <div className="p-5 sm:p-6 flex-1 flex flex-col">
@@ -362,8 +562,9 @@ export default function ScrollPortfolio() {
                       )}
                     </div>
                   </div>
-                </div>
-              </Reveal>
+                  </div>
+                </TiltCard>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -385,30 +586,32 @@ export default function ScrollPortfolio() {
 
           {/* Stat counters */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
-            {[
-              { value: '391+', label: t('portfolio.stack.stat.hours') },
-              { value: '5', label: t('portfolio.stack.stat.projects') },
-              { value: '100+', label: t('portfolio.stack.stat.clients') },
-            ].map((s, i) => (
-              <Reveal key={s.label}>
-                <div className="text-center bg-surface-container-low border-2 border-outline-variant/20 pixel-corners p-6">
-                  <p className="font-pixel text-2xl sm:text-3xl text-primary">{s.value}</p>
-                  <p className="mt-2 font-label text-[11px] uppercase tracking-widest text-on-surface-variant">{s.label}</p>
-                </div>
-              </Reveal>
-            ))}
+            <StatCounter value={391} suffix="+" label={t('portfolio.stack.stat.hours')} />
+            <StatCounter value={5} label={t('portfolio.stack.stat.projects')} delay={0.1} />
+            <StatCounter value={100} suffix="+" label={t('portfolio.stack.stat.clients')} delay={0.2} />
           </div>
 
           {/* Tech tags */}
-          <Reveal>
-            <div className="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto mb-10">
-              {TECH_TAGS.map((tag) => (
-                <span key={tag} className="font-mono text-xs px-3 py-1.5 bg-surface-container-low border border-outline-variant/20 hover:border-primary/50 hover:text-primary transition-colors">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </Reveal>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.5, ease: EASE }}
+            className="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto mb-10"
+          >
+            {TECH_TAGS.map((tag, i) => (
+              <motion.span
+                key={tag}
+                initial={{ opacity: 0, scale: 0.6 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.35, ease: EASE, delay: Math.min(i * 0.02, 0.6) }}
+                className="font-mono text-xs px-3 py-1.5 bg-surface-container-low border border-outline-variant/20 hover:border-primary/50 hover:text-primary hover:shadow-[0_0_12px_rgba(255,145,0,0.35)] transition-all cursor-default"
+              >
+                {tag}
+              </motion.span>
+            ))}
+          </motion.div>
 
           {/* Soft skills */}
           <Reveal>
@@ -432,10 +635,23 @@ export default function ScrollPortfolio() {
           <Reveal>
             <SectionHeading kicker="// timeline" title={t('portfolio.experience.title')} />
           </Reveal>
-          <div className="relative border-l-[3px] border-primary/40 pl-8 ml-4 space-y-12">
-            <Reveal>
+          <div className="relative pl-8 ml-4 space-y-12">
+            {/* Growing timeline */}
+            <motion.div
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 1.1, ease: EASE }}
+              className="absolute left-0 top-1 bottom-1 w-[3px] origin-top bg-gradient-to-b from-primary to-primary-container/30"
+            />
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.55, ease: EASE }}
+            >
               <div className="relative">
-                <div className="absolute -left-[41px] top-1 w-3 h-3 bg-primary pixel-corners" />
+                <div className="pulse-dot absolute -left-[41px] top-1 w-3 h-3 bg-primary pixel-corners" />
                 <div className="flex items-center gap-2 text-on-surface-variant font-mono text-xs uppercase tracking-widest mb-1">
                   <Briefcase size={14} className="text-primary" />
                   {t('portfolio.exp.sales.date')}
@@ -445,10 +661,15 @@ export default function ScrollPortfolio() {
                 <p className="text-on-surface-variant text-sm">{t('portfolio.exp.sales.desc1')}</p>
                 <p className="text-on-surface-variant text-sm mt-2">{t('portfolio.exp.sales.desc2')}</p>
               </div>
-            </Reveal>
-            <Reveal>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.55, ease: EASE, delay: 0.1 }}
+            >
               <div className="relative">
-                <div className="absolute -left-[41px] top-1 w-3 h-3 bg-primary pixel-corners" />
+                <div className="pulse-dot absolute -left-[41px] top-1 w-3 h-3 bg-primary pixel-corners" />
                 <div className="flex items-center gap-2 text-on-surface-variant font-mono text-xs uppercase tracking-widest mb-1">
                   <Code2 size={14} className="text-primary" />
                   {t('portfolio.exp.freelance.date')}
@@ -457,7 +678,7 @@ export default function ScrollPortfolio() {
                 <p className="text-primary text-sm mb-3">{t('portfolio.exp.freelance.company')}</p>
                 <p className="text-on-surface-variant text-sm">{t('portfolio.exp.freelance.desc')}</p>
               </div>
-            </Reveal>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -469,13 +690,20 @@ export default function ScrollPortfolio() {
           <Reveal>
             <SectionHeading kicker="// academies" title={t('portfolio.education.title')} />
           </Reveal>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6" style={{ transformStyle: 'preserve-3d' }}>
             {[
               { nameKey: 'portfolio.edu.pescar.name', orgKey: 'portfolio.edu.pescar.org', dateKey: 'portfolio.edu.pescar.date', descKey: 'portfolio.edu.pescar.desc', cert: null },
               { nameKey: 'portfolio.edu.utn.name', orgKey: 'portfolio.edu.utn.org', dateKey: 'portfolio.edu.utn.date', descKey: 'portfolio.edu.utn.desc', cert: 'net.pdf' },
               { nameKey: 'portfolio.edu.ticmas.name', orgKey: 'portfolio.edu.ticmas.org', dateKey: 'portfolio.edu.ticmas.date', descKey: 'portfolio.edu.ticmas.desc', cert: 'ticmas.pdf' },
             ].map((e, i) => (
-              <Reveal key={i}>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.55, ease: EASE, delay: i * 0.1 }}
+              >
+                <TiltCard>
                 <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners p-6 flex flex-col h-full hover:border-primary/50 transition-colors">
                   <div className="flex items-center justify-between mb-3">
                     <GraduationCap size={24} className="text-primary" />
@@ -496,7 +724,8 @@ export default function ScrollPortfolio() {
                     </a>
                   )}
                 </div>
-              </Reveal>
+                </TiltCard>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -545,43 +774,62 @@ export default function ScrollPortfolio() {
 
             {/* Right: form */}
             <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners p-6 sm:p-8">
-              {status === 'sent' ? (
-                <div className="text-center py-10">
-                  <CheckCircle2 className="text-primary mx-auto mb-6" size={48} />
-                  <h3 className="font-headline text-xl font-bold mb-2">{t('contacto.success.title')}</h3>
-                  <p className="text-on-surface-variant font-body">{t('contacto.success.text')}</p>
-                  <button onClick={() => setStatus('idle')} className="mt-8 px-6 py-3 bg-surface-container-highest text-xs uppercase tracking-widest font-label hover:text-primary transition-colors cursor-pointer">
-                    {t('contacto.success.another')}
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  {status === 'error' && (
-                    <div className="p-3 bg-error/10 border border-error text-error text-sm font-label uppercase tracking-widest text-center">
-                      {t('contacto.error')}
+              <AnimatePresence mode="wait" initial={false}>
+                {status === 'sent' ? (
+                  <motion.div
+                    key="sent"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3, ease: EASE }}
+                    className="text-center py-10"
+                  >
+                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.15, type: 'spring', stiffness: 260, damping: 18 }}>
+                      <CheckCircle2 className="text-primary mx-auto mb-6" size={48} />
+                    </motion.div>
+                    <h3 className="font-headline text-xl font-bold mb-2">{t('contacto.success.title')}</h3>
+                    <p className="text-on-surface-variant font-body">{t('contacto.success.text')}</p>
+                    <button onClick={() => setStatus('idle')} className="mt-8 px-6 py-3 bg-surface-container-highest text-xs uppercase tracking-widest font-label hover:text-primary transition-colors cursor-pointer">
+                      {t('contacto.success.another')}
+                    </button>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    onSubmit={handleSubmit}
+                    className="space-y-4"
+                  >
+                    {status === 'error' && (
+                      <div className="p-3 bg-error/10 border border-error text-error text-sm font-label uppercase tracking-widest text-center">
+                        {t('contacto.error')}
+                      </div>
+                    )}
+                    <div>
+                      <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant" htmlFor="pf-name">{t('portfolio.contact.name')}</label>
+                      <input required name="name" id="pf-name" value={formData.name} onChange={handleChange} className="w-full mt-1 bg-surface-container-lowest border border-outline-variant/30 p-3 font-body text-on-surface focus:border-primary outline-none transition-colors" />
                     </div>
-                  )}
-                  <div>
-                    <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant" htmlFor="pf-name">{t('portfolio.contact.name')}</label>
-                    <input required name="name" id="pf-name" value={formData.name} onChange={handleChange} className="w-full mt-1 bg-surface-container-lowest border border-outline-variant/30 p-3 font-body text-on-surface focus:border-primary outline-none transition-colors" />
-                  </div>
-                  <div>
-                    <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant" htmlFor="pf-email">{t('portfolio.contact.email')}</label>
-                    <input required type="email" name="email" id="pf-email" value={formData.email} onChange={handleChange} className="w-full mt-1 bg-surface-container-lowest border border-outline-variant/30 p-3 font-body text-on-surface focus:border-primary outline-none transition-colors" />
-                  </div>
-                  <div>
-                    <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant" htmlFor="pf-subject">{t('portfolio.contact.subject')}</label>
-                    <input required name="subject" id="pf-subject" value={formData.subject} onChange={handleChange} className="w-full mt-1 bg-surface-container-lowest border border-outline-variant/30 p-3 font-body text-on-surface focus:border-primary outline-none transition-colors" />
-                  </div>
-                  <div>
-                    <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant" htmlFor="pf-message">{t('portfolio.contact.message')}</label>
-                    <textarea required rows={4} name="message" id="pf-message" value={formData.message} onChange={handleChange} className="w-full mt-1 bg-surface-container-lowest border border-outline-variant/30 p-3 font-body text-on-surface focus:border-primary outline-none transition-colors resize-none" />
-                  </div>
-                  <button type="submit" disabled={status === 'sending'} className="w-full py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-label font-bold tracking-widest uppercase pixel-shadow disabled:opacity-50 cursor-pointer">
-                    {status === 'sending' ? t('contacto.sending') : t('portfolio.contact.send')}
-                  </button>
-                </form>
-              )}
+                    <div>
+                      <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant" htmlFor="pf-email">{t('portfolio.contact.email')}</label>
+                      <input required type="email" name="email" id="pf-email" value={formData.email} onChange={handleChange} className="w-full mt-1 bg-surface-container-lowest border border-outline-variant/30 p-3 font-body text-on-surface focus:border-primary outline-none transition-colors" />
+                    </div>
+                    <div>
+                      <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant" htmlFor="pf-subject">{t('portfolio.contact.subject')}</label>
+                      <input required name="subject" id="pf-subject" value={formData.subject} onChange={handleChange} className="w-full mt-1 bg-surface-container-lowest border border-outline-variant/30 p-3 font-body text-on-surface focus:border-primary outline-none transition-colors" />
+                    </div>
+                    <div>
+                      <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant" htmlFor="pf-message">{t('portfolio.contact.message')}</label>
+                      <textarea required rows={4} name="message" id="pf-message" value={formData.message} onChange={handleChange} className="w-full mt-1 bg-surface-container-lowest border border-outline-variant/30 p-3 font-body text-on-surface focus:border-primary outline-none transition-colors resize-none" />
+                    </div>
+                    <button type="submit" disabled={status === 'sending'} className="w-full py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-label font-bold tracking-widest uppercase pixel-shadow disabled:opacity-50 cursor-pointer">
+                      {status === 'sending' ? t('contacto.sending') : t('portfolio.contact.send')}
+                    </button>
+                  </motion.form>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
@@ -606,6 +854,24 @@ export default function ScrollPortfolio() {
           </div>
         </div>
       </footer>
+
+      {/* Back to top */}
+      <AnimatePresence>
+        {scrolledPast && (
+          <motion.button
+            key="backtotop"
+            initial={{ opacity: 0, scale: 0.5, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.5, y: 20 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+            onClick={() => scrollTo('home')}
+            aria-label={t('portfolio.backToTop')}
+            className="fixed bottom-6 right-6 z-50 w-12 h-12 flex items-center justify-center bg-gradient-to-r from-primary to-primary-container text-on-primary pixel-shadow cursor-pointer"
+          >
+            <ArrowUp size={22} />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
