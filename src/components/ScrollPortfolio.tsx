@@ -1,14 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, Suspense } from 'react';
 import {
   FolderGit2, Code2, Rocket, Github,
   Globe, Mail, Download, ChevronRight, CheckCircle2,
-  Award, Briefcase, GraduationCap, Send, Gamepad2, Languages, Linkedin, ArrowUp
+  Award, Briefcase, GraduationCap, Send, Gamepad2, Languages, Linkedin, ArrowUp, Star,
+  Server, Cpu, Shield, Network
 } from 'lucide-react';
 import {
   motion, AnimatePresence, useInView, useScroll, useSpring, useTransform, useMotionValue, useReducedMotion
 } from 'motion/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
+
+const Mermaid = React.lazy(() => import('./Mermaid'));
 
 type ProjectStatus = 'completed' | 'progress';
 
@@ -23,6 +26,7 @@ interface Project {
   screenshot?: string;
   status: ProjectStatus;
   accent: string;
+  featured?: boolean;
 }
 
 const PROJECTS: Project[] = [
@@ -49,6 +53,7 @@ const PROJECTS: Project[] = [
     screenshot: 'projects/mood.png',
     status: 'completed',
     accent: '#ff9100',
+    featured: true,
   },
   {
     id: 'bank',
@@ -83,6 +88,47 @@ const PROJECTS: Project[] = [
     accent: '#81c784',
   },
 ];
+
+const MOOD_ARCH_CHART = `flowchart LR
+    subgraph Cliente["Cliente"]
+        U["Usuario<br/>(Navegador Web)"]
+    end
+
+    subgraph Internet["Internet"]
+        DNS["DNS / Edge<br/>Cloudflare"]
+        TUN["Cloudflare Tunnel<br/>(cloudflared)"]
+    end
+
+    subgraph Host["Servidor - Docker Compose (red bridge mood_network)"]
+        direction TB
+        NGX["Nginx Reverse Proxy<br/>mood_nginx :80"]
+        FR["Frontend React (SPA)<br/>mood_frontend :80<br/>nginx:alpine + bundle Vite"]
+        API["Backend FastAPI<br/>mood_backend :8000<br/>Uvicorn + Routers"]
+        SCR["Scraper de eventos<br/>(tarea de fondo del backend,<br/>cada 6 hs)"]
+        DB[("MongoDB 7<br/>mood_mongo :27017<br/>volumen mongodb_data")]
+    end
+
+    subgraph Externos["Servicios Externos"]
+        SMTP["Gmail SMTP"]
+        GEM["Google Gemini"]
+        OAU["Google OAuth"]
+    end
+
+    U -->|"HTTPS https://dominio"| TUN
+    DNS -.-> TUN
+    TUN -->|"requerimiento interno (red docker)"| NGX
+    NGX -->|"location /   (HTML + assets)"| FR
+    NGX -->|"location /api/  (quita prefijo)"| API
+    NGX -->|"location /uploads/ (imagenes)"| API
+    NGX -->|"location /docs/ (Swagger)"| API
+    FR -->|"fetch /api/..."| API
+    API -->|"pymongo / Beanie ODM"| DB
+    API --> SCR
+    SCR -->|"inserta / deduplica eventos"| DB
+    API -->|"notificaciones por email"| SMTP
+    API -->|"chat de ayuda"| GEM
+    API -->|"login social"| OAU
+`;
 
 /* ---------- animation helpers ---------- */
 
@@ -529,9 +575,17 @@ export default function ScrollPortfolio() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.55, ease: EASE, delay: (i % 2) * 0.1 }}
+                className={p.featured ? 'md:col-span-2' : ''}
               >
                 <TiltCard>
-                  <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full group">
+                  <div className="bg-surface-container-low border-2 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full group relative"
+                    style={{ borderColor: p.featured ? p.accent : undefined }}>
+                  {p.featured && (
+                    <span className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2.5 py-1 bg-primary text-on-primary font-label text-[10px] uppercase tracking-widest pixel-shadow">
+                      <Star size={12} />
+                      {t('portfolio.featured')}
+                    </span>
+                  )}
                   <ProjectScreenshot screenshot={p.screenshot} accent={p.accent} status={p.status} />
 
                   <div className="p-5 sm:p-6 flex-1 flex flex-col">
@@ -578,6 +632,50 @@ export default function ScrollPortfolio() {
               </motion.div>
             ))}
           </div>
+
+          {/* ===== FEATURED PROJECT ENGINEERING ===== */}
+          <Reveal>
+            <div className="mt-20">
+              <SectionHeading kicker="// deep dive" title={t('portfolio.mood.engineering.title')} />
+              <p className="text-center text-on-surface-variant mb-12 max-w-2xl mx-auto">{t('portfolio.mood.engineering.subtitle')}</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners p-6 flex flex-col">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Server size={20} className="text-primary" />
+                    <h3 className="font-headline text-base font-bold text-on-surface">{t('portfolio.mood.engineering.infra.title')}</h3>
+                  </div>
+                  <p className="text-sm text-on-surface-variant font-body flex-1">{t('portfolio.mood.engineering.infra.desc')}</p>
+                </div>
+
+                <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners p-6 flex flex-col">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Cpu size={20} className="text-primary" />
+                    <h3 className="font-headline text-base font-bold text-on-surface">{t('portfolio.mood.engineering.stack.title')}</h3>
+                  </div>
+                  <p className="text-sm text-on-surface-variant font-body flex-1">{t('portfolio.mood.engineering.stack.desc')}</p>
+                </div>
+
+                <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners p-6 flex flex-col">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Shield size={20} className="text-primary" />
+                    <h3 className="font-headline text-base font-bold text-on-surface">{t('portfolio.mood.engineering.security.title')}</h3>
+                  </div>
+                  <p className="text-sm text-on-surface-variant font-body flex-1">{t('portfolio.mood.engineering.security.desc')}</p>
+                </div>
+              </div>
+
+              <div className="mt-6 bg-surface-container-lowest border-2 border-primary/40 pixel-corners p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Network size={20} className="text-primary" />
+                  <h3 className="font-headline text-base font-bold text-on-surface">{t('portfolio.mood.engineering.arch.title')}</h3>
+                </div>
+                <Suspense fallback={<p className="font-mono text-xs text-on-surface-variant">Loading diagram…</p>}>
+                  <Mermaid chart={MOOD_ARCH_CHART} className="overflow-x-auto" />
+                </Suspense>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 

@@ -271,10 +271,21 @@ export default {
   'portfolio.projects.code': 'Código',
   'portfolio.projects.status.completed': 'Completado',
   'portfolio.projects.status.progress': 'En Progreso',
+  'portfolio.featured': 'Proyecto Destacado',
 
   'portfolio.mood.name': 'Mood App',
   'portfolio.mood.desc': 'Plataforma web de eventos en Buenos Aires con búsqueda y recomendaciones según tu estado de ánimo. Frontend con React 19, TypeScript, Vite y Tailwind CSS; backend con Python y FastAPI sobre MongoDB. Incluye chat con IA (Gemini) que recomienda eventos, un scraper automático de eventos, mapa interactivo, favoritos, reseñas, notificaciones por email, login con Google, modo claro/oscuro y un panel de administración con analíticas detalladas. Desplegada con Docker, Nginx y Cloudflare.',
   'portfolio.mood.metric': 'Recomendaciones por estado de ánimo con IA, panel admin con métricas en tiempo real, deploy en dominio real con Cloudflare',
+
+  'portfolio.mood.engineering.title': 'MOOD — Arquitectura e Ingeniería',
+  'portfolio.mood.engineering.subtitle': 'Las decisiones de ingeniería detrás de mi proyecto estrella — desplegado y corriendo 24/7 en mi propio homelab.',
+  'portfolio.mood.engineering.infra.title': 'Infraestructura y Despliegue',
+  'portfolio.mood.engineering.infra.desc': 'MOOD corre en mi propio homelab — un servidor dedicado en mi casa funcionando 24/7. La app está contenedorizada con Docker, expuesta a través de un proxy inverso Nginx, y asegurada y acelerada por Cloudflare (DNS, CDN, SSL/TLS). Este stack me da control total del entorno, desde los contenedores hasta el edge.',
+  'portfolio.mood.engineering.stack.title': 'Stack y Decisiones Técnicas',
+  'portfolio.mood.engineering.stack.desc': 'Combiné un frontend con React 19 + TypeScript + Vite + Tailwind CSS con un backend en Python/FastAPI y MongoDB. Elegí FastAPI por su rendimiento, soporte asíncrono y una capa de API limpia y validada por tipos, y MongoDB por la flexibilidad de un modelo de documentos para datos de eventos. El backend está estructurado con una arquitectura limpia y modular para mantenerlo escalable y mantenible.',
+  'portfolio.mood.engineering.security.title': 'Seguridad',
+  'portfolio.mood.engineering.security.desc': 'La autenticación usa Google OAuth con tokens JWT sin estado y seguros, y control de acceso por roles (RBAC) para las funciones de administración. Las analíticas de eventos se recopilan con consentimiento explícito del usuario, y todo el tráfico está protegido de punta a punta por SSL/TLS de Cloudflare.',
+  'portfolio.mood.engineering.arch.title': 'Flujo de Arquitectura',
 
   'portfolio.bank.name': 'Simulación Bancaria',
   'portfolio.bank.desc': 'Sistema bancario full-stack con .NET 8 y C# 12: gestión de cuentas, transacciones, EF Core + MariaDB, autenticación JWT, Docker y pruebas xUnit.',
