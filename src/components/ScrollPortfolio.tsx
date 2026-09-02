@@ -567,66 +567,113 @@ export default function ScrollPortfolio() {
           <Reveal>
             <p className="text-center text-on-surface-variant mb-12">{t('portfolio.projects.subtitle')}</p>
           </Reveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8" style={{ transformStyle: 'preserve-3d' }}>
-            {PROJECTS.map((p, i) => (
+          <div className="flex flex-col gap-8" style={{ transformStyle: 'preserve-3d' }}>
+            {PROJECTS.filter((p) => p.featured).map((p) => (
+              <motion.div
+                key={p.id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.55, ease: EASE }}
+              >
+                <TiltCard>
+                  <div className="bg-surface-container-low border-2 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full group relative"
+                    style={{ borderColor: p.accent }}>
+                    <span className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2.5 py-1 bg-primary text-on-primary font-label text-[10px] uppercase tracking-widest pixel-shadow">
+                      <Star size={12} />
+                      {t('portfolio.featured')}
+                    </span>
+                    <ProjectScreenshot screenshot={p.screenshot} accent={p.accent} status={p.status} />
+                    <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-headline text-xl font-bold text-on-surface" style={{ color: p.accent }}>
+                          {t(p.nameKey)}
+                        </h3>
+                        <span className={`font-label text-[10px] uppercase tracking-widest px-2 py-0.5 ${p.status === 'completed' ? 'text-primary bg-primary/10' : 'text-secondary bg-secondary/10'}`}>
+                          {p.status === 'completed' ? t('portfolio.projects.status.completed') : t('portfolio.projects.status.progress')}
+                        </span>
+                      </div>
+                      <p className="text-sm text-on-surface-variant font-body flex-1">{t(p.descKey)}</p>
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {p.tags.map((tag) => (
+                          <span key={tag} className="font-mono text-[11px] px-2 py-0.5 bg-surface-container-highest text-on-surface/80 border border-outline-variant/20">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="mt-4 flex items-start gap-2 text-xs text-on-surface-variant">
+                        <CheckCircle2 size={14} className="text-primary shrink-0 mt-0.5" />
+                        <span>{t(p.metricKey)}</span>
+                      </p>
+                      <div className="mt-5 flex gap-3">
+                        {p.live && (
+                          <a href={p.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-container text-on-primary font-label text-xs font-bold uppercase tracking-widest pixel-shadow cursor-pointer">
+                            <Rocket size={14} />
+                            {t('portfolio.projects.live')}
+                          </a>
+                        )}
+                        {p.repo && (
+                          <a href={p.repo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 border-2 border-primary/50 text-primary hover:bg-primary hover:text-on-primary font-label text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer">
+                            <Github size={14} />
+                            {t('portfolio.projects.code')}
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </TiltCard>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8" style={{ transformStyle: 'preserve-3d' }}>
+            {PROJECTS.filter((p) => !p.featured).map((p, i) => (
               <motion.div
                 key={p.id}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.55, ease: EASE, delay: (i % 2) * 0.1 }}
-                className={p.featured ? 'md:col-span-2' : ''}
               >
                 <TiltCard>
-                  <div className="bg-surface-container-low border-2 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full group relative"
-                    style={{ borderColor: p.featured ? p.accent : undefined }}>
-                  {p.featured && (
-                    <span className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2.5 py-1 bg-primary text-on-primary font-label text-[10px] uppercase tracking-widest pixel-shadow">
-                      <Star size={12} />
-                      {t('portfolio.featured')}
-                    </span>
-                  )}
-                  <ProjectScreenshot screenshot={p.screenshot} accent={p.accent} status={p.status} />
-
-                  <div className="p-5 sm:p-6 flex-1 flex flex-col">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-headline text-xl font-bold text-on-surface" style={{ color: p.accent }}>
-                        {t(p.nameKey)}
-                      </h3>
-                      <span className={`font-label text-[10px] uppercase tracking-widest px-2 py-0.5 ${p.status === 'completed' ? 'text-primary bg-primary/10' : 'text-secondary bg-secondary/10'}`}>
-                        {p.status === 'completed' ? t('portfolio.projects.status.completed') : t('portfolio.projects.status.progress')}
-                      </span>
-                    </div>
-                    <p className="text-sm text-on-surface-variant font-body flex-1">{t(p.descKey)}</p>
-
-                    <div className="mt-4 flex flex-wrap gap-1.5">
-                      {p.tags.map((tag) => (
-                        <span key={tag} className="font-mono text-[11px] px-2 py-0.5 bg-surface-container-highest text-on-surface/80 border border-outline-variant/20">
-                          {tag}
+                  <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full group">
+                    <ProjectScreenshot screenshot={p.screenshot} accent={p.accent} status={p.status} />
+                    <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-headline text-xl font-bold text-on-surface" style={{ color: p.accent }}>
+                          {t(p.nameKey)}
+                        </h3>
+                        <span className={`font-label text-[10px] uppercase tracking-widest px-2 py-0.5 ${p.status === 'completed' ? 'text-primary bg-primary/10' : 'text-secondary bg-secondary/10'}`}>
+                          {p.status === 'completed' ? t('portfolio.projects.status.completed') : t('portfolio.projects.status.progress')}
                         </span>
-                      ))}
+                      </div>
+                      <p className="text-sm text-on-surface-variant font-body flex-1">{t(p.descKey)}</p>
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {p.tags.map((tag) => (
+                          <span key={tag} className="font-mono text-[11px] px-2 py-0.5 bg-surface-container-highest text-on-surface/80 border border-outline-variant/20">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="mt-4 flex items-start gap-2 text-xs text-on-surface-variant">
+                        <CheckCircle2 size={14} className="text-primary shrink-0 mt-0.5" />
+                        <span>{t(p.metricKey)}</span>
+                      </p>
+                      <div className="mt-5 flex gap-3">
+                        {p.live && (
+                          <a href={p.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-container text-on-primary font-label text-xs font-bold uppercase tracking-widest pixel-shadow cursor-pointer">
+                            <Rocket size={14} />
+                            {t('portfolio.projects.live')}
+                          </a>
+                        )}
+                        {p.repo && (
+                          <a href={p.repo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 border-2 border-primary/50 text-primary hover:bg-primary hover:text-on-primary font-label text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer">
+                            <Github size={14} />
+                            {t('portfolio.projects.code')}
+                          </a>
+                        )}
+                      </div>
                     </div>
-
-                    <p className="mt-4 flex items-start gap-2 text-xs text-on-surface-variant">
-                      <CheckCircle2 size={14} className="text-primary shrink-0 mt-0.5" />
-                      <span>{t(p.metricKey)}</span>
-                    </p>
-
-                    <div className="mt-5 flex gap-3">
-                      {p.live && (
-                        <a href={p.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-container text-on-primary font-label text-xs font-bold uppercase tracking-widest pixel-shadow cursor-pointer">
-                          <Rocket size={14} />
-                          {t('portfolio.projects.live')}
-                        </a>
-                      )}
-                      {p.repo && (
-                        <a href={p.repo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 border-2 border-primary/50 text-primary hover:bg-primary hover:text-on-primary font-label text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer">
-                          <Github size={14} />
-                          {t('portfolio.projects.code')}
-                        </a>
-                      )}
-                    </div>
-                  </div>
                   </div>
                 </TiltCard>
               </motion.div>
