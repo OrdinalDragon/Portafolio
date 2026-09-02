@@ -286,6 +286,46 @@ export default {
   'portfolio.mood.engineering.security.title': 'Seguridad',
   'portfolio.mood.engineering.security.desc': 'La autenticación usa Google OAuth con tokens JWT sin estado y seguros, y control de acceso por roles (RBAC) para las funciones de administración. Las analíticas de eventos se recopilan con consentimiento explícito del usuario, y todo el tráfico está protegido de punta a punta por SSL/TLS de Cloudflare.',
   'portfolio.mood.engineering.arch.title': 'Flujo de Arquitectura',
+  'portfolio.mood.engineering.arch.mermaid': `flowchart LR
+    subgraph Cliente["Cliente"]
+        U["Usuario<br/>(Navegador Web)"]
+    end
+
+    subgraph Internet["Internet"]
+        DNS["DNS / Edge<br/>Cloudflare"]
+        TUN["Cloudflare Tunnel<br/>(cloudflared)"]
+    end
+
+    subgraph Host["Servidor - Docker Compose (red bridge mood_network)"]
+        direction TB
+        NGX["Nginx Reverse Proxy<br/>mood_nginx :80"]
+        FR["Frontend React (SPA)<br/>mood_frontend :80<br/>nginx:alpine + bundle Vite"]
+        API["Backend FastAPI<br/>mood_backend :8000<br/>Uvicorn + Routers"]
+        SCR["Scraper de eventos<br/>(tarea de fondo del backend,<br/>cada 6 hs)"]
+        DB[("MongoDB 7<br/>mood_mongo :27017<br/>volumen mongodb_data")]
+    end
+
+    subgraph Externos["Servicios Externos"]
+        SMTP["Gmail SMTP"]
+        GEM["Google Gemini"]
+        OAU["Google OAuth"]
+    end
+
+    U -->|"HTTPS https://dominio"| TUN
+    DNS -.-> TUN
+    TUN -->|"requerimiento interno (red docker)"| NGX
+    NGX -->|"location /   (HTML + assets)"| FR
+    NGX -->|"location /api/  (quita prefijo)"| API
+    NGX -->|"location /uploads/ (imagenes)"| API
+    NGX -->|"location /docs/ (Swagger)"| API
+    FR -->|"fetch /api/..."| API
+    API -->|"pymongo / Beanie ODM"| DB
+    API --> SCR
+    SCR -->|"inserta / deduplica eventos"| DB
+    API -->|"notificaciones por email"| SMTP
+    API -->|"chat de ayuda"| GEM
+    API -->|"login social"| OAU
+`,
 
   'portfolio.bank.name': 'Simulación Bancaria',
   'portfolio.bank.desc': 'Sistema bancario full-stack con .NET 8 y C# 12: gestión de cuentas, transacciones, EF Core + MariaDB, autenticación JWT, Docker y pruebas xUnit.',

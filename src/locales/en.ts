@@ -286,6 +286,46 @@ export default {
   'portfolio.mood.engineering.security.title': 'Security',
   'portfolio.mood.engineering.security.desc': 'Authentication uses Google OAuth with secure, stateless JWT tokens and role-based access control for admin features. Event analytics are collected with explicit user consent, and all traffic is protected end-to-end by Cloudflare SSL/TLS.',
   'portfolio.mood.engineering.arch.title': 'Architecture Flow',
+  'portfolio.mood.engineering.arch.mermaid': `flowchart LR
+    subgraph Client["Client"]
+        U["User<br/>(Web Browser)"]
+    end
+
+    subgraph Internet["Internet"]
+        DNS["DNS / Edge<br/>Cloudflare"]
+        TUN["Cloudflare Tunnel<br/>(cloudflared)"]
+    end
+
+    subgraph Host["Server - Docker Compose (bridge network mood_network)"]
+        direction TB
+        NGX["Nginx Reverse Proxy<br/>mood_nginx :80"]
+        FR["React Frontend (SPA)<br/>mood_frontend :80<br/>nginx:alpine + Vite bundle"]
+        API["FastAPI Backend<br/>mood_backend :8000<br/>Uvicorn + Routers"]
+        SCR["Event scraper<br/>(backend background task,<br/>every 6 hs)"]
+        DB[("MongoDB 7<br/>mood_mongo :27017<br/>mongodb_data volume")]
+    end
+
+    subgraph Externos["External Services"]
+        SMTP["Gmail SMTP"]
+        GEM["Google Gemini"]
+        OAU["Google OAuth"]
+    end
+
+    U -->|"HTTPS https://domain"| TUN
+    DNS -.-> TUN
+    TUN -->|"internal request (docker network)"| NGX
+    NGX -->|"location /   (HTML + assets)"| FR
+    NGX -->|"location /api/  (prefix stripped)"| API
+    NGX -->|"location /uploads/ (images)"| API
+    NGX -->|"location /docs/ (Swagger)"| API
+    FR -->|"fetch /api/..."| API
+    API -->|"pymongo / Beanie ODM"| DB
+    API --> SCR
+    SCR -->|"inserts / dedupes events"| DB
+    API -->|"email notifications"| SMTP
+    API -->|"help chat"| GEM
+    API -->|"social login"| OAU
+`,
 
   'portfolio.bank.name': 'Bank Simulation',
   'portfolio.bank.desc': 'Full-stack banking system with .NET 8 and C# 12: account management, transactions, EF Core + MariaDB, JWT auth, Docker, and xUnit tests.',

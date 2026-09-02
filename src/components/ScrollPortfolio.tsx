@@ -3,7 +3,7 @@ import {
   FolderGit2, Code2, Rocket, Github,
   Globe, Mail, Download, ChevronRight, CheckCircle2,
   Award, Briefcase, GraduationCap, Send, Gamepad2, Languages, Linkedin, ArrowUp, Star,
-  Server, Cpu, Shield, Network
+  Server, Cpu, Shield, Network, ZoomIn
 } from 'lucide-react';
 import {
   motion, AnimatePresence, useInView, useScroll, useSpring, useTransform, useMotionValue, useReducedMotion
@@ -12,6 +12,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 
 const Mermaid = React.lazy(() => import('./Mermaid'));
+import Lightbox from './Lightbox';
 
 type ProjectStatus = 'completed' | 'progress';
 
@@ -88,47 +89,6 @@ const PROJECTS: Project[] = [
     accent: '#81c784',
   },
 ];
-
-const MOOD_ARCH_CHART = `flowchart LR
-    subgraph Cliente["Cliente"]
-        U["Usuario<br/>(Navegador Web)"]
-    end
-
-    subgraph Internet["Internet"]
-        DNS["DNS / Edge<br/>Cloudflare"]
-        TUN["Cloudflare Tunnel<br/>(cloudflared)"]
-    end
-
-    subgraph Host["Servidor - Docker Compose (red bridge mood_network)"]
-        direction TB
-        NGX["Nginx Reverse Proxy<br/>mood_nginx :80"]
-        FR["Frontend React (SPA)<br/>mood_frontend :80<br/>nginx:alpine + bundle Vite"]
-        API["Backend FastAPI<br/>mood_backend :8000<br/>Uvicorn + Routers"]
-        SCR["Scraper de eventos<br/>(tarea de fondo del backend,<br/>cada 6 hs)"]
-        DB[("MongoDB 7<br/>mood_mongo :27017<br/>volumen mongodb_data")]
-    end
-
-    subgraph Externos["Servicios Externos"]
-        SMTP["Gmail SMTP"]
-        GEM["Google Gemini"]
-        OAU["Google OAuth"]
-    end
-
-    U -->|"HTTPS https://dominio"| TUN
-    DNS -.-> TUN
-    TUN -->|"requerimiento interno (red docker)"| NGX
-    NGX -->|"location /   (HTML + assets)"| FR
-    NGX -->|"location /api/  (quita prefijo)"| API
-    NGX -->|"location /uploads/ (imagenes)"| API
-    NGX -->|"location /docs/ (Swagger)"| API
-    FR -->|"fetch /api/..."| API
-    API -->|"pymongo / Beanie ODM"| DB
-    API --> SCR
-    SCR -->|"inserta / deduplica eventos"| DB
-    API -->|"notificaciones por email"| SMTP
-    API -->|"chat de ayuda"| GEM
-    API -->|"login social"| OAU
-`;
 
 /* ---------- animation helpers ---------- */
 
@@ -253,40 +213,52 @@ function TiltCard({ children, className = '', max = 4 }: { children: React.React
   );
 }
 
-function ProjectScreenshot({ screenshot, accent, status }: { screenshot?: string; accent: string; status: ProjectStatus }) {
+function ProjectScreenshot({ screenshot, accent, status, onZoom }: { screenshot?: string; accent: string; status: ProjectStatus; onZoom?: () => void }) {
   const [failed, setFailed] = React.useState(false);
   const src = screenshot ? `${import.meta.env.BASE_URL}${screenshot}` : '';
   const showImage = Boolean(screenshot) && !failed;
 
   return (
-    <div className="group/shot relative h-44 sm:h-52 overflow-hidden border-b-2 border-outline-variant/20" style={{ background: `linear-gradient(135deg, rgba(255,145,0,0.06), rgba(0,0,0,0.4))` }}>
-      {showImage ? (
-        <>
-          <img
-            src={src}
-            alt=""
-            loading="lazy"
-            onError={() => setFailed(true)}
-            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 ease-out group-hover/shot:scale-105"
-          />
-          <div className="absolute inset-0 scanlines pointer-events-none opacity-40" />
-          <div className="project-sweep absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent -skew-x-12 pointer-events-none opacity-0" />
-        </>
-      ) : (
-        <>
-          <div className="absolute inset-0 scanlines pointer-events-none" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-16 h-16 flex items-center justify-center border-4 border-black/30 pixel-shadow" style={{ background: `${accent}22`, boxShadow: `5px 5px 0 0 ${accent}55` }}>
-              <Code2 size={28} style={{ color: accent }} />
+    <div className="relative">
+      <button
+        type="button"
+        onClick={onZoom}
+        className="group/shot relative h-44 sm:h-52 overflow-hidden border-b-2 border-outline-variant/20 w-full text-left cursor-zoom-in block"
+        style={{ background: `linear-gradient(135deg, rgba(255,145,0,0.06), rgba(0,0,0,0.4))` }}
+        aria-label="View full size"
+      >
+        {showImage ? (
+          <>
+            <img
+              src={src}
+              alt=""
+              loading="lazy"
+              onError={() => setFailed(true)}
+              className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 ease-out group-hover/shot:scale-105"
+            />
+            <div className="absolute inset-0 scanlines pointer-events-none opacity-40" />
+            <div className="project-sweep absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent -skew-x-12 pointer-events-none opacity-0" />
+          </>
+        ) : (
+          <>
+            <div className="absolute inset-0 scanlines pointer-events-none" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-16 h-16 flex items-center justify-center border-4 border-black/30 pixel-shadow" style={{ background: `${accent}22`, boxShadow: `5px 5px 0 0 ${accent}55` }}>
+                <Code2 size={28} style={{ color: accent }} />
+              </div>
             </div>
+          </>
+        )}
+        {status === 'progress' && (
+          <div className="absolute top-3 right-3 px-2 py-1 font-pixel text-[8px] bg-secondary text-black">
+            WIP
           </div>
-        </>
-      )}
-      {status === 'progress' && (
-        <div className="absolute top-3 right-3 px-2 py-1 font-pixel text-[8px] bg-secondary text-black">
-          WIP
-        </div>
-      )}
+        )}
+        <span className="absolute bottom-3 right-3 flex items-center gap-1.5 px-2.5 py-1.5 bg-black/60 text-on-surface font-label text-[10px] uppercase tracking-widest opacity-0 group-hover/shot:opacity-100 transition-opacity">
+          <ZoomIn size={14} className="text-primary" />
+          Zoom
+        </span>
+      </button>
     </div>
   );
 }
@@ -365,6 +337,9 @@ function StatCounter({ value, suffix, label, delay = 0 }: { value: number; suffi
 export default function ScrollPortfolio() {
   const { t, lang, setLanguage } = useLanguage();
   const navigate = useNavigate();
+
+  const [lightboxUrl, setLightboxUrl] = React.useState<string | null>(null);
+  const [diagramOpen, setDiagramOpen] = React.useState(false);
 
   const BASE = import.meta.env.BASE_URL;
   const cvPdf = `${BASE}Nicolas_Schernetzki_CV_${lang === 'en' ? 'Eng' : 'Esp'}.pdf`;
@@ -583,7 +558,7 @@ export default function ScrollPortfolio() {
                       <Star size={12} />
                       {t('portfolio.featured')}
                     </span>
-                    <ProjectScreenshot screenshot={p.screenshot} accent={p.accent} status={p.status} />
+                    <ProjectScreenshot screenshot={p.screenshot} accent={p.accent} status={p.status} onZoom={() => p.screenshot && setLightboxUrl(`${BASE}${p.screenshot}`)} />
                     <div className="p-5 sm:p-6 flex-1 flex flex-col">
                       <div className="flex items-center justify-between mb-2">
                         <h3 className="font-headline text-xl font-bold text-on-surface" style={{ color: p.accent }}>
@@ -637,7 +612,7 @@ export default function ScrollPortfolio() {
               >
                 <TiltCard>
                   <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full group">
-                    <ProjectScreenshot screenshot={p.screenshot} accent={p.accent} status={p.status} />
+                    <ProjectScreenshot screenshot={p.screenshot} accent={p.accent} status={p.status} onZoom={() => p.screenshot && setLightboxUrl(`${BASE}${p.screenshot}`)} />
                     <div className="p-5 sm:p-6 flex-1 flex flex-col">
                       <div className="flex items-center justify-between mb-2">
                         <h3 className="font-headline text-xl font-bold text-on-surface" style={{ color: p.accent }}>
@@ -712,13 +687,23 @@ export default function ScrollPortfolio() {
                 </div>
               </div>
 
-              <div className="mt-6 bg-surface-container-lowest border-2 border-primary/40 pixel-corners p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <Network size={20} className="text-primary" />
-                  <h3 className="font-headline text-base font-bold text-on-surface">{t('portfolio.mood.engineering.arch.title')}</h3>
+              <div className="mt-6 bg-surface-container-lowest border-2 border-primary/40 pixel-corners p-6 relative">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Network size={20} className="text-primary" />
+                    <h3 className="font-headline text-base font-bold text-on-surface">{t('portfolio.mood.engineering.arch.title')}</h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setDiagramOpen(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 border-2 border-primary/50 text-primary hover:bg-primary hover:text-on-primary font-label text-[10px] uppercase tracking-widest transition-colors cursor-pointer"
+                  >
+                    <ZoomIn size={14} />
+                    Expand
+                  </button>
                 </div>
                 <Suspense fallback={<p className="font-mono text-xs text-on-surface-variant">Loading diagram…</p>}>
-                  <Mermaid chart={MOOD_ARCH_CHART} className="overflow-x-auto" />
+                  <Mermaid chart={t('portfolio.mood.engineering.arch.mermaid')} className="overflow-x-auto" />
                 </Suspense>
               </div>
             </div>
@@ -1014,6 +999,26 @@ export default function ScrollPortfolio() {
           </motion.button>
         )}
       </AnimatePresence>
+
+      {/* Lightbox: project screenshot */}
+      <Lightbox
+        open={Boolean(lightboxUrl)}
+        onClose={() => setLightboxUrl(null)}
+        caption={t('portfolio.projects.title')}
+      >
+        {lightboxUrl && (
+          <img src={lightboxUrl} alt="" className="w-full h-auto max-h-[85vh] object-contain" />
+        )}
+      </Lightbox>
+
+      {/* Lightbox: architecture diagram */}
+      <Lightbox open={diagramOpen} onClose={() => setDiagramOpen(false)} caption={t('portfolio.mood.engineering.arch.title')}>
+        <div className="overflow-auto">
+          <Suspense fallback={<p className="font-mono text-xs text-on-surface-variant">Loading diagram…</p>}>
+            <Mermaid chart={t('portfolio.mood.engineering.arch.mermaid')} className="w-full" />
+          </Suspense>
+        </div>
+      </Lightbox>
     </div>
   );
 }
