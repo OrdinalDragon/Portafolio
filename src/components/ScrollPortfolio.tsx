@@ -3,13 +3,14 @@ import {
   FolderGit2, Code2, Rocket, Github,
   Globe, Mail, Download, ChevronRight, CheckCircle2,
   Award, Briefcase, GraduationCap, Send, Gamepad2, Languages, Linkedin, ArrowUp, Star,
-  Server, Cpu, Shield, Network, ZoomIn
+  Server, Cpu, Shield, Network, ZoomIn, Sun, Moon
 } from 'lucide-react';
 import {
   motion, AnimatePresence, useInView, useScroll, useSpring, useTransform, useMotionValue, useReducedMotion
 } from 'motion/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useTheme } from '../i18n/ThemeContext';
 
 const Mermaid = React.lazy(() => import('./Mermaid'));
 import Lightbox from './Lightbox';
@@ -336,6 +337,7 @@ function StatCounter({ value, suffix, label, delay = 0 }: { value: number; suffi
 
 export default function ScrollPortfolio() {
   const { t, lang, setLanguage } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const [lightboxUrl, setLightboxUrl] = React.useState<string | null>(null);
@@ -408,10 +410,10 @@ export default function ScrollPortfolio() {
           className="absolute top-0 left-0 right-0 h-[3px] origin-left bg-gradient-to-r from-primary to-primary-container"
         />
         <div className="max-w-6xl mx-auto flex items-center justify-between px-4 sm:px-6 h-full">
-          <button onClick={() => scrollTo('home')} className="flex items-center gap-2 font-pixel text-primary text-[10px] sm:text-xs tracking-tight cursor-pointer">
-            <span className="hidden sm:inline">N.</span>
-            <span>SCHERNETZKI</span>
-            <span className="blink-cursor text-on-surface-variant">_</span>
+          <button onClick={() => scrollTo('home')} className="flex items-center gap-2 text-primary tracking-tight cursor-pointer">
+            <span className="font-pixel text-[10px] sm:text-xs">N.</span>
+            <span className="font-headline font-bold text-sm sm:text-base tracking-wide">SCHERNETZKI</span>
+            <span className="blink-cursor text-on-surface-variant hidden sm:inline">_</span>
           </button>
 
           <nav className="hidden md:flex items-center gap-6">
@@ -451,13 +453,13 @@ export default function ScrollPortfolio() {
               <Globe size={16} />
               <span>{lang === 'en' ? 'ES' : 'EN'}</span>
             </button>
-            <Link
-              to="/rpg"
-              className="flex items-center gap-1 px-3 py-1.5 font-pixel text-[9px] sm:text-[10px] text-on-primary bg-gradient-to-r from-primary to-primary-container pixel-shadow cursor-pointer"
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-1 px-3 py-1.5 font-label text-xs uppercase tracking-widest text-on-surface/70 hover:text-primary transition-transform hover:scale-105 cursor-pointer"
+              aria-label="Toggle theme"
             >
-              <Gamepad2 size={14} />
-              <span className="hidden sm:inline">{t('portfolio.rpg')}</span>
-            </Link>
+              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
           </div>
         </div>
       </header>
@@ -466,25 +468,27 @@ export default function ScrollPortfolio() {
       <section id="home" ref={heroRef} className="relative min-h-[100dvh] flex items-center justify-center px-4 pt-20 overflow-hidden">
         <div className="absolute inset-0 scanlines pointer-events-none" />
 
-        {/* Floating 8-bit particles */}
-        <div className="absolute inset-0 pointer-events-none" aria-hidden>
-          {[
-            { left: '8%', size: 3, delay: 0, dur: 14, color: '#ff9100' },
-            { left: '20%', size: 2, delay: 3, dur: 16, color: '#f9abff' },
-            { left: '33%', size: 2, delay: 6, dur: 13, color: '#ffb97c' },
-            { left: '55%', size: 3, delay: 1.5, dur: 18, color: '#ff9100' },
-            { left: '70%', size: 2, delay: 8, dur: 15, color: '#f9abff' },
-            { left: '82%', size: 3, delay: 4, dur: 17, color: '#ffb97c' },
-            { left: '92%', size: 2, delay: 9.5, dur: 12, color: '#ff9100' },
-            { left: '48%', size: 2, delay: 11, dur: 16, color: '#f9abff' },
-          ].map((p, i) => (
-            <span
-              key={i}
-              className="particle"
-              style={{ left: p.left, width: p.size, height: p.size, background: p.color, boxShadow: `0 0 6px ${p.color}`, animationDelay: `${p.delay}s`, animationDuration: `${p.dur}s`, opacity: 0.7 }}
-            />
-          ))}
-        </div>
+        {/* Floating 8-bit particles (dark mode only — signature of the retro identity) */}
+        {theme === 'dark' && (
+          <div className="absolute inset-0 pointer-events-none" aria-hidden>
+            {[
+              { left: '8%', size: 3, delay: 0, dur: 14, color: '#ff9100' },
+              { left: '20%', size: 2, delay: 3, dur: 16, color: '#f9abff' },
+              { left: '33%', size: 2, delay: 6, dur: 13, color: '#ffb97c' },
+              { left: '55%', size: 3, delay: 1.5, dur: 18, color: '#ff9100' },
+              { left: '70%', size: 2, delay: 8, dur: 15, color: '#f9abff' },
+              { left: '82%', size: 3, delay: 4, dur: 17, color: '#ffb97c' },
+              { left: '92%', size: 2, delay: 9.5, dur: 12, color: '#ff9100' },
+              { left: '48%', size: 2, delay: 11, dur: 16, color: '#f9abff' },
+            ].map((p, i) => (
+              <span
+                key={i}
+                className="particle"
+                style={{ left: p.left, width: p.size, height: p.size, background: p.color, boxShadow: `0 0 6px ${p.color}`, animationDelay: `${p.delay}s`, animationDuration: `${p.dur}s`, opacity: 0.7 }}
+              />
+            ))}
+          </div>
+        )}
 
         <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 w-full max-w-3xl">
           <motion.div
@@ -974,6 +978,13 @@ export default function ScrollPortfolio() {
             <a href="https://www.linkedin.com/in/nicolas-schernetzki-518b28212/" target="_blank" rel="noopener noreferrer" className="text-on-surface-variant hover:text-primary transition-colors" aria-label="LinkedIn">
               <Linkedin size={20} />
             </a>
+            <Link
+              to="/rpg"
+              className="flex items-center gap-1.5 px-3 py-2 font-pixel text-[9px] text-on-primary bg-gradient-to-r from-primary to-primary-container pixel-shadow hover:brightness-110 transition-all hover:scale-105 cursor-pointer"
+            >
+              <Gamepad2 size={14} />
+              <span className="hidden sm:inline">{t('portfolio.rpg')}</span>
+            </Link>
           </div>
         </div>
       </footer>

@@ -1,11 +1,41 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-headline: ui-sans-serif, system-ui, sans-serif;
   --font-body: ui-sans-serif, system-ui, sans-serif;
   --font-label: ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-sans-serif, system-ui, sans-serif;
 
+  /* Light "parchment" 8-bit palette (default: :root) */
+  --color-primary: #b3541e;
+  --color-primary-container: #ff9100;
+  --color-on-primary: #ffffff;
+  --color-secondary: #9c4168;
+  --color-secondary-container: #86039c;
+  --color-tertiary: #8a5a3b;
+  --color-background: #f4efe6;
+  --color-surface: #fbf8f2;
+  --color-surface-container: #ece5d8;
+  --color-surface-container-low: #f0eadf;
+  --color-surface-container-high: #e5dccb;
+  --color-surface-container-highest: #dccfba;
+  --color-surface-container-lowest: #fbf8f2;
+  --color-on-surface: #2b2621;
+  --color-on-surface-variant: #5c5247;
+  --color-outline: #7a6f60;
+  --color-outline-variant: #d0c3b2;
+  --color-error: #ba1a1a;
+}
+
+@theme {
+  --font-pixel: "Press Start 2P", ui-monospace, monospace;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Dark 8-bit palette (applied via .dark on <html>) */
+.dark {
   --color-primary: #ffb97c;
   --color-primary-container: #ff9100;
   --color-on-primary: #4c2700;
@@ -20,15 +50,10 @@
   --color-surface-container-highest: #353534;
   --color-surface-container-lowest: #0e0e0e;
   --color-on-surface: #e5e2e1;
-  --color-on-surface-variant: #dcc2ae;
+  --color-on-surface-variant: #e8d7c5;
   --color-outline: #a48c7a;
   --color-outline-variant: #564334;
   --color-error: #ffb4ab;
-}
-
-@theme {
-  --font-pixel: "Press Start 2P", ui-monospace, monospace;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 @layer base {
@@ -46,7 +71,7 @@
   body {
     @apply bg-background text-on-surface font-body;
     height: 100%;
-    background-image: radial-gradient(circle at 50% 50%, rgba(255, 145, 0, 0.05) 0%, transparent 70%);
+    background-image: radial-gradient(circle at 50% 50%, rgba(255, 145, 0, 0.07) 0%, transparent 70%);
     background-attachment: fixed;
     font-size: 16px;
     line-height: 1.6;
@@ -401,18 +426,30 @@
 
 /* Hard offset pixel shadow for game-like buttons/cards */
 .pixel-shadow {
-  box-shadow: 5px 5px 0 0 #101010, 7px 7px 0 0 rgba(255, 145, 0, 0.35);
+  box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 0.35), 7px 7px 0 0 rgba(255, 145, 0, 0.35);
   transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .pixel-shadow:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 7px 7px 0 0 #101010, 9px 9px 0 0 rgba(255, 145, 0, 0.35);
+  box-shadow: 7px 7px 0 0 rgba(0, 0, 0, 0.35), 9px 9px 0 0 rgba(255, 145, 0, 0.35);
 }
 
 .pixel-shadow:active {
   transform: translate(3px, 3px);
-  box-shadow: 1px 1px 0 0 #101010, 2px 2px 0 0 rgba(255, 145, 0, 0.35);
+  box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.35), 2px 2px 0 0 rgba(255, 145, 0, 0.35);
+}
+
+:root:not(.dark) .pixel-shadow {
+  box-shadow: 5px 5px 0 0 rgba(43, 38, 33, 0.18), 7px 7px 0 0 rgba(255, 145, 0, 0.4);
+}
+
+:root:not(.dark) .pixel-shadow:hover {
+  box-shadow: 7px 7px 0 0 rgba(43, 38, 33, 0.18), 9px 9px 0 0 rgba(255, 145, 0, 0.4);
+}
+
+:root:not(.dark) .pixel-shadow:active {
+  box-shadow: 1px 1px 0 0 rgba(43, 38, 33, 0.18), 2px 2px 0 0 rgba(255, 145, 0, 0.4);
 }
 
 /* Pixelated tripolar corners for section frames */
@@ -431,6 +468,16 @@
     0deg,
     rgba(255, 255, 255, 0.02) 0px,
     rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+:root:not(.dark) .scanlines {
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.03) 0px,
+    rgba(0, 0, 0, 0.03) 1px,
     transparent 1px,
     transparent 3px
   );
@@ -512,6 +559,19 @@
   }
   100% {
     box-shadow: 0 0 0 12px rgba(255, 255, 255, 0);
+  }
+}
+
+:root:not(.dark) .glow-pulse {
+  animation: glow-pulse-light 1.8s ease-out infinite;
+}
+
+@keyframes glow-pulse-light {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgba(0, 0, 0, 0);
   }
 }
 

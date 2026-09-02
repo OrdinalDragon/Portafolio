@@ -1,11 +1,13 @@
 import React from 'react';
-import { LayoutDashboard, Globe, Linkedin, Github, ArrowLeft } from 'lucide-react';
+import { LayoutDashboard, Globe, Linkedin, Github, ArrowLeft, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useTheme } from '../i18n/ThemeContext';
 import type { Screen } from '../types';
 
 export default function TopNav({ activeScreen, setScreen, onMenuClick }: { activeScreen: Screen, setScreen: (s: Screen) => void, onMenuClick: () => void }) {
   const { t, lang, setLanguage } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const toggleLanguage = () => {
@@ -72,6 +74,13 @@ export default function TopNav({ activeScreen, setScreen, onMenuClick }: { activ
         >
           <Globe size={18} className="md:w-[22px] md:h-[22px]" aria-hidden="true" />
           <span className="hidden sm:inline">{lang === 'en' ? 'ES' : 'EN'}</span>
+        </button>
+        <button
+          onClick={toggleTheme}
+          className="text-on-surface/60 hover:text-primary transition-all hover:scale-110 cursor-pointer flex items-center gap-1 font-label text-xs uppercase tracking-widest"
+          aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+        >
+          {theme === 'dark' ? <Sun size={18} className="md:w-[22px] md:h-[22px]" aria-hidden="true" /> : <Moon size={18} className="md:w-[22px] md:h-[22px]" aria-hidden="true" />}
         </button>
         <a 
           href="https://www.linkedin.com/in/nicolas-schernetzki-518b28212/" 
