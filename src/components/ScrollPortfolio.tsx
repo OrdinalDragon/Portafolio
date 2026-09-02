@@ -816,7 +816,7 @@ export default function ScrollPortfolio() {
           </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6" style={{ transformStyle: 'preserve-3d' }}>
             {[
-              { nameKey: 'portfolio.edu.pescar.name', orgKey: 'portfolio.edu.pescar.org', dateKey: 'portfolio.edu.pescar.date', descKey: 'portfolio.edu.pescar.desc', cert: null },
+              { nameKey: 'portfolio.edu.pescar.name', orgKey: 'portfolio.edu.pescar.org', dateKey: 'portfolio.edu.pescar.date', descKey: 'portfolio.edu.pescar.desc', cert: 'pescar_nico.pdf' },
               { nameKey: 'portfolio.edu.utn.name', orgKey: 'portfolio.edu.utn.org', dateKey: 'portfolio.edu.utn.date', descKey: 'portfolio.edu.utn.desc', cert: 'net.pdf' },
               { nameKey: 'portfolio.edu.ticmas.name', orgKey: 'portfolio.edu.ticmas.org', dateKey: 'portfolio.edu.ticmas.date', descKey: 'portfolio.edu.ticmas.desc', cert: 'ticmas.pdf' },
             ].map((e, i) => (
