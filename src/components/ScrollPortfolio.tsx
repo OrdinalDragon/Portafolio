@@ -551,9 +551,8 @@ export default function ScrollPortfolio() {
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.55, ease: EASE }}
               >
-                <TiltCard>
-                  <div className="bg-surface-container-low border-2 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full group relative"
-                    style={{ borderColor: p.accent }}>
+                <div className="bg-surface-container-low border-2 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full group relative"
+                  style={{ borderColor: p.accent }}>
                     <span className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2.5 py-1 bg-primary text-on-primary font-label text-[10px] uppercase tracking-widest pixel-shadow">
                       <Star size={12} />
                       {t('portfolio.featured')}
@@ -596,7 +595,6 @@ export default function ScrollPortfolio() {
                       </div>
                     </div>
                   </div>
-                </TiltCard>
               </motion.div>
             ))}
           </div>
@@ -610,8 +608,7 @@ export default function ScrollPortfolio() {
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.55, ease: EASE, delay: (i % 2) * 0.1 }}
               >
-                <TiltCard>
-                  <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full group">
+                <div className="bg-surface-container-low border-2 border-outline-variant/20 pixel-corners hover:border-primary/50 transition-colors flex flex-col h-full group">
                     <ProjectScreenshot screenshot={p.screenshot} accent={p.accent} status={p.status} onZoom={() => p.screenshot && setLightboxUrl(`${BASE}${p.screenshot}`)} />
                     <div className="p-5 sm:p-6 flex-1 flex flex-col">
                       <div className="flex items-center justify-between mb-2">
@@ -650,7 +647,6 @@ export default function ScrollPortfolio() {
                       </div>
                     </div>
                   </div>
-                </TiltCard>
               </motion.div>
             ))}
           </div>
