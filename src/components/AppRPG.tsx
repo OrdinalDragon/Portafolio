@@ -38,7 +38,7 @@ export default function AppRPG() {
   };
 
   return (
-    <div className="h-dvh flex flex-col bg-background text-on-surface selection:bg-primary-container selection:text-on-primary overflow-hidden relative">
+    <div className="dark h-dvh flex flex-col bg-[#0d0c0b] text-on-surface selection:bg-primary-container selection:text-on-primary overflow-hidden relative">
       <RPGBackground />
       <TopNav activeScreen={screen} setScreen={setScreen} onMenuClick={() => setIsSidebarOpen(true)} />
       

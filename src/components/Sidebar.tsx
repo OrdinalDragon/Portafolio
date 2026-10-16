@@ -52,15 +52,15 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
         )}
       </AnimatePresence>
 
-      <aside className={`fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant/15 flex flex-col pt-8 z-[70] transition-transform duration-300 lg:translate-x-0 lg:top-20 lg:h-[calc(100dvh-5rem)] ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant/15 flex flex-col pt-4 z-[70] transition-transform duration-300 lg:translate-x-0 lg:top-20 lg:h-[calc(100dvh-5rem)] ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="lg:hidden absolute top-4 right-4">
           <button onClick={onClose} className="text-on-surface/60 hover:text-primary cursor-pointer" aria-label="Close menu">
             <X size={24} />
           </button>
         </div>
 
-        <div className="px-6 mb-10 flex flex-col items-center">
-          <div className="w-20 h-20 rounded-full border-2 border-primary-container shadow-lg mb-4 overflow-hidden relative bg-surface-container-highest">
+        <div className="px-6 mb-3 flex flex-col items-center">
+          <div className="w-16 h-16 rounded-full border-2 border-primary-container shadow-lg mb-2 overflow-hidden relative bg-surface-container-highest">
             <motion.img 
               src={profileImg} 
               animate={{ opacity: showDragon ? 0 : 1 }}
@@ -82,12 +82,12 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
               }}
             />
           </div>
-          <p className="font-label text-primary text-[10px] uppercase tracking-widest mb-1">{t('sidebar.name')}</p>
-          <h3 className="font-headline text-on-surface font-bold text-lg text-center">{t('sidebar.title')}</h3>
-          <p className="font-label text-on-surface-variant text-xs uppercase tracking-widest">{t('sidebar.subtitle')}</p>
+          <p className="font-label text-primary text-[9px] uppercase tracking-widest">{t('sidebar.name')}</p>
+          <h3 className="font-headline text-on-surface font-bold text-base text-center leading-tight">{t('sidebar.title')}</h3>
+          <p className="font-label text-on-surface-variant text-[11px] uppercase tracking-widest">{t('sidebar.subtitle')}</p>
         </div>
 
-        <nav className="flex-1 px-4 space-y-2 font-label overflow-y-auto" aria-label="Main navigation">
+        <nav className="flex-1 px-3 space-y-1 font-label overflow-y-auto" aria-label="Main navigation">
           {navItems.map((item) => (
             <button
               key={item.id}
@@ -98,19 +98,19 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
                 onClose();
               }}
               aria-current={activeScreen === item.id ? 'page' : undefined}
-              className={`w-full flex items-center gap-4 px-4 py-3 transition-all duration-200 rounded-sm cursor-pointer ${
+              className={`w-full flex items-center gap-3 px-3 py-2 transition-all duration-200 rounded-sm cursor-pointer ${
                 activeScreen === item.id 
                   ? 'bg-primary/10 text-primary border-l-4 border-primary' 
                   : 'text-on-surface/60 hover:bg-surface-container-highest hover:text-primary'
               }`}
             >
-              <item.icon size={20} aria-hidden="true" />
-              <span className="text-sm uppercase tracking-tighter">{item.label}</span>
+              <item.icon size={18} aria-hidden="true" />
+              <span className="text-xs uppercase tracking-tight">{item.label}</span>
             </button>
           ))}
         </nav>
 
-        <div className="p-6 border-t border-outline-variant/10 space-y-3">
+        <div className="p-4 border-t border-outline-variant/10 space-y-2">
           <button 
             onMouseEnter={() => sfx.playHover()}
             onClick={() => {
@@ -118,9 +118,9 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
               setScreen('estadisticas');
               onClose();
             }}
-            className="w-full py-3 border border-primary/40 text-primary font-bold text-xs tracking-widest uppercase rounded-sm hover:bg-primary/5 transition-all cursor-pointer flex items-center justify-center gap-2"
+            className="w-full py-2 border border-primary/40 text-primary font-bold text-xs tracking-widest uppercase rounded-sm hover:bg-primary/5 transition-all cursor-pointer flex items-center justify-center gap-2"
           >
-            <FileText size={16} />
+            <FileText size={15} />
             {t('sidebar.stats')}
           </button>
           <button 
@@ -130,7 +130,7 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
               setScreen('contacto');
               onClose();
             }}
-            className="w-full py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-xs tracking-widest uppercase rounded-sm hover:shadow-[0_0_15px_rgba(255,145,0,0.4)] transition-all cursor-pointer"
+            className="w-full py-2 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-xs tracking-widest uppercase rounded-sm hover:shadow-[0_0_15px_rgba(255,145,0,0.4)] transition-all cursor-pointer"
           >
             {t('sidebar.contact')}
           </button>

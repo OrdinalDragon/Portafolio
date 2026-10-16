@@ -324,7 +324,7 @@ export default function Historia() {
   ];
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center scroll-bg relative h-full w-full max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+    <div className="flex flex-col items-center scroll-bg relative min-h-full w-full max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 pb-32 text-on-surface">
       {/* Header */}
       <header className="text-center mb-8 max-w-2xl px-4">
         <span className="text-secondary font-label text-[10px] sm:text-xs uppercase tracking-[0.25em] block mb-2 font-bold">

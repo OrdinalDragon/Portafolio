@@ -287,7 +287,7 @@ export default function ArenaCombate() {
   };
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 min-h-full p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto">
+    <div className="relative min-h-full w-full bg-transparent text-on-surface p-4 sm:p-6 lg:p-8 pb-32 max-w-5xl mx-auto">
       {/* Header with boss selection pills & bonuses bar */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
         <div>
@@ -300,7 +300,7 @@ export default function ArenaCombate() {
         </div>
 
         {/* Boss Switcher */}
-        <div className="flex items-center gap-2 bg-surface-container-low p-1.5 rounded-xl border border-outline-variant/20">
+        <div className="flex items-center gap-2 bg-surface-container-low/90 backdrop-blur-sm p-1.5 rounded-xl border border-outline-variant/30 shadow-md">
           {BOSSES.map((b) => {
             const isDefeated = defeatedBosses.includes(b.id);
             return (
@@ -322,7 +322,7 @@ export default function ArenaCombate() {
       </div>
 
       {/* Equipped Relic Combat Synergy Badge */}
-      <div className="mb-6 px-4 py-2 rounded-lg bg-surface-container-low border border-outline-variant/30 flex items-center justify-between text-xs font-mono">
+      <div className="mb-6 px-4 py-2.5 rounded-lg bg-surface-container-low/90 backdrop-blur-sm border border-outline-variant/30 flex items-center justify-between text-xs font-mono shadow-md">
         <div className="flex items-center gap-2 text-on-surface">
           <Award size={14} className="text-primary" />
           <span className="text-primary font-bold">Reliquias Activas:</span>
@@ -507,10 +507,7 @@ export default function ArenaCombate() {
                 <button
                   type="button"
                   disabled={turn !== 'player'}
-                  onClick={() => {
-                    setActiveMenu('attack'); // defend inside
-                    handleDefend('shield');
-                  }}
+                  onClick={() => handleDefend('shield')}
                   className="flex items-center gap-2 p-3 rounded-lg bg-surface-container-lowest border border-outline-variant/30 hover:border-blue-400 text-on-surface hover:text-blue-400 transition-all font-label text-xs uppercase font-bold tracking-wider cursor-pointer disabled:opacity-50"
                 >
                   <Shield size={16} className="text-blue-400" />

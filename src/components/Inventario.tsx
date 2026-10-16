@@ -142,7 +142,7 @@ export default function Inventario() {
   };
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 min-h-full p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto">
+    <div className="relative min-h-full w-full bg-transparent text-on-surface p-4 sm:p-6 lg:p-8 pb-32 max-w-6xl mx-auto">
       <header className="mb-6 text-center sm:text-left">
         <span className="font-mono text-primary text-xs uppercase tracking-widest block mb-1">
           // EQUIPAMIENTO & RELIQUIAS
@@ -156,7 +156,7 @@ export default function Inventario() {
       </header>
 
       {/* Combat Synergy Stat Bar */}
-      <div className="mb-6 p-4 rounded-xl bg-surface-container border border-primary/30 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+      <div className="mb-6 p-4 rounded-xl bg-surface-container/80 backdrop-blur-sm border border-primary/40 flex flex-wrap items-center justify-between gap-4 shadow-md">
         <div className="flex items-center gap-2">
           <Award size={18} className="text-primary" />
           <span className="font-mono text-xs uppercase tracking-wider font-bold text-on-surface">
@@ -180,8 +180,8 @@ export default function Inventario() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Inventory Grid (8 cols on lg) */}
-        <div className="lg:col-span-7 bg-surface-container-low border-2 border-outline-variant/20 p-4 sm:p-6 rounded-xl">
+        {/* Inventory Grid (7 cols on lg) */}
+        <div className="lg:col-span-7 bg-surface-container-low/90 backdrop-blur-sm border-2 border-outline-variant/30 p-4 sm:p-6 rounded-xl shadow-lg">
           <div className="flex items-center justify-between mb-4 border-b border-outline-variant/20 pb-3">
             <h3 className="font-headline font-bold text-sm uppercase tracking-wider text-on-surface">
               Mochila de Reliquias ({ITEMS.length} / 12)
@@ -231,7 +231,7 @@ export default function Inventario() {
         </div>
 
         {/* Item Details Panel (5 cols on lg) */}
-        <div className="lg:col-span-5 bg-surface-container-high border-2 border-outline-variant/25 p-6 rounded-xl flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-surface-container-high/90 backdrop-blur-sm border-2 border-outline-variant/30 p-6 rounded-xl flex flex-col justify-between shadow-lg min-h-[380px]">
           {selectedItem ? (
             <div className="space-y-4">
               <div className="flex items-start justify-between gap-3">
