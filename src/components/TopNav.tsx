@@ -152,10 +152,13 @@ export default function TopNav({ activeScreen, setScreen, onMenuClick }: { activ
         </a>
         <div className="w-7 h-7 md:w-10 md:h-10 rounded-sm border-2 border-outline-variant overflow-hidden ml-1 md:ml-2">
           <img 
-            src={`${import.meta.env.BASE_URL}profile.png`} 
+            src={`${import.meta.env.BASE_URL}profile.webp`} 
             alt="User" 
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = `${import.meta.env.BASE_URL}profile.png`;
+            }}
           />
         </div>
       </div>

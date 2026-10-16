@@ -18,6 +18,7 @@ import Proyectos from './Proyectos';
 import Estadisticas from './Estadisticas';
 import DragonCompanion from './DragonCompanion';
 import AchievementBanner from './AchievementBanner';
+import RPGBackground from './RPGBackground';
 
 export default function AppRPG() {
   const { t } = useLanguage();
@@ -38,6 +39,7 @@ export default function AppRPG() {
 
   return (
     <div className="h-dvh flex flex-col bg-background text-on-surface selection:bg-primary-container selection:text-on-primary overflow-hidden relative">
+      <RPGBackground />
       <TopNav activeScreen={screen} setScreen={setScreen} onMenuClick={() => setIsSidebarOpen(true)} />
       
       <AnimatePresence>

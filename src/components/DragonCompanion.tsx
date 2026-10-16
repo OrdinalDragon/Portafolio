@@ -157,12 +157,16 @@ export default function DragonCompanion({ currentScreen }: { currentScreen?: Scr
           className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/30 to-surface-container-highest border-2 border-primary/60 p-1 shadow-[0_0_20px_rgba(255,145,0,0.4)] flex items-center justify-center cursor-pointer overflow-hidden group"
         >
           <img
-            src={`${import.meta.env.BASE_URL}dragon.png`}
+            src={`${import.meta.env.BASE_URL}dragon.webp`}
             alt="OrdinalDragon Companion"
             className="w-full h-full object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
+              if (target.src.endsWith('.webp')) {
+                target.src = `${import.meta.env.BASE_URL}dragon.png`;
+              } else {
+                target.style.display = 'none';
+              }
             }}
           />
           <Flame size={26} className="text-primary hidden group-has-[img:not([style*='display: none'])]:hidden" />

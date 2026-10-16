@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FileText, History, School, ExternalLink, Eye, X, Award } from 'lucide-react';
+import { 
+  FileText, History, School, ExternalLink, Eye, X, Award, 
+  Sparkles, CheckCircle2, ShieldCheck, Download, Sparkle
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { rpgState } from '../utils/rpgState';
+import { sfx } from '../utils/sfx';
 
 export default function Estadisticas() {
   const { t, lang } = useLanguage();
@@ -19,12 +23,14 @@ export default function Estadisticas() {
   const [previewPdf, setPreviewPdf] = useState<string | null>(null);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
   const [selectedCertPdf, setSelectedCertPdf] = useState<string | null>(null);
+  const [selectedCertTitle, setSelectedCertTitle] = useState<string>('Certificado');
   const [certBlobUrl, setCertBlobUrl] = useState<string | null>(null);
 
   const base = import.meta.env.BASE_URL;
   const cvPdf = lang === 'en' ? `${base}Nicolas_Schernetzki_CV_Eng.pdf` : `${base}Nicolas_Schernetzki_CV_Esp.pdf`;
 
-  const handleDownload = useCallback(async (url: string, _filename: string) => {
+  const handleDownload = useCallback((url: string) => {
+    sfx.playSelect();
     window.open(url, '_blank');
   }, []);
 
@@ -75,245 +81,503 @@ export default function Estadisticas() {
     };
   }, [selectedCertPdf]);
 
+  const certificates = [
+    {
+      id: 'pescar',
+      file: 'pescar_nico.pdf',
+      title: t('estadisticas.cert4'),
+      entity: 'Fundación Pescar / Banco Nación',
+      badge: 'MERN 345 HS',
+      isRecent: true,
+      color: 'border-primary/50 bg-primary/10 text-primary',
+    },
+    {
+      id: 'net',
+      file: 'net.pdf',
+      title: t('estadisticas.cert1'),
+      entity: 'UTN.BA',
+      badge: 'C# & .NET 8',
+      isRecent: false,
+      color: 'border-purple-500/40 bg-purple-500/10 text-purple-400',
+    },
+    {
+      id: 'fundamentos',
+      file: 'fundamentos.pdf',
+      title: t('estadisticas.cert2'),
+      entity: 'UTN.BA',
+      badge: 'POO & LÓGICA',
+      isRecent: false,
+      color: 'border-blue-500/40 bg-blue-500/10 text-blue-400',
+    },
+    {
+      id: 'ticmas',
+      file: 'ticmas.pdf',
+      title: t('estadisticas.cert3'),
+      entity: 'Ticmas / Arg. Programa',
+      badge: 'FRONT-END',
+      isRecent: false,
+      color: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400',
+    },
+  ];
+
   return (
-    <div className="parchment-bg relative h-full w-full">
-      <div className="max-w-4xl mx-auto py-8 md:py-12 px-4 md:px-0">
-      <header className="mb-10 md:mb-12 text-center px-4">
-        <h2 className="font-headline text-xl sm:text-4xl md:text-5xl font-black text-primary italic uppercase tracking-normal sm:tracking-widest mb-4 break-words">{t('estadisticas.title')}</h2>
-        <p className="font-label text-on-surface-variant text-[9px] sm:text-xs uppercase tracking-[0.1em] sm:tracking-[0.3em]">{t('estadisticas.subtitle')}</p>
-      </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Left Column: Core Stats */}
-        <div className="md:col-span-1 space-y-6">
-          <div className="bg-surface-container-lowest border border-outline-variant/20 p-6 rounded-sm shadow-lg">
-            <h3 className="font-headline text-primary font-bold uppercase text-sm mb-6 border-b border-primary/20 pb-2">{t('estadisticas.attributes')}</h3>
-            <div className="space-y-4">
-              {[
-                { label: t('habilidades.attr.str'), val: dynAttrs.str, color: 'bg-red-500' },
-                { label: t('habilidades.attr.agi'), val: dynAttrs.agi, color: 'bg-blue-500' },
-                { label: t('habilidades.attr.int'), val: dynAttrs.int, color: 'bg-purple-500' },
-                { label: t('habilidades.attr.cha'), val: dynAttrs.cha, color: 'bg-yellow-500' },
-                { label: t('habilidades.attr.dex'), val: dynAttrs.dex, color: 'bg-green-500' }
-              ].map((stat, i) => (
-                <div key={i}>
-                  <div className="flex justify-between text-[10px] uppercase font-label mb-1">
-                    <span className="text-on-surface-variant">{stat.label}</span>
-                    <span className="text-primary font-bold">{stat.val}</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${Math.min(stat.val, 100)}%` }}
-                      transition={{ duration: 1, delay: i * 0.1 }}
-                      className={`h-full ${stat.color}`}
-                    ></motion.div>
-                  </div>
-                </div>
-              ))}
-            </div>
+    <div className="relative min-h-full w-full bg-transparent text-on-surface p-4 sm:p-6 md:p-10">
+      <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
+        
+        {/* Header */}
+        <header className="text-center px-4 pt-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] md:text-xs font-mono uppercase tracking-widest">
+            <Sparkle size={12} className="animate-spin" style={{ animationDuration: '6s' }} />
+            <span>// PERGAMINOS & BITÁCORA DEL HÉROE</span>
           </div>
+          <h1 className="font-headline text-2xl sm:text-4xl md:text-5xl font-black text-on-surface uppercase italic tracking-normal sm:tracking-wider mb-2">
+            {t('estadisticas.title')}
+          </h1>
+          <p className="font-label text-on-surface-variant text-[10px] sm:text-xs uppercase tracking-[0.2em] max-w-xl mx-auto">
+            {t('estadisticas.subtitle')}
+          </p>
+          <div className="h-1 w-20 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mt-4"></div>
+        </header>
 
-          {/* Active Relic Combat Bonus Box */}
-          <div className="bg-surface-container-lowest border border-primary/30 p-5 rounded-sm shadow-lg space-y-2.5">
-            <div className="flex items-center gap-2 border-b border-outline-variant/20 pb-2">
-              <Award size={16} className="text-primary" />
-              <h3 className="font-headline text-primary font-bold uppercase text-xs tracking-wider">
-                Bonos de Combate Activos
-              </h3>
-            </div>
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-              <div className="bg-surface-container-high/60 p-2 rounded">
-                <span className="text-[10px] text-on-surface-variant block uppercase">Daño Extra</span>
-                <span className="text-primary font-bold">+{combatBonuses.damageBonus}</span>
-              </div>
-              <div className="bg-surface-container-high/60 p-2 rounded">
-                <span className="text-[10px] text-on-surface-variant block uppercase">Mitigación</span>
-                <span className="text-secondary font-bold">+{combatBonuses.defensePercent}%</span>
-              </div>
-              <div className="bg-surface-container-high/60 p-2 rounded">
-                <span className="text-[10px] text-on-surface-variant block uppercase">Prob. Crítico</span>
-                <span className="text-amber-400 font-bold">{combatBonuses.critChance}%</span>
-              </div>
-              <div className="bg-surface-container-high/60 p-2 rounded">
-                <span className="text-[10px] text-on-surface-variant block uppercase">Bono Maná</span>
-                <span className="text-blue-400 font-bold">+{combatBonuses.maxMpBonus}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-surface-container-lowest border border-outline-variant/20 p-6 rounded-sm shadow-lg">
-            <h3 className="font-headline text-primary font-bold uppercase text-sm mb-4 border-b border-primary/20 pb-2">{t('estadisticas.languages')}</h3>
-            <div className="space-y-2 font-body text-sm">
-              <div className="flex justify-between">
-                <span className="text-on-surface">{t('estadisticas.spanish')}</span>
-                <span className="text-primary italic">{t('estadisticas.spanish.level')}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-on-surface">{t('estadisticas.english')}</span>
-                <span className="text-primary italic">{t('estadisticas.english.level')}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-surface-container-lowest border border-outline-variant/20 p-6 rounded-sm shadow-lg">
-            <h3 className="font-headline text-primary font-bold uppercase text-sm mb-4 border-b border-primary/20 pb-2">{t('estadisticas.power')}</h3>
-            <div className="space-y-3 font-body text-[11px] text-on-surface-variant leading-tight">
-              <button 
-                onClick={() => setSelectedCertPdf('net.pdf')}
-                className="w-full text-left hover:text-primary hover:bg-primary/5 p-2 -mx-2 rounded transition-colors cursor-pointer flex items-center gap-2"
-              >
-                <ExternalLink size={10} className="text-primary/60 flex-shrink-0" />
-                {t('estadisticas.cert1')}
-              </button>
-              <button 
-                onClick={() => setSelectedCertPdf('fundamentos.pdf')}
-                className="w-full text-left hover:text-primary hover:bg-primary/5 p-2 -mx-2 rounded transition-colors cursor-pointer flex items-center gap-2"
-              >
-                <ExternalLink size={10} className="text-primary/60 flex-shrink-0" />
-                {t('estadisticas.cert2')}
-              </button>
-              <button 
-                onClick={() => setSelectedCertPdf('ticmas.pdf')}
-                className="w-full text-left hover:text-primary hover:bg-primary/5 p-2 -mx-2 rounded transition-colors cursor-pointer flex items-center gap-2"
-              >
-                <ExternalLink size={10} className="text-primary/60 flex-shrink-0" />
-                {t('estadisticas.cert3')}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column: Experience & Education */}
-        <div className="md:col-span-2 space-y-8">
-          <div className="bg-surface-container-lowest border border-outline-variant/20 p-8 rounded-sm shadow-lg relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-10">
-              <FileText size={80} />
-            </div>
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
+          
+          {/* Left Column: Attributes, Combat Relics, Languages, Certificates (4 cols) */}
+          <div className="lg:col-span-4 space-y-6">
             
-            <h3 className="font-headline text-primary font-bold uppercase text-xl mb-8 flex items-center gap-3">
-              <History size={24} />
-              {t('estadisticas.experience')}
-            </h3>
-
-            <div className="space-y-8 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-0.5 before:bg-primary/20">
-              {[
-                { 
-                  title: t('estadisticas.exp1.title'), 
-                  place: t('estadisticas.exp1.place'), 
-                  date: t('estadisticas.exp1.date'),
-                  desc: t('estadisticas.exp1.desc')
-                },
-                { 
-                  title: t('estadisticas.exp2.title'), 
-                  place: t('estadisticas.exp2.place'), 
-                  date: t('estadisticas.exp2.date'),
-                  desc: t('estadisticas.exp2.desc')
-                }
-              ].map((exp, i) => (
-                <div key={i} className="pl-10 relative">
-                  <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-background border-2 border-primary flex items-center justify-center z-10">
-                    <div className="w-2 h-2 rounded-full bg-primary"></div>
+            {/* Dynamic Attributes */}
+            <div className="bg-surface-container-high/60 border border-outline-variant/30 p-5 rounded-sm shadow-xl backdrop-blur-sm">
+              <div className="flex items-center justify-between border-b border-primary/20 pb-2 mb-4">
+                <h2 className="font-headline text-primary font-bold uppercase text-xs tracking-wider flex items-center gap-2">
+                  <ShieldCheck size={16} />
+                  {t('estadisticas.attributes')}
+                </h2>
+                <span className="text-[10px] font-mono text-on-surface-variant uppercase">Sincronizado</span>
+              </div>
+              
+              <div className="space-y-3.5">
+                {[
+                  { label: t('habilidades.attr.str'), val: dynAttrs.str, color: 'from-red-500 to-rose-600', sub: 'Backend & Lógica' },
+                  { label: t('habilidades.attr.agi'), val: dynAttrs.agi, color: 'from-amber-500 to-yellow-400', sub: 'Frontend & UI' },
+                  { label: t('habilidades.attr.int'), val: dynAttrs.int, color: 'from-purple-500 to-indigo-500', sub: 'Arquitectura & POO' },
+                  { label: t('habilidades.attr.dex'), val: dynAttrs.dex, color: 'from-emerald-500 to-teal-400', sub: 'DevOps & Cloud' },
+                  { label: t('habilidades.attr.cha'), val: dynAttrs.cha, color: 'from-sky-500 to-cyan-400', sub: 'B2B & Negocio' }
+                ].map((stat, i) => (
+                  <div key={i}>
+                    <div className="flex justify-between items-baseline text-[10px] uppercase font-mono mb-1">
+                      <span className="text-on-surface font-semibold">{stat.label} <span className="text-on-surface-variant font-normal">({stat.sub})</span></span>
+                      <span className="text-primary font-bold">{stat.val}</span>
+                    </div>
+                    <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${Math.min(stat.val, 100)}%` }}
+                        transition={{ duration: 0.8, delay: i * 0.08 }}
+                        className={`h-full bg-gradient-to-r ${stat.color}`}
+                      />
+                    </div>
                   </div>
-                  <h4 className="font-headline text-on-surface font-bold text-lg uppercase tracking-tight">{exp.title}</h4>
-                  <p className="font-label text-primary text-[10px] uppercase tracking-widest mb-2">{exp.place} | {exp.date}</p>
-                  <p className="font-body text-sm text-on-surface-variant leading-relaxed">{exp.desc}</p>
+                ))}
+              </div>
+            </div>
+
+            {/* Active Relic Combat Bonus Box */}
+            <div className="bg-surface-container-high/60 border border-primary/40 p-5 rounded-sm shadow-xl backdrop-blur-sm space-y-3">
+              <div className="flex items-center gap-2 border-b border-primary/20 pb-2">
+                <Award size={16} className="text-primary animate-pulse" />
+                <h2 className="font-headline text-primary font-bold uppercase text-xs tracking-wider">
+                  Bonos de Reliquias Activas
+                </h2>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                <div className="bg-surface-container-lowest/80 border border-outline-variant/20 p-2.5 rounded">
+                  <span className="text-[9px] text-on-surface-variant block uppercase tracking-wider">Poder de Ataque</span>
+                  <span className="text-primary font-bold text-sm">+{combatBonuses.damageBonus} ATK</span>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-surface-container-lowest border border-outline-variant/20 p-8 rounded-sm shadow-lg">
-            <h3 className="font-headline text-primary font-bold uppercase text-xl mb-8 flex items-center gap-3">
-              <School size={24} />
-              {t('estadisticas.education')}
-            </h3>
-            <div className="space-y-6">
-              <div>
-                <h4 className="font-headline text-on-surface font-bold text-lg uppercase tracking-tight">{t('estadisticas.edu1.title')}</h4>
-                <p className="font-label text-primary text-[10px] uppercase tracking-widest">{t('estadisticas.edu1.place')}</p>
-                <p className="font-body text-xs text-on-surface-variant mt-1">{t('estadisticas.edu1.desc')}</p>
-              </div>
-              <div className="pt-4 border-t border-outline-variant/10">
-                <h4 className="font-headline text-on-surface font-bold text-lg uppercase tracking-tight">{t('estadisticas.edu2.title')}</h4>
-                <p className="font-label text-primary text-[10px] uppercase tracking-widest">{t('estadisticas.edu2.place')}</p>
-                <p className="font-body text-xs text-on-surface-variant mt-1">{t('estadisticas.edu2.desc')}</p>
+                <div className="bg-surface-container-lowest/80 border border-outline-variant/20 p-2.5 rounded">
+                  <span className="text-[9px] text-on-surface-variant block uppercase tracking-wider">Mitigación</span>
+                  <span className="text-secondary font-bold text-sm">+{combatBonuses.defensePercent}% DEF</span>
+                </div>
+                <div className="bg-surface-container-lowest/80 border border-outline-variant/20 p-2.5 rounded">
+                  <span className="text-[9px] text-on-surface-variant block uppercase tracking-wider">Golpe Crítico</span>
+                  <span className="text-amber-400 font-bold text-sm">{combatBonuses.critChance}% CRT</span>
+                </div>
+                <div className="bg-surface-container-lowest/80 border border-outline-variant/20 p-2.5 rounded">
+                  <span className="text-[9px] text-on-surface-variant block uppercase tracking-wider">Reserva de Maná</span>
+                  <span className="text-blue-400 font-bold text-sm">+{combatBonuses.maxMpBonus} MP</span>
+                </div>
               </div>
             </div>
+
+            {/* Languages */}
+            <div className="bg-surface-container-high/60 border border-outline-variant/30 p-5 rounded-sm shadow-xl backdrop-blur-sm">
+              <h2 className="font-headline text-primary font-bold uppercase text-xs tracking-wider mb-3 border-b border-primary/20 pb-2">
+                {t('estadisticas.languages')}
+              </h2>
+              <div className="space-y-2.5 font-mono text-xs">
+                <div className="flex justify-between items-center p-2 rounded bg-surface-container-lowest/60 border border-outline-variant/20">
+                  <span className="text-on-surface font-semibold flex items-center gap-1.5">
+                    🇦🇷 {t('estadisticas.spanish')}
+                  </span>
+                  <span className="text-primary text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-primary/10 border border-primary/20">
+                    {t('estadisticas.spanish.level')}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center p-2 rounded bg-surface-container-lowest/60 border border-outline-variant/20">
+                  <span className="text-on-surface font-semibold flex items-center gap-1.5">
+                    🌐 {t('estadisticas.english')}
+                  </span>
+                  <span className="text-cyan-400 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-cyan-400/10 border border-cyan-400/20">
+                    {t('estadisticas.english.level')}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Power Scrolls / Certifications */}
+            <div className="bg-surface-container-high/60 border border-outline-variant/30 p-5 rounded-sm shadow-xl backdrop-blur-sm">
+              <div className="flex items-center justify-between border-b border-primary/20 pb-2 mb-3">
+                <h2 className="font-headline text-primary font-bold uppercase text-xs tracking-wider flex items-center gap-2">
+                  <Sparkles size={14} className="text-primary" />
+                  {t('estadisticas.power')}
+                </h2>
+                <span className="text-[10px] font-mono text-primary font-bold">4 Verificados</span>
+              </div>
+              
+              <div className="space-y-2.5">
+                {certificates.map((cert) => (
+                  <button
+                    key={cert.id}
+                    onClick={() => {
+                      sfx.playSelect();
+                      setSelectedCertTitle(cert.title);
+                      setSelectedCertPdf(cert.file);
+                    }}
+                    className={`w-full text-left p-3 rounded border transition-all cursor-pointer group hover:scale-[1.01] ${
+                      cert.isRecent 
+                        ? 'bg-gradient-to-r from-primary/15 via-surface-container-lowest to-surface-container-lowest border-primary/50 shadow-[0_0_15px_rgba(255,145,0,0.15)]' 
+                        : 'bg-surface-container-lowest/80 border-outline-variant/30 hover:border-primary/40'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <span className="font-mono text-xs font-bold text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+                        {cert.title}
+                      </span>
+                      <ExternalLink size={12} className="text-on-surface-variant group-hover:text-primary shrink-0 mt-0.5 transition-colors" />
+                    </div>
+                    <div className="flex items-center justify-between text-[10px] font-mono">
+                      <span className="text-on-surface-variant">{cert.entity}</span>
+                      <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase border ${cert.color}`}>
+                        {cert.badge}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
           </div>
-        </div>
-      </div>
 
-      {/* CV Download & Preview - Language aware */}
-      <div className="mt-8 space-y-4">
-        <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant text-center">{t('estadisticas.download.sub')}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Preview Button */}
-          <button
-            onClick={() => setPreviewPdf(cvPdf)}
-            className="group flex items-center gap-4 bg-surface-container-highest border border-outline-variant/20 p-6 hover:border-secondary/40 transition-all cursor-pointer text-left"
-          >
-            <div className="w-12 h-12 bg-secondary/10 border border-secondary/30 flex items-center justify-center flex-shrink-0">
-              <Eye className="text-secondary" size={24} />
-            </div>
-            <div className="flex-1">
-              <p className="font-headline font-bold text-secondary uppercase tracking-widest text-sm">{t('estadisticas.download.preview')}</p>
-            </div>
-          </button>
+          {/* Right Column: Work Experience & Education (8 cols) */}
+          <div className="lg:col-span-8 space-y-6">
+            
+            {/* Experience Chronicles */}
+            <div className="bg-surface-container-high/60 border border-outline-variant/30 p-6 sm:p-8 rounded-sm shadow-xl backdrop-blur-sm relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
+                <FileText size={120} />
+              </div>
 
-          {/* PDF Download */}
-          <button
-            onClick={() => handleDownload(cvPdf, '')}
-            className="group flex items-center gap-4 bg-gradient-to-r from-primary/5 to-primary-container/5 border border-primary/30 p-6 hover:bg-primary/10 transition-all cursor-pointer text-left"
-          >
-            <div className="w-12 h-12 bg-primary/10 border border-primary/30 flex items-center justify-center flex-shrink-0">
-              <FileText className="text-primary" size={24} />
+              <div className="flex items-center justify-between border-b border-outline-variant/20 pb-4 mb-6">
+                <h2 className="font-headline text-primary font-bold uppercase text-lg sm:text-xl flex items-center gap-3">
+                  <History size={22} className="text-primary" />
+                  {t('estadisticas.experience')}
+                </h2>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 flex items-center gap-1.5 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                  En Actividad
+                </span>
+              </div>
+
+              <div className="space-y-8 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-0.5 before:bg-primary/25">
+                
+                {/* Exp 1: Freelance Full-Stack Developer */}
+                <div className="pl-9 relative">
+                  <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-background border-2 border-primary flex items-center justify-center z-10 shadow-[0_0_10px_rgba(255,145,0,0.5)]">
+                    <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+                  </div>
+                  
+                  <div className="bg-surface-container-lowest/80 border border-outline-variant/30 p-5 rounded-sm space-y-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                      <h3 className="font-headline text-on-surface font-bold text-base sm:text-lg uppercase tracking-tight">
+                        {t('estadisticas.exp2.title')}
+                      </h3>
+                      <span className="font-mono text-primary text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-primary/10 border border-primary/20 shrink-0 self-start sm:self-auto">
+                        {t('estadisticas.exp2.date')}
+                      </span>
+                    </div>
+
+                    <p className="font-label text-secondary text-[11px] uppercase tracking-widest font-bold">
+                      {t('estadisticas.exp2.place')}
+                    </p>
+
+                    <p className="font-body text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                      {t('estadisticas.exp2.desc')}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 pt-2 border-t border-outline-variant/15">
+                      {['React 19', 'Python FastAPI', 'Gemini AI', 'Node.js', 'Express', 'MongoDB', 'Docker', 'AWS S3', 'TypeScript'].map((tech) => (
+                        <span key={tech} className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-container-highest/80 text-on-surface border border-outline-variant/20">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Exp 2: Sales Representative & VBA Automation */}
+                <div className="pl-9 relative">
+                  <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-background border-2 border-outline-variant flex items-center justify-center z-10">
+                    <div className="w-2 h-2 rounded-full bg-secondary"></div>
+                  </div>
+
+                  <div className="bg-surface-container-lowest/80 border border-outline-variant/30 p-5 rounded-sm space-y-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                      <h3 className="font-headline text-on-surface font-bold text-base sm:text-lg uppercase tracking-tight">
+                        {t('estadisticas.exp1.title')}
+                      </h3>
+                      <span className="font-mono text-on-surface-variant text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-surface-container-highest border border-outline-variant/20 shrink-0 self-start sm:self-auto">
+                        {t('estadisticas.exp1.date')}
+                      </span>
+                    </div>
+
+                    <p className="font-label text-secondary text-[11px] uppercase tracking-widest font-bold">
+                      {t('estadisticas.exp1.place')}
+                    </p>
+
+                    <p className="font-body text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                      {t('estadisticas.exp1.desc')}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 pt-2 border-t border-outline-variant/15">
+                      {['Excel VBA', 'Automatización de Tareas', '100+ Clientes B2B', 'Email Marketing', 'Catálogos & Precios'].map((tech) => (
+                        <span key={tech} className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-container-highest/80 text-on-surface border border-outline-variant/20">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
             </div>
-            <div className="flex-1">
-              <p className="font-headline font-bold text-primary uppercase tracking-widest text-sm">{t('estadisticas.download.pdf')}</p>
+
+            {/* Education & Academies */}
+            <div className="bg-surface-container-high/60 border border-outline-variant/30 p-6 sm:p-8 rounded-sm shadow-xl backdrop-blur-sm">
+              <div className="flex items-center justify-between border-b border-outline-variant/20 pb-4 mb-6">
+                <h2 className="font-headline text-primary font-bold uppercase text-lg sm:text-xl flex items-center gap-3">
+                  <School size={22} className="text-primary" />
+                  {t('estadisticas.education')}
+                </h2>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-primary font-bold">
+                  Formación Continua
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                {/* Edu 1: Pescar MERN */}
+                <div className="bg-surface-container-lowest/80 border border-primary/30 p-5 rounded-sm flex flex-col justify-between space-y-4 hover:border-primary/60 transition-colors">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 font-bold">
+                        ★ 345 Horas Académicas
+                      </span>
+                      <span className="text-[10px] font-mono text-on-surface-variant">2024 - 2025</span>
+                    </div>
+                    <h3 className="font-headline text-on-surface font-bold text-base uppercase tracking-tight">
+                      {t('estadisticas.edu1.title')}
+                    </h3>
+                    <p className="font-label text-primary text-[10px] uppercase tracking-wider font-semibold">
+                      {t('estadisticas.edu1.place')}
+                    </p>
+                    <p className="font-body text-xs text-on-surface-variant leading-relaxed">
+                      {t('estadisticas.edu1.desc')}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      sfx.playSelect();
+                      setSelectedCertTitle('Desarrollador Web Full Stack MERN - Fundación Pescar');
+                      setSelectedCertPdf('pescar_nico.pdf');
+                    }}
+                    className="w-full py-2 px-3 rounded bg-primary/10 hover:bg-primary/20 border border-primary/30 text-primary font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  >
+                    <Eye size={14} />
+                    Ver Certificado Pescar
+                  </button>
+                </div>
+
+                {/* Edu 2: UTN .NET */}
+                <div className="bg-surface-container-lowest/80 border border-outline-variant/30 p-5 rounded-sm flex flex-col justify-between space-y-4 hover:border-purple-500/50 transition-colors">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 font-bold">
+                        Diplomatura Universitaria
+                      </span>
+                      <span className="text-[10px] font-mono text-on-surface-variant">2023 - 2024</span>
+                    </div>
+                    <h3 className="font-headline text-on-surface font-bold text-base uppercase tracking-tight">
+                      {t('estadisticas.edu2.title')}
+                    </h3>
+                    <p className="font-label text-purple-400 text-[10px] uppercase tracking-wider font-semibold">
+                      {t('estadisticas.edu2.place')}
+                    </p>
+                    <p className="font-body text-xs text-on-surface-variant leading-relaxed">
+                      {t('estadisticas.edu2.desc')}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      sfx.playSelect();
+                      setSelectedCertTitle('Diplomatura Programación .NET - UTN.BA');
+                      setSelectedCertPdf('net.pdf');
+                    }}
+                    className="w-full py-2 px-3 rounded bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-400 font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  >
+                    <Eye size={14} />
+                    Ver Certificado .NET
+                  </button>
+                </div>
+
+              </div>
             </div>
-            <ExternalLink size={16} className="text-primary/60 group-hover:text-primary transition-colors" />
-          </button>
+
+            {/* Official CV Section */}
+            <div className="bg-surface-container-high/60 border border-primary/30 p-6 rounded-sm shadow-xl backdrop-blur-sm space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-primary/20 pb-3">
+                <div>
+                  <h3 className="font-headline text-base sm:text-lg font-bold text-on-surface uppercase tracking-wider">
+                    {t('estadisticas.download.sub')}
+                  </h3>
+                  <p className="font-mono text-[11px] text-on-surface-variant">
+                    Nicolás Schernetzki · Full-Stack Developer ({lang === 'en' ? 'English Version' : 'Versión en Español'})
+                  </p>
+                </div>
+                <span className="text-[10px] font-mono text-primary uppercase tracking-widest px-2 py-1 bg-primary/10 border border-primary/20 rounded self-start sm:self-auto">
+                  PDF Optimizado ATS
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                {/* Preview Button */}
+                <button
+                  onClick={() => {
+                    sfx.playSelect();
+                    setPreviewPdf(cvPdf);
+                  }}
+                  className="flex items-center justify-center gap-3 bg-surface-container-lowest border border-outline-variant/40 hover:border-secondary p-4 rounded transition-all cursor-pointer group text-left"
+                >
+                  <div className="w-10 h-10 bg-secondary/10 border border-secondary/30 flex items-center justify-center rounded">
+                    <Eye className="text-secondary group-hover:scale-110 transition-transform" size={20} />
+                  </div>
+                  <div>
+                    <p className="font-headline font-bold text-secondary uppercase tracking-wider text-xs">
+                      {t('estadisticas.download.preview')}
+                    </p>
+                    <p className="text-[10px] font-mono text-on-surface-variant">
+                      Abrir visor interactivo
+                    </p>
+                  </div>
+                </button>
+
+                {/* PDF Download Button */}
+                <button
+                  onClick={() => handleDownload(cvPdf)}
+                  className="flex items-center justify-center gap-3 bg-gradient-to-r from-primary/15 to-primary-container/10 border border-primary/50 hover:bg-primary/20 p-4 rounded transition-all cursor-pointer group text-left shadow-[0_0_15px_rgba(255,145,0,0.15)]"
+                >
+                  <div className="w-10 h-10 bg-primary/20 border border-primary/40 flex items-center justify-center rounded">
+                    <Download className="text-primary group-hover:scale-110 transition-transform" size={20} />
+                  </div>
+                  <div>
+                    <p className="font-headline font-bold text-primary uppercase tracking-wider text-xs">
+                      {t('estadisticas.download.pdf')}
+                    </p>
+                    <p className="text-[10px] font-mono text-on-surface-variant">
+                      Descarga directa en nueva pestaña
+                    </p>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
         </div>
-      </div>
+
       </div>
 
       {/* CV Preview Modal */}
       <AnimatePresence>
         {previewPdf && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-6 md:p-10">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setPreviewPdf(null)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              onClick={() => {
+                sfx.playSelect();
+                setPreviewPdf(null);
+              }}
+              className="absolute inset-0 bg-black/85 backdrop-blur-md"
             />
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-5xl h-full max-h-[90vh] bg-surface-container-highest border border-outline-variant shadow-2xl overflow-hidden flex flex-col"
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="relative w-full max-w-5xl h-full max-h-[92vh] bg-surface-container-highest border border-primary/40 shadow-2xl overflow-hidden flex flex-col rounded-sm z-10"
             >
-              <div className="flex items-center justify-between p-4 border-b border-outline-variant bg-surface-container">
-                <div className="flex items-center gap-4">
-                  <h3 className="font-headline text-lg font-bold uppercase tracking-widest text-primary">{t('estadisticas.download.preview')}</h3>
+              <div className="flex items-center justify-between p-4 border-b border-outline-variant/30 bg-surface-container">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0">
+                    <FileText size={16} />
+                  </div>
+                  <div className="truncate">
+                    <h3 className="font-headline text-sm sm:text-base font-bold uppercase tracking-wider text-primary truncate">
+                      {t('estadisticas.download.preview')}
+                    </h3>
+                    <p className="text-[10px] font-mono text-on-surface-variant truncate">
+                      Nicolás Schernetzki · Curriculum Vitae
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
                   <a 
                     href={cvPdf} 
-                    download
-                    className="flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded text-[10px] uppercase tracking-widest font-label text-primary hover:bg-primary/20 transition-all"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => sfx.playSelect()}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 border border-primary/30 rounded text-[10px] uppercase tracking-wider font-mono text-primary hover:bg-primary/20 transition-all"
                   >
-                    <ExternalLink size={12} /> {t('estadisticas.download.pdf')}
+                    <ExternalLink size={12} />
+                    <span className="hidden sm:inline">{t('estadisticas.download.pdf')}</span>
                   </a>
+                  <button 
+                    onClick={() => {
+                      sfx.playSelect();
+                      setPreviewPdf(null);
+                    }}
+                    className="p-1.5 hover:bg-surface-container-highest rounded transition-colors text-on-surface-variant hover:text-primary cursor-pointer"
+                    aria-label="Cerrar modal"
+                  >
+                    <X size={20} />
+                  </button>
                 </div>
-                <button 
-                  onClick={() => setPreviewPdf(null)}
-                  className="p-2 hover:bg-surface-container-highest rounded-full transition-colors text-on-surface-variant hover:text-primary cursor-pointer"
-                >
-                  <X size={24} />
-                </button>
               </div>
-              <div className="flex-1 bg-white relative overflow-hidden">
+
+              <div className="flex-1 bg-neutral-900 relative overflow-hidden">
                 {pdfBlobUrl ? (
                   <object 
                     key={pdfBlobUrl}
@@ -321,20 +585,25 @@ export default function Estadisticas() {
                     type="application/pdf"
                     className="w-full h-full border-none"
                   >
-                    <div className="flex flex-col items-center justify-center h-full p-10 text-center">
-                      <p className="text-on-surface-variant mb-4">Browser cannot display PDF</p>
+                    <div className="flex flex-col items-center justify-center h-full p-8 text-center text-on-surface space-y-4">
+                      <FileText size={48} className="text-primary/60" />
+                      <p className="text-sm font-mono text-on-surface-variant max-w-md">
+                        Tu navegador no admite la previsualización directa de PDF en este marco.
+                      </p>
                       <a 
                         href={pdfBlobUrl} 
-                        download={previewPdf}
-                        className="px-6 py-2 bg-primary text-on-primary font-label uppercase tracking-widest hover:bg-primary/80 transition-all"
+                        download={lang === 'en' ? 'Nicolas_Schernetzki_CV_Eng.pdf' : 'Nicolas_Schernetzki_CV_Esp.pdf'}
+                        onClick={() => sfx.playSelect()}
+                        className="px-6 py-2.5 bg-primary text-on-primary font-mono text-xs uppercase tracking-widest hover:bg-primary/80 transition-all rounded shadow-lg"
                       >
-                        Download
+                        Descargar Archivo PDF
                       </a>
                     </div>
                   </object>
                 ) : (
-                  <div className="flex items-center justify-center h-full">
-                    <p className="text-on-surface-variant font-label uppercase tracking-widest animate-pulse">Loading...</p>
+                  <div className="flex flex-col items-center justify-center h-full gap-3 text-on-surface-variant">
+                    <Sparkles className="animate-spin text-primary" size={28} />
+                    <p className="font-mono text-xs uppercase tracking-widest">Cargando Pergamino...</p>
                   </div>
                 )}
               </div>
@@ -346,40 +615,63 @@ export default function Estadisticas() {
       {/* Certificate PDF Modal */}
       <AnimatePresence>
         {selectedCertPdf && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-6 md:p-10">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setSelectedCertPdf(null)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              onClick={() => {
+                sfx.playSelect();
+                setSelectedCertPdf(null);
+              }}
+              className="absolute inset-0 bg-black/85 backdrop-blur-md"
             />
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-5xl h-full max-h-[90vh] bg-surface-container-highest border border-outline-variant shadow-2xl overflow-hidden flex flex-col"
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="relative w-full max-w-5xl h-full max-h-[92vh] bg-surface-container-highest border border-primary/40 shadow-2xl overflow-hidden flex flex-col rounded-sm z-10"
             >
-              <div className="flex items-center justify-between p-4 border-b border-outline-variant bg-surface-container">
-                <div className="flex items-center gap-4">
-                  <h3 className="font-headline text-lg font-bold uppercase tracking-widest text-primary">Certificate</h3>
+              <div className="flex items-center justify-between p-4 border-b border-outline-variant/30 bg-surface-container">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0">
+                    <Award size={16} />
+                  </div>
+                  <div className="truncate">
+                    <h3 className="font-headline text-sm sm:text-base font-bold uppercase tracking-wider text-primary truncate">
+                      {selectedCertTitle}
+                    </h3>
+                    <p className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
+                      <CheckCircle2 size={10} /> Credencial Verificada Oficial
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
                   <a 
                     href={certBlobUrl || `${import.meta.env.BASE_URL}${selectedCertPdf}`}
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded text-[10px] uppercase tracking-widest font-label text-primary hover:bg-primary/20 transition-all"
+                    onClick={() => sfx.playSelect()}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 border border-primary/30 rounded text-[10px] uppercase tracking-wider font-mono text-primary hover:bg-primary/20 transition-all"
                   >
-                    <ExternalLink size={12} /> Open in new tab
+                    <ExternalLink size={12} />
+                    <span className="hidden sm:inline">Abrir en pestaña</span>
                   </a>
+                  <button 
+                    onClick={() => {
+                      sfx.playSelect();
+                      setSelectedCertPdf(null);
+                    }}
+                    className="p-1.5 hover:bg-surface-container-highest rounded transition-colors text-on-surface-variant hover:text-primary cursor-pointer"
+                    aria-label="Cerrar modal"
+                  >
+                    <X size={20} />
+                  </button>
                 </div>
-                <button 
-                  onClick={() => setSelectedCertPdf(null)}
-                  className="p-2 hover:bg-surface-container-highest rounded-full transition-colors text-on-surface-variant hover:text-primary cursor-pointer"
-                >
-                  <X size={24} />
-                </button>
               </div>
-              <div className="flex-1 bg-white relative overflow-hidden">
+
+              <div className="flex-1 bg-neutral-900 relative overflow-hidden">
                 {certBlobUrl ? (
                   <object 
                     key={certBlobUrl}
@@ -387,20 +679,25 @@ export default function Estadisticas() {
                     type="application/pdf"
                     className="w-full h-full border-none"
                   >
-                    <div className="flex flex-col items-center justify-center h-full p-10 text-center">
-                      <p className="text-on-surface-variant mb-4">Browser cannot display PDF</p>
+                    <div className="flex flex-col items-center justify-center h-full p-8 text-center text-on-surface space-y-4">
+                      <Award size={48} className="text-primary/60" />
+                      <p className="text-sm font-mono text-on-surface-variant max-w-md">
+                        Tu navegador no admite la previsualización directa del certificado en este marco.
+                      </p>
                       <a 
                         href={certBlobUrl} 
                         download={selectedCertPdf}
-                        className="px-6 py-2 bg-primary text-on-primary font-label uppercase tracking-widest hover:bg-primary/80 transition-all"
+                        onClick={() => sfx.playSelect()}
+                        className="px-6 py-2.5 bg-primary text-on-primary font-mono text-xs uppercase tracking-widest hover:bg-primary/80 transition-all rounded shadow-lg"
                       >
-                        Download
+                        Descargar Certificado
                       </a>
                     </div>
                   </object>
                 ) : (
-                  <div className="flex items-center justify-center h-full">
-                    <p className="text-on-surface-variant font-label uppercase tracking-widest animate-pulse">Loading...</p>
+                  <div className="flex flex-col items-center justify-center h-full gap-3 text-on-surface-variant">
+                    <Sparkles className="animate-spin text-primary" size={28} />
+                    <p className="font-mono text-xs uppercase tracking-widest">Cargando Certificado...</p>
                   </div>
                 )}
               </div>
@@ -408,6 +705,7 @@ export default function Estadisticas() {
           </div>
         )}
       </AnimatePresence>
+
     </div>
   );
 }

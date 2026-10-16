@@ -8,6 +8,17 @@ class SoundFX {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('rpg-sfx-muted');
       this.muted = stored === 'true';
+
+      // Warm up and unlock AudioContext on first user interaction (Safari & iOS compliant)
+      const unlockAudio = () => {
+        this.initCtx();
+        window.removeEventListener('pointerdown', unlockAudio);
+        window.removeEventListener('keydown', unlockAudio);
+        window.removeEventListener('touchstart', unlockAudio);
+      };
+      window.addEventListener('pointerdown', unlockAudio, { passive: true, once: true });
+      window.addEventListener('keydown', unlockAudio, { passive: true, once: true });
+      window.addEventListener('touchstart', unlockAudio, { passive: true, once: true });
     }
   }
 
@@ -235,6 +246,29 @@ class SoundFX {
       gain.connect(this.ctx.destination);
       osc.start(now);
       osc.stop(now + 0.4);
+    } catch {
+      // ignore
+    }
+  }
+
+  // Dragon Flame Blast (fiery hiss + resonance)
+  public playDragonFlame() {
+    if (this.muted) return;
+    try {
+      this.initCtx();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.exponentialRampToValueAtTime(110, now + 0.3);
+      gain.gain.setValueAtTime(0.09, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.35);
     } catch {
       // ignore
     }

@@ -133,15 +133,18 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
                 <div className="relative group cursor-pointer" onClick={() => setShowDragonAvatar(prev => !prev)}>
                   <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-surface-container-highest border-2 border-primary-container p-1 shadow-[0_0_25px_rgba(255,145,0,0.4)] overflow-hidden relative">
                     <motion.img 
-                      src={`${import.meta.env.BASE_URL}profile.png`} 
+                      src={`${import.meta.env.BASE_URL}profile.webp`} 
                       alt="Nicolás Schernetzki" 
                       animate={{ opacity: showDragonAvatar ? 0 : 1, scale: showDragonAvatar ? 0.95 : 1 }}
                       transition={{ duration: 0.5 }}
                       className="w-full h-full object-cover rounded-xl absolute inset-0"
                       referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `${import.meta.env.BASE_URL}profile.png`;
+                      }}
                     />
                     <motion.img 
-                      src={`${import.meta.env.BASE_URL}dragon.png`} 
+                      src={`${import.meta.env.BASE_URL}dragon.webp`} 
                       alt="Ordinal Dragon" 
                       animate={{ opacity: showDragonAvatar ? 1 : 0, scale: showDragonAvatar ? 1 : 0.95 }}
                       transition={{ duration: 0.5 }}
@@ -149,7 +152,11 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
                       referrerPolicy="no-referrer"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
+                        if (target.src.endsWith('.webp')) {
+                          target.src = `${import.meta.env.BASE_URL}dragon.png`;
+                        } else {
+                          target.style.display = 'none';
+                        }
                       }}
                     />
                   </div>

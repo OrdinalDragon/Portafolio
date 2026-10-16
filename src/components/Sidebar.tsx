@@ -17,8 +17,8 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
 }) {
   const [showDragon, setShowDragon] = useState(false);
   const { t, lang, setLanguage } = useLanguage();
-  const profileImg = `${import.meta.env.BASE_URL}profile.png`;
-  const dragonImg = `${import.meta.env.BASE_URL}dragon.png`;
+  const profileImg = `${import.meta.env.BASE_URL}profile.webp`;
+  const dragonImg = `${import.meta.env.BASE_URL}dragon.webp`;
 
   useEffect(() => {
     const interval = setInterval(() => {

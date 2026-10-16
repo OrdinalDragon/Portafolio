@@ -235,4 +235,81 @@ describe('Historia Component', () => {
     expect(screen.getByText(/Capítulo III: El Reino Productivo/i)).toBeInTheDocument();
   });
 });
+describe('Estadisticas Component', () => {
+  it('renders attributes, combat bonuses, and all 4 certificates including Fundación Pescar', async () => {
+    const Estadisticas = (await import('../components/Estadisticas')).default;
+    render(
+      <LanguageProvider defaultLang="es">
+        <Estadisticas />
+      </LanguageProvider>
+    );
+
+    expect(screen.getByText(/Hoja de Estadísticas/i)).toBeInTheDocument();
+    expect(screen.getByText(/Bonos de Reliquias Activas/i)).toBeInTheDocument();
+    expect(screen.getByText(/4 Verificados/i)).toBeInTheDocument();
+    expect(screen.getByText(/Desarrollador Web Full Stack MERN \(Fundación Pescar \/ Banco Nación\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Diplomatura Programación \.NET \(UTN\.BA\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Visualizar CV en Pantalla/i)).toBeInTheDocument();
+  });
+});
+
+describe('Contacto Component', () => {
+  it('renders summoning screen, quest selectors, and auto-fills subject', async () => {
+    const Contacto = (await import('../components/Contacto')).default;
+    render(
+      <LanguageProvider defaultLang="es">
+        <Contacto />
+      </LanguageProvider>
+    );
+
+    expect(screen.getByText(/CONVOCAR AL HÉROE/i)).toBeInTheDocument();
+    expect(screen.getByText(/Disponible para Nuevas Misiones/i)).toBeInTheDocument();
+    
+    // Quick quest selector
+    const jobPill = screen.getByRole('button', { name: /💼 Oferta Laboral Full-Stack/i });
+    expect(jobPill).toBeInTheDocument();
+
+    const subjectInput = screen.getByLabelText(/Asunto de la Convocatoria/i) as HTMLInputElement;
+    expect(subjectInput.value).toBe('');
+
+    fireEvent.click(jobPill);
+    expect(subjectInput.value).toBe('💼 Oferta Laboral Full-Stack');
+  });
+});
+
+describe('Proyectos Component', () => {
+  it('renders forged artifacts, filter tabs, and opens artifact inspection modal', async () => {
+    const Proyectos = (await import('../components/Proyectos')).default;
+    render(
+      <LanguageProvider defaultLang="es">
+        <Proyectos />
+      </LanguageProvider>
+    );
+
+    expect(screen.getByRole('heading', { level: 1, name: /^LA FORJA DE ARTEFACTOS$/i })).toBeInTheDocument();
+    expect(screen.getByText(/Mood App/i)).toBeInTheDocument();
+    expect(screen.getByText(/EmotionShop/i)).toBeInTheDocument();
+    expect(screen.getByText(/Simulador Bancario/i)).toBeInTheDocument();
+
+    // Filter by backend
+    const backendFilter = screen.getByRole('button', { name: /\.NET & Sistemas/i });
+    fireEvent.click(backendFilter);
+    expect(screen.getByText(/Simulador Bancario/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Mood App/i)).not.toBeInTheDocument();
+
+    // Inspect artifact
+    const inspectBtn = screen.getByRole('button', { name: /Examinar Artefacto/i });
+    fireEvent.click(inspectBtn);
+    expect(screen.getByText(/Arquitectura Forjada/i)).toBeInTheDocument();
+  });
+});
+
+describe('RPGBackground Component', () => {
+  it('renders dragon scales and mystical background runes', async () => {
+    const RPGBackground = (await import('../components/RPGBackground')).default;
+    const { container } = render(<RPGBackground />);
+    expect(container.querySelector('svg')).toBeInTheDocument();
+  });
+});
+
 
