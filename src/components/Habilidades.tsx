@@ -1,100 +1,83 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Wand2, Layers, Globe, Shield, Cpu, Database, Terminal, 
-  History, CheckCircle2, User, Plus, RotateCcw, Sparkles
+  History, CheckCircle2, User, RotateCcw, Sparkles, Award
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { sfx } from '../utils/sfx';
+import { rpgState } from '../utils/rpgState';
 
 export default function Habilidades() {
   const { t } = useLanguage();
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
-  const [availablePoints, setAvailablePoints] = useState(6);
+  const [availablePoints, setAvailablePoints] = useState(rpgState.getAvailablePoints());
+  const [skillLevels, setSkillLevels] = useState(rpgState.getSkillAllocations());
 
-  // Dynamic levels state
-  const [skillLevels, setSkillLevels] = useState<Record<string, number>>({
-    js: 4, react: 4, next: 3, tailwind: 4,
-    dotnet: 4, sql: 3, mongo: 3, python: 3,
-    git: 4, docker: 3, githubactions: 2, linux: 3, cloud: 2, testing: 3,
-  });
-
-  const baseLevels = {
-    js: 4, react: 4, next: 3, tailwind: 4,
-    dotnet: 4, sql: 3, mongo: 3, python: 3,
-    git: 4, docker: 3, githubactions: 2, linux: 3, cloud: 2, testing: 3,
-  };
+  useEffect(() => {
+    return rpgState.subscribe(() => {
+      setAvailablePoints(rpgState.getAvailablePoints());
+      setSkillLevels(rpgState.getSkillAllocations());
+    });
+  }, []);
 
   const handleUpgradeSkill = (id: string, max: number) => {
-    const current = skillLevels[id] || 1;
-    if (availablePoints > 0 && current < max) {
-      sfx.playLevelUp();
-      setSkillLevels((prev) => ({ ...prev, [id]: current + 1 }));
-      setAvailablePoints((pts) => pts - 1);
-    } else {
-      sfx.playHover();
-    }
+    rpgState.upgradeSkill(id, max);
   };
 
   const handleResetPoints = () => {
-    sfx.playSelect();
-    setSkillLevels(baseLevels);
-    setAvailablePoints(6);
+    rpgState.resetSkills();
   };
 
   const paths = [
     {
+      id: 'frontend',
       name: t('habilidades.path.frontend'),
       color: 'text-primary',
       borderColor: 'border-primary',
+      lineGradient: 'from-amber-500/30 via-primary to-amber-500/20',
       glow: 'shadow-[0_0_20px_rgba(255,145,0,0.4)]',
       skills: [
-        { id: 'js', name: 'JavaScript', icon: Wand2, max: 5 },
-        { id: 'react', name: 'React.js', icon: Layers, max: 5 },
+        { id: 'react', name: 'React 19', icon: Layers, max: 5 },
         { id: 'next', name: 'Next.js', icon: Globe, max: 5 },
         { id: 'tailwind', name: 'Tailwind CSS', icon: Shield, max: 5 },
+        { id: 'redux', name: 'State Management (Redux/Zustand)', icon: Wand2, max: 5 },
       ]
     },
     {
+      id: 'backend',
       name: t('habilidades.path.backend'),
       color: 'text-secondary',
       borderColor: 'border-secondary',
+      lineGradient: 'from-purple-500/30 via-secondary to-purple-500/20',
       glow: 'shadow-[0_0_20px_rgba(249,171,255,0.4)]',
       skills: [
-        { id: 'dotnet', name: '.NET / C#', icon: Cpu, max: 5 },
-        { id: 'sql', name: 'SQL Server', icon: Database, max: 5 },
-        { id: 'mongo', name: 'MongoDB', icon: Database, max: 5 },
-        { id: 'python', name: 'Python', icon: Terminal, max: 5 },
+        { id: 'csharp', name: 'C# 12 & POO', icon: Cpu, max: 5 },
+        { id: 'dotnet', name: '.NET 8 / ASP.NET Core', icon: Cpu, max: 5 },
+        { id: 'node', name: 'Node.js & Express', icon: Terminal, max: 5 },
+        { id: 'sql', name: 'Bases de Datos (SQL & Mongo)', icon: Database, max: 5 },
       ]
     },
     {
+      id: 'tools',
       name: t('habilidades.path.tools'),
       color: 'text-primary-container',
       borderColor: 'border-primary-container',
+      lineGradient: 'from-amber-500/30 via-primary-container to-amber-500/20',
       glow: 'shadow-[0_0_20px_rgba(255,145,0,0.3)]',
       skills: [
-        { id: 'git', name: 'Git / GitHub', icon: History, max: 5 },
-        { id: 'docker', name: 'Docker', icon: Layers, max: 5 },
-        { id: 'githubactions', name: 'GitHub Actions', icon: CheckCircle2, max: 5 },
-        { id: 'linux', name: 'Linux / Bash', icon: Terminal, max: 5 },
-        { id: 'cloud', name: 'Cloud (AWS)', icon: Globe, max: 5 },
-        { id: 'testing', name: 'Unit Testing', icon: CheckCircle2, max: 5 },
+        { id: 'git', name: 'Git & Control de Versiones', icon: History, max: 5 },
+        { id: 'docker', name: 'Docker & Contenedores', icon: Layers, max: 5 },
+        { id: 'linux', name: 'Linux / Bash Scripting', icon: Terminal, max: 5 },
+        { id: 'testing', name: 'Testing Automatizado (xUnit/Vitest)', icon: CheckCircle2, max: 5 },
       ]
     }
   ];
 
-  // Calculate dynamic attributes based on allocated points
-  const totalFrontPoints = (skillLevels['js'] || 0) + (skillLevels['react'] || 0) + (skillLevels['next'] || 0) + (skillLevels['tailwind'] || 0);
-  const totalBackPoints = (skillLevels['dotnet'] || 0) + (skillLevels['sql'] || 0) + (skillLevels['mongo'] || 0) + (skillLevels['python'] || 0);
-  const totalToolsPoints = (skillLevels['git'] || 0) + (skillLevels['docker'] || 0) + (skillLevels['githubactions'] || 0) + (skillLevels['linux'] || 0);
-
-  const dynamicStr = Math.min(80 + totalBackPoints * 1.2, 100);
-  const dynamicAgi = Math.min(75 + totalFrontPoints * 1.3, 100);
-  const dynamicInt = Math.min(80 + (totalBackPoints + totalFrontPoints) * 0.7, 100);
-  const dynamicDex = Math.min(75 + totalToolsPoints * 1.5, 100);
+  const dynamicAttrs = rpgState.getDynamicAttributes();
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 h-full constellation-bg relative p-4 md:p-8">
+    <div className="dragon-texture min-h-full constellation-bg relative p-4 md:p-8">
       <header className="mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-6 md:gap-8">
         <div className="text-center md:text-left">
           <span className="font-label text-[10px] sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.3em] text-primary block mb-1">{t('habilidades.subtitle')}</span>
@@ -105,7 +88,7 @@ export default function Habilidades() {
         </div>
 
         {/* Skill Points HUD */}
-        <div className="bg-surface-container-high p-3 md:p-4 rounded-xl border border-outline-variant/30 flex items-center gap-6 shadow-lg">
+        <div className="bg-surface-container-high/90 backdrop-blur-md p-3 md:p-4 rounded-xl border-2 border-primary/40 flex items-center gap-6 shadow-xl">
           <div className="text-center">
             <p className="font-label text-[9px] uppercase tracking-wider text-on-surface-variant">Puntos Disponibles</p>
             <p className="font-headline text-2xl font-bold text-primary flex items-center justify-center gap-1">
@@ -120,7 +103,7 @@ export default function Habilidades() {
           {availablePoints < 6 && (
             <button
               onClick={handleResetPoints}
-              className="p-2 rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+              className="p-2 rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors cursor-pointer border border-outline-variant/30"
               title="Reiniciar Puntos"
             >
               <RotateCcw size={16} />
@@ -132,8 +115,8 @@ export default function Habilidades() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 md:gap-12">
         {/* Dynamic Attributes Panel (1 col) */}
         <div className="lg:col-span-1 space-y-6">
-          <section className="bg-surface-container-low p-4 sm:p-6 rounded-xl border border-outline-variant/20 relative overflow-hidden shadow-sm">
-            <div className="absolute top-0 right-0 p-2 opacity-5">
+          <section className="bg-surface-container-low/90 backdrop-blur-md p-4 sm:p-6 rounded-xl border border-outline-variant/20 relative overflow-hidden shadow-lg">
+            <div className="absolute top-0 right-0 p-2 opacity-5 pointer-events-none">
               <User size={60} />
             </div>
             <h3 className="font-headline text-base md:text-lg font-bold mb-4 uppercase tracking-wider border-b border-outline-variant/20 pb-2 text-center md:text-left">
@@ -141,11 +124,11 @@ export default function Habilidades() {
             </h3>
             <div className="space-y-4">
               {[
-                { label: t('habilidades.attr.str'), val: Math.round(dynamicStr), color: 'bg-red-500' },
-                { label: t('habilidades.attr.agi'), val: Math.round(dynamicAgi), color: 'bg-blue-500' },
-                { label: t('habilidades.attr.int'), val: Math.round(dynamicInt), color: 'bg-purple-500' },
-                { label: t('habilidades.attr.cha'), val: 92, color: 'bg-yellow-500' },
-                { label: t('habilidades.attr.dex'), val: Math.round(dynamicDex), color: 'bg-green-500' }
+                { label: t('habilidades.attr.str'), val: dynamicAttrs.str, color: 'bg-red-500' },
+                { label: t('habilidades.attr.agi'), val: dynamicAttrs.agi, color: 'bg-amber-500' },
+                { label: t('habilidades.attr.int'), val: dynamicAttrs.int, color: 'bg-purple-500' },
+                { label: t('habilidades.attr.cha'), val: dynamicAttrs.cha, color: 'bg-sky-500' },
+                { label: t('habilidades.attr.dex'), val: dynamicAttrs.dex, color: 'bg-emerald-500' }
               ].map((attr) => (
                 <div key={attr.label} className="space-y-1.5">
                   <div className="flex justify-between font-label text-[10px] uppercase">
@@ -164,8 +147,12 @@ export default function Habilidades() {
             </div>
           </section>
 
-          <section className="bg-primary/5 p-4 sm:p-5 rounded-xl border border-primary/20">
-            <h4 className="font-headline text-xs font-bold text-primary mb-1 uppercase tracking-wider">{t('habilidades.bonus.title')}</h4>
+          {/* Active Sinergy Badge */}
+          <section className="bg-primary/10 p-4 sm:p-5 rounded-xl border border-primary/30 shadow-md">
+            <div className="flex items-center gap-2 mb-1.5">
+              <Award className="text-primary" size={16} />
+              <h4 className="font-headline text-xs font-bold text-primary uppercase tracking-wider">{t('habilidades.bonus.title')}</h4>
+            </div>
             <p className="text-[11px] text-on-surface-variant leading-relaxed">
               {t('habilidades.bonus.desc1')} <br/>
               {t('habilidades.bonus.desc2')}
@@ -173,16 +160,19 @@ export default function Habilidades() {
           </section>
         </div>
 
-        {/* Tree Nodes Display (3 cols) */}
-        <div className="lg:col-span-3 bg-surface-container-lowest/60 p-6 md:p-10 border border-outline-variant/20 rounded-2xl relative overflow-hidden shadow-xl">
+        {/* Tree Nodes Display with Constellation Lines (3 cols) */}
+        <div className="lg:col-span-3 bg-surface-container-lowest/80 backdrop-blur-md p-6 md:p-10 border-2 border-outline-variant/20 rounded-2xl relative overflow-hidden shadow-2xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 relative z-10">
             {paths.map((path) => (
-              <div key={path.name} className="flex flex-col items-center gap-8 md:gap-10">
+              <div key={path.id} className="flex flex-col items-center gap-8 md:gap-10 relative">
                 <h3 className={`font-headline text-xs md:text-sm font-bold uppercase tracking-[0.2em] ${path.color} text-center`}>
                   {path.name}
                 </h3>
                 
-                <div className="flex flex-col gap-8 md:gap-10 w-full items-center">
+                {/* Visual Constellation Line */}
+                <div className="relative flex flex-col gap-8 md:gap-10 w-full items-center">
+                  <div className={`absolute top-6 bottom-6 left-1/2 -translate-x-1/2 w-1 bg-gradient-to-b ${path.lineGradient} rounded-full -z-0 opacity-70`} />
+
                   {path.skills.map((skill, index) => {
                     const currentLvl = skillLevels[skill.id] || 1;
                     const isMax = currentLvl >= skill.max;
@@ -198,7 +188,7 @@ export default function Habilidades() {
                           sfx.playHover();
                         }}
                         onMouseLeave={() => setSelectedSkill(null)}
-                        className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center cursor-pointer transition-all duration-200 group"
+                        className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center cursor-pointer transition-all duration-200 group z-10"
                       >
                         {/* Diamond base */}
                         <div
@@ -231,7 +221,7 @@ export default function Habilidades() {
                               initial={{ opacity: 0, y: index > 1 ? 10 : -10 }}
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, scale: 0.95 }}
-                              className={`absolute ${index > 1 ? 'bottom-full mb-3' : 'top-full mt-3'} left-1/2 -translate-x-1/2 w-44 md:w-52 bg-surface-container-highest p-3.5 z-[110] border border-primary/40 rounded-xl shadow-2xl text-left pointer-events-none`}
+                              className={`absolute ${index > 1 ? 'bottom-full mb-3' : 'top-full mt-3'} left-1/2 -translate-x-1/2 w-48 md:w-56 bg-surface-container-highest p-3.5 z-[110] border border-primary/40 rounded-xl shadow-2xl text-left pointer-events-none`}
                             >
                               <p className="font-headline font-bold text-xs text-primary mb-0.5 uppercase tracking-wider">{skill.name}</p>
                               <p className="text-[10px] font-mono text-on-surface-variant mb-2">
@@ -239,10 +229,10 @@ export default function Habilidades() {
                               </p>
                               <p className="text-[10px] text-on-surface-variant leading-relaxed">
                                 {isMax
-                                  ? 'Habilidad maximizada. Efecto sinérgico activado.'
+                                  ? 'Habilidad maximizada. Efecto sinérgico activado en toda la rama.'
                                   : availablePoints > 0
-                                  ? 'Haz clic para asignar +1 punto de talento.'
-                                  : 'No tienes puntos restantes. Reinicia para reasignar.'}
+                                  ? 'Haz clic para asignar +1 punto de talento y potenciar atributos.'
+                                  : 'No tienes puntos restantes. Reinicia para reasignar talentos.'}
                               </p>
                             </motion.div>
                           )}

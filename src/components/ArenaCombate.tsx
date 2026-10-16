@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Swords, Shield, Zap, Coffee, RefreshCw, Trophy, Skull, Flame,
-  CheckCircle2, Terminal
+  CheckCircle2, Terminal, Sparkles, Award
 } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { sfx } from '../utils/sfx';
+import { rpgState } from '../utils/rpgState';
 
 interface Boss {
   id: string;
@@ -43,13 +44,33 @@ const BOSSES: Boss[] = [
   },
 ];
 
+interface FloatingText {
+  id: number;
+  text: string;
+  target: 'boss' | 'player';
+  color: string;
+  isCrit?: boolean;
+}
+
 export default function ArenaCombate() {
   const { t } = useLanguage();
+
+  const [combatBonuses, setCombatBonuses] = useState(() => rpgState.getCombatBonuses());
+  const [defeatedBosses, setDefeatedBosses] = useState<string[]>(() => rpgState.getBossesDefeated());
+
+  useEffect(() => {
+    return rpgState.subscribe(() => {
+      setCombatBonuses(rpgState.getCombatBonuses());
+      setDefeatedBosses(rpgState.getBossesDefeated());
+    });
+  }, []);
+
+  const maxPlayerMp = 500 + combatBonuses.maxMpBonus;
 
   const [selectedBoss, setSelectedBoss] = useState<Boss>(BOSSES[0]);
   const [bossHp, setBossHp] = useState(BOSSES[0].maxHp);
   const [playerHp, setPlayerHp] = useState(1000);
-  const [playerMp, setPlayerMp] = useState(500);
+  const [playerMp, setPlayerMp] = useState(maxPlayerMp);
   const [shieldActive, setShieldActive] = useState(false);
   const [battleLogs, setBattleLogs] = useState<string[]>([
     '¡El combate ha comenzado! Selecciona una acción en tu consola de batalla.',
@@ -58,15 +79,39 @@ export default function ArenaCombate() {
   const [battleState, setBattleState] = useState<'fighting' | 'won' | 'lost'>('fighting');
   const [activeMenu, setActiveMenu] = useState<'main' | 'attack' | 'spell' | 'item'>('main');
 
+  // Animation states
+  const [bossShaking, setBossShaking] = useState(false);
+  const [playerShaking, setPlayerShaking] = useState(false);
+  const [floatingTexts, setFloatingTexts] = useState<FloatingText[]>([]);
+
+  const spawnFloatingText = (text: string, target: 'boss' | 'player', color: string, isCrit = false) => {
+    const id = Date.now() + Math.random();
+    setFloatingTexts((prev) => [...prev, { id, text, target, color, isCrit }]);
+    setTimeout(() => {
+      setFloatingTexts((prev) => prev.filter((item) => item.id !== id));
+    }, 1200);
+  };
+
+  const triggerBossShake = () => {
+    setBossShaking(true);
+    setTimeout(() => setBossShaking(false), 500);
+  };
+
+  const triggerPlayerShake = () => {
+    setPlayerShaking(true);
+    setTimeout(() => setPlayerShaking(false), 500);
+  };
+
   const resetBattle = (boss: Boss) => {
     setSelectedBoss(boss);
     setBossHp(boss.maxHp);
     setPlayerHp(1000);
-    setPlayerMp(500);
+    setPlayerMp(maxPlayerMp);
     setShieldActive(false);
     setBattleState('fighting');
     setTurn('player');
     setActiveMenu('main');
+    setFloatingTexts([]);
     setBattleLogs([`¡Desafiaste a ${boss.name}! Prepara tus pruebas y defensas.`]);
     sfx.playSelect();
   };
@@ -79,21 +124,28 @@ export default function ArenaCombate() {
     if (currentBossHp <= 0) {
       setBattleState('won');
       sfx.playVictory();
+      rpgState.registerBossDefeat(selectedBoss.id);
       addLog(`🏆 ¡Victoria! ${selectedBoss.name} ha sido erradicado del codebase.`);
       return;
     }
 
     setTurn('boss');
     setTimeout(() => {
-      let damage = Math.floor(selectedBoss.attackPower * (0.8 + Math.random() * 0.4));
+      let rawDamage = Math.floor(selectedBoss.attackPower * (0.8 + Math.random() * 0.4));
+      // Apply equipment defense reduction
+      const defenseReductionFactor = (100 - combatBonuses.defensePercent) / 100;
+      let damage = Math.floor(rawDamage * defenseReductionFactor);
+
       if (shieldActive) {
         damage = Math.floor(damage * 0.3);
         setShieldActive(false);
         addLog(`🛡️ Tu Try/Catch redujo el impacto a solo ${damage} de daño.`);
       } else {
-        addLog(`💥 ${selectedBoss.name} atacó con Bug en Producción causando ${damage} de daño.`);
+        addLog(`💥 ${selectedBoss.name} atacó causando ${damage} de daño (${combatBonuses.defensePercent}% mitigado por armadura).`);
       }
 
+      triggerPlayerShake();
+      spawnFloatingText(`-${damage} HP`, 'player', '#ef4444');
       sfx.playAttack();
       setPlayerHp((prev) => {
         const nextHp = Math.max(prev - damage, 0);
@@ -114,9 +166,14 @@ export default function ArenaCombate() {
     if (turn !== 'player' || battleState !== 'fighting') return;
 
     if (type === 'test') {
-      const dmg = 120 + Math.floor(Math.random() * 30);
+      const isCrit = Math.random() * 100 < combatBonuses.critChance;
+      let dmg = 120 + Math.floor(Math.random() * 30) + combatBonuses.damageBonus;
+      if (isCrit) dmg = Math.floor(dmg * 1.5);
+
       sfx.playAttack();
-      addLog(`⚔️ Ejecutaste 'Unit Test Suite': causó ${dmg} de daño certero.`);
+      triggerBossShake();
+      spawnFloatingText(isCrit ? `💥 CRÍTICO -${dmg}` : `-${dmg}`, 'boss', isCrit ? '#f59e0b' : '#ff9100', isCrit);
+      addLog(`⚔️ Ejecutaste 'Unit Test Suite': causó ${dmg} de daño${isCrit ? ' (¡GOLPE CRÍTICO!)' : ''}.`);
       const nextBossHp = Math.max(bossHp - dmg, 0);
       setBossHp(nextBossHp);
       setActiveMenu('main');
@@ -126,10 +183,15 @@ export default function ArenaCombate() {
         addLog('⚠️ Maná insuficiente para Refactor.');
         return;
       }
-      const dmg = 220 + Math.floor(Math.random() * 50);
+      const isCrit = Math.random() * 100 < combatBonuses.critChance;
+      let dmg = 220 + Math.floor(Math.random() * 50) + combatBonuses.damageBonus;
+      if (isCrit) dmg = Math.floor(dmg * 1.5);
+
       setPlayerMp((mp) => mp - 40);
       sfx.playAttack();
-      addLog(`⚡ 'Refactor Arquitectónico Limpio': ¡Daño crítico de ${dmg}!`);
+      triggerBossShake();
+      spawnFloatingText(isCrit ? `💥 CRÍTICO -${dmg}` : `-${dmg}`, 'boss', isCrit ? '#f59e0b' : '#ff9100', isCrit);
+      addLog(`⚡ 'Refactor Arquitectónico Limpio': causó ${dmg} de daño${isCrit ? ' (¡GOLPE CRÍTICO!)' : ''}!`);
       const nextBossHp = Math.max(bossHp - dmg, 0);
       setBossHp(nextBossHp);
       setActiveMenu('main');
@@ -148,7 +210,9 @@ export default function ArenaCombate() {
       }
       setPlayerMp((mp) => mp - 50);
       sfx.playEquip();
-      const dmg = 160;
+      const dmg = 160 + combatBonuses.damageBonus;
+      triggerBossShake();
+      spawnFloatingText(`-${dmg} (STUN)`, 'boss', '#a855f7');
       addLog(`🔮 'TypeScript Strict Mode': Causó ${dmg} de daño y aturdió al enemigo.`);
       const nextBossHp = Math.max(bossHp - dmg, 0);
       setBossHp(nextBossHp);
@@ -157,6 +221,7 @@ export default function ArenaCombate() {
       if (nextBossHp <= 0) {
         setBattleState('won');
         sfx.playVictory();
+        rpgState.registerBossDefeat(selectedBoss.id);
       } else {
         setTimeout(() => {
           addLog(`🌀 ${selectedBoss.name} está aturdido por los tipos y pierde su turno.`);
@@ -170,8 +235,12 @@ export default function ArenaCombate() {
       }
       setPlayerMp((mp) => mp - 70);
       sfx.playLevelUp();
-      const dmg = 280;
-      addLog(`🚀 'Lluvia de Microservicios Concurrentes': ¡Impacto masivo de ${dmg}!`);
+      const isCrit = Math.random() * 100 < combatBonuses.critChance;
+      let dmg = 280 + combatBonuses.damageBonus;
+      if (isCrit) dmg = Math.floor(dmg * 1.5);
+      triggerBossShake();
+      spawnFloatingText(isCrit ? `🚀 CRÍTICO -${dmg}` : `-${dmg}`, 'boss', '#06b6d4', isCrit);
+      addLog(`🚀 'Lluvia de Microservicios Concurrentes': ¡Impacto masivo de ${dmg}${isCrit ? ' (CRÍTICO!)' : ''}!`);
       const nextBossHp = Math.max(bossHp - dmg, 0);
       setBossHp(nextBossHp);
       setActiveMenu('main');
@@ -197,6 +266,7 @@ export default function ArenaCombate() {
       setPlayerMp((mp) => mp - 30);
       const heal = 180;
       setPlayerHp((hp) => Math.min(hp + heal, 1000));
+      spawnFloatingText(`+${heal} HP`, 'player', '#10b981');
       sfx.playLevelUp();
       addLog(`🐳 'Docker Container Restart': Restauraste ${heal} HP.`);
       setActiveMenu('main');
@@ -208,7 +278,8 @@ export default function ArenaCombate() {
   const handleItem = () => {
     if (turn !== 'player' || battleState !== 'fighting') return;
     setPlayerHp((hp) => Math.min(hp + 250, 1000));
-    setPlayerMp((mp) => Math.min(mp + 150, 500));
+    setPlayerMp((mp) => Math.min(mp + 150, maxPlayerMp));
+    spawnFloatingText('+250 HP / +150 MP', 'player', '#10b981');
     sfx.playLevelUp();
     addLog('☕ Bebiste una Taza de Café Espresso: +250 HP y +150 MP.');
     setActiveMenu('main');
@@ -217,8 +288,8 @@ export default function ArenaCombate() {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 min-h-full p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto">
-      {/* Header with boss selection pills */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+      {/* Header with boss selection pills & bonuses bar */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
         <div>
           <span className="font-mono text-xs uppercase tracking-widest text-primary block">
             // ARENA DE COMBATE
@@ -230,19 +301,37 @@ export default function ArenaCombate() {
 
         {/* Boss Switcher */}
         <div className="flex items-center gap-2 bg-surface-container-low p-1.5 rounded-xl border border-outline-variant/20">
-          {BOSSES.map((b) => (
-            <button
-              key={b.id}
-              onClick={() => resetBattle(b)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
-                selectedBoss.id === b.id
-                  ? 'bg-primary text-on-primary font-bold shadow-sm'
-                  : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
-              }`}
-            >
-              {b.icon} {b.name.split(' ')[0]}
-            </button>
-          ))}
+          {BOSSES.map((b) => {
+            const isDefeated = defeatedBosses.includes(b.id);
+            return (
+              <button
+                key={b.id}
+                onClick={() => resetBattle(b)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 ${
+                  selectedBoss.id === b.id
+                    ? 'bg-primary text-on-primary font-bold shadow-sm'
+                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
+                }`}
+              >
+                <span>{b.icon} {b.name.split(' ')[0]}</span>
+                {isDefeated && <CheckCircle2 size={13} className={selectedBoss.id === b.id ? 'text-on-primary' : 'text-emerald-400'} />}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Equipped Relic Combat Synergy Badge */}
+      <div className="mb-6 px-4 py-2 rounded-lg bg-surface-container-low border border-outline-variant/30 flex items-center justify-between text-xs font-mono">
+        <div className="flex items-center gap-2 text-on-surface">
+          <Award size={14} className="text-primary" />
+          <span className="text-primary font-bold">Reliquias Activas:</span>
+          <span className="hidden sm:inline text-on-surface-variant">Bonos transferidos desde tu inventario</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-primary font-bold">+{combatBonuses.damageBonus} ATK</span>
+          <span className="text-secondary font-bold">+{combatBonuses.defensePercent}% DEF</span>
+          <span className="text-amber-400 font-bold">{combatBonuses.critChance}% CRIT</span>
         </div>
       </div>
 
@@ -251,8 +340,29 @@ export default function ArenaCombate() {
         {/* Background Grid Pattern */}
         <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(#ff9100_1px,transparent_1px)] [background-size:16px_16px]" />
 
+        {/* Floating Numbers over Boss */}
+        <AnimatePresence>
+          {floatingTexts.filter((f) => f.target === 'boss').map((f) => (
+            <motion.div
+              key={f.id}
+              initial={{ opacity: 0, y: 0, scale: 0.8 }}
+              animate={{ opacity: 1, y: -45, scale: f.isCrit ? 1.4 : 1.1 }}
+              exit={{ opacity: 0, y: -70 }}
+              transition={{ duration: 0.9, ease: 'easeOut' }}
+              className="absolute top-16 right-8 sm:right-28 z-30 font-headline font-black text-xl sm:text-2xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] pointer-events-none"
+              style={{ color: f.color }}
+            >
+              {f.text}
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
         {/* Boss Display (Top) */}
-        <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-outline-variant/20 pb-6">
+        <motion.div
+          animate={bossShaking ? { x: [-12, 12, -8, 8, -4, 4, 0] } : { x: 0 }}
+          transition={{ duration: 0.4 }}
+          className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-outline-variant/20 pb-6"
+        >
           <div className="flex items-center gap-4 text-center sm:text-left">
             <div className="text-5xl sm:text-6xl p-3 bg-surface-container-high/60 rounded-2xl border border-outline-variant/30 shadow-inner">
               {selectedBoss.icon}
@@ -284,10 +394,31 @@ export default function ArenaCombate() {
               />
             </div>
           </div>
-        </div>
+        </motion.div>
+
+        {/* Floating Numbers over Player */}
+        <AnimatePresence>
+          {floatingTexts.filter((f) => f.target === 'player').map((f) => (
+            <motion.div
+              key={f.id}
+              initial={{ opacity: 0, y: 0, scale: 0.8 }}
+              animate={{ opacity: 1, y: -35, scale: 1.2 }}
+              exit={{ opacity: 0, y: -60 }}
+              transition={{ duration: 0.9, ease: 'easeOut' }}
+              className="absolute top-44 right-8 sm:right-28 z-30 font-headline font-black text-lg sm:text-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] pointer-events-none"
+              style={{ color: f.color }}
+            >
+              {f.text}
+            </motion.div>
+          ))}
+        </AnimatePresence>
 
         {/* Player Status Display (Middle) */}
-        <div className="relative z-10 my-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-surface-container-low/70 border border-outline-variant/20 p-4 rounded-xl">
+        <motion.div
+          animate={playerShaking ? { x: [-8, 8, -5, 5, 0] } : { x: 0 }}
+          transition={{ duration: 0.4 }}
+          className="relative z-10 my-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-surface-container-low/70 border border-outline-variant/20 p-4 rounded-xl"
+        >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary/20 border border-primary text-primary flex items-center justify-center font-bold">
               NS
@@ -319,17 +450,17 @@ export default function ArenaCombate() {
             <div className="space-y-1 flex-1 sm:w-36">
               <div className="flex justify-between font-mono text-[11px]">
                 <span className="text-on-surface-variant">MP</span>
-                <span className="text-secondary font-bold">{playerMp} / 500</span>
+                <span className="text-secondary font-bold">{playerMp} / {maxPlayerMp}</span>
               </div>
               <div className="h-2 bg-surface-container-high rounded-full overflow-hidden">
                 <div
                   className="h-full bg-secondary transition-all duration-300"
-                  style={{ width: `${(playerMp / 500) * 100}%` }}
+                  style={{ width: `${(playerMp / maxPlayerMp) * 100}%` }}
                 />
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Action Controls & Console Log (Bottom) */}
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-4">

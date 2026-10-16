@@ -1,10 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FileText, History, School, ExternalLink, Eye, X } from 'lucide-react';
+import { FileText, History, School, ExternalLink, Eye, X, Award } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { rpgState } from '../utils/rpgState';
 
 export default function Estadisticas() {
   const { t, lang } = useLanguage();
+  const [dynAttrs, setDynAttrs] = useState(() => rpgState.getDynamicAttributes());
+  const [combatBonuses, setCombatBonuses] = useState(() => rpgState.getCombatBonuses());
+
+  useEffect(() => {
+    return rpgState.subscribe(() => {
+      setDynAttrs(rpgState.getDynamicAttributes());
+      setCombatBonuses(rpgState.getCombatBonuses());
+    });
+  }, []);
+
   const [previewPdf, setPreviewPdf] = useState<string | null>(null);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
   const [selectedCertPdf, setSelectedCertPdf] = useState<string | null>(null);
@@ -79,11 +90,11 @@ export default function Estadisticas() {
             <h3 className="font-headline text-primary font-bold uppercase text-sm mb-6 border-b border-primary/20 pb-2">{t('estadisticas.attributes')}</h3>
             <div className="space-y-4">
               {[
-                { label: t('habilidades.attr.str'), val: 88, color: 'bg-red-500' },
-                { label: t('habilidades.attr.agi'), val: 82, color: 'bg-blue-500' },
-                { label: t('habilidades.attr.int'), val: 85, color: 'bg-purple-500' },
-                { label: t('habilidades.attr.cha'), val: 92, color: 'bg-yellow-500' },
-                { label: t('habilidades.attr.dex'), val: 80, color: 'bg-green-500' }
+                { label: t('habilidades.attr.str'), val: dynAttrs.str, color: 'bg-red-500' },
+                { label: t('habilidades.attr.agi'), val: dynAttrs.agi, color: 'bg-blue-500' },
+                { label: t('habilidades.attr.int'), val: dynAttrs.int, color: 'bg-purple-500' },
+                { label: t('habilidades.attr.cha'), val: dynAttrs.cha, color: 'bg-yellow-500' },
+                { label: t('habilidades.attr.dex'), val: dynAttrs.dex, color: 'bg-green-500' }
               ].map((stat, i) => (
                 <div key={i}>
                   <div className="flex justify-between text-[10px] uppercase font-label mb-1">
@@ -93,13 +104,41 @@ export default function Estadisticas() {
                   <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
-                      animate={{ width: `${stat.val}%` }}
+                      animate={{ width: `${Math.min(stat.val, 100)}%` }}
                       transition={{ duration: 1, delay: i * 0.1 }}
                       className={`h-full ${stat.color}`}
                     ></motion.div>
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Active Relic Combat Bonus Box */}
+          <div className="bg-surface-container-lowest border border-primary/30 p-5 rounded-sm shadow-lg space-y-2.5">
+            <div className="flex items-center gap-2 border-b border-outline-variant/20 pb-2">
+              <Award size={16} className="text-primary" />
+              <h3 className="font-headline text-primary font-bold uppercase text-xs tracking-wider">
+                Bonos de Combate Activos
+              </h3>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+              <div className="bg-surface-container-high/60 p-2 rounded">
+                <span className="text-[10px] text-on-surface-variant block uppercase">Daño Extra</span>
+                <span className="text-primary font-bold">+{combatBonuses.damageBonus}</span>
+              </div>
+              <div className="bg-surface-container-high/60 p-2 rounded">
+                <span className="text-[10px] text-on-surface-variant block uppercase">Mitigación</span>
+                <span className="text-secondary font-bold">+{combatBonuses.defensePercent}%</span>
+              </div>
+              <div className="bg-surface-container-high/60 p-2 rounded">
+                <span className="text-[10px] text-on-surface-variant block uppercase">Prob. Crítico</span>
+                <span className="text-amber-400 font-bold">{combatBonuses.critChance}%</span>
+              </div>
+              <div className="bg-surface-container-high/60 p-2 rounded">
+                <span className="text-[10px] text-on-surface-variant block uppercase">Bono Maná</span>
+                <span className="text-blue-400 font-bold">+{combatBonuses.maxMpBonus}</span>
+              </div>
             </div>
           </div>
 

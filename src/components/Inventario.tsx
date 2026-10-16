@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Shield, Wand2, FileText, Coffee, Sparkles, Check, Download, Zap,
-  Layers, Database, ArrowRight
+  Layers, Database, ArrowRight, Flame, ShieldAlert, Award
 } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { sfx } from '../utils/sfx';
+import { rpgState } from '../utils/rpgState';
 
 export interface InventoryItem {
   id: string;
@@ -24,9 +25,17 @@ export default function Inventario() {
   const { t, lang } = useLanguage();
   const cvPdf = `${import.meta.env.BASE_URL}Nicolas_Schernetzki_CV_${lang === 'en' ? 'Eng' : 'Esp'}.pdf`;
 
-  const [equippedIds, setEquippedIds] = useState<string[]>(['weapon-ts', 'armor-docker', 'ring-fastapi']);
+  const [equippedIds, setEquippedIds] = useState<string[]>(() => rpgState.getEquippedIds());
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
   const [potionConsumed, setPotionConsumed] = useState(false);
+
+  useEffect(() => {
+    return rpgState.subscribe(() => {
+      setEquippedIds(rpgState.getEquippedIds());
+    });
+  }, []);
+
+  const combatBonuses = rpgState.getCombatBonuses();
 
   const ITEMS: InventoryItem[] = [
     {
@@ -120,14 +129,7 @@ export default function Inventario() {
       if (item.onAction) item.onAction();
       return;
     }
-    const isEquipped = equippedIds.includes(item.id);
-    if (isEquipped) {
-      setEquippedIds(equippedIds.filter((id) => id !== item.id));
-      sfx.playHover();
-    } else {
-      setEquippedIds([...equippedIds, item.id]);
-      sfx.playEquip();
-    }
+    rpgState.toggleEquip(item.id);
   };
 
   const getRarityColor = (rarity: string) => {
@@ -141,7 +143,7 @@ export default function Inventario() {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 min-h-full p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto">
-      <header className="mb-8 text-center sm:text-left">
+      <header className="mb-6 text-center sm:text-left">
         <span className="font-mono text-primary text-xs uppercase tracking-widest block mb-1">
           // EQUIPAMIENTO & RELIQUIAS
         </span>
@@ -149,9 +151,33 @@ export default function Inventario() {
           Alijo del Desarrollador
         </h1>
         <p className="font-body text-sm sm:text-base text-on-surface-variant mt-2 max-w-2xl">
-          Selecciona y equipa tus herramientas legendarias. Cada artefacto otorga bonificaciones reales a tu hoja de personaje.
+          Selecciona y equipa tus herramientas legendarias. Cada artefacto otorga bonificaciones reales transferibles a la Arena de Combate.
         </p>
       </header>
+
+      {/* Combat Synergy Stat Bar */}
+      <div className="mb-6 p-4 rounded-xl bg-surface-container border border-primary/30 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+        <div className="flex items-center gap-2">
+          <Award size={18} className="text-primary" />
+          <span className="font-mono text-xs uppercase tracking-wider font-bold text-on-surface">
+            Bonos de Combate Activos:
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-2 text-xs font-mono">
+          <span className="px-2.5 py-1 rounded bg-surface-container-highest border border-primary/20 text-primary font-bold">
+            ⚔️ Daño: +{combatBonuses.damageBonus}
+          </span>
+          <span className="px-2.5 py-1 rounded bg-surface-container-highest border border-outline-variant/30 text-secondary font-bold">
+            🛡️ Reducción Daño: +{combatBonuses.defensePercent}%
+          </span>
+          <span className="px-2.5 py-1 rounded bg-surface-container-highest border border-outline-variant/30 text-amber-400 font-bold">
+            💥 Crítico: {combatBonuses.critChance}%
+          </span>
+          <span className="px-2.5 py-1 rounded bg-surface-container-highest border border-outline-variant/30 text-blue-400 font-bold">
+            ✨ MP Máx: +{combatBonuses.maxMpBonus}
+          </span>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Inventory Grid (8 cols on lg) */}

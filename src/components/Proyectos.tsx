@@ -28,7 +28,13 @@ export default function Proyectos() {
             <div className="w-12 h-12 bg-primary/10 border border-primary/30 flex items-center justify-center">
               <Wand2 className="text-primary" size={24} />
             </div>
-            <span className="font-label text-[9px] uppercase tracking-widest text-primary border border-primary/30 px-2 py-1">COMPLETED</span>
+            <div className="flex items-center gap-2">
+              <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 font-mono text-[9px] uppercase tracking-wider font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                SERVIDOR EN VIVO
+              </span>
+              <span className="font-label text-[9px] uppercase tracking-widest text-primary border border-primary/30 px-2 py-1">COMPLETED</span>
+            </div>
           </div>
           <h3 className="font-headline text-2xl font-bold text-on-surface mb-2">{t('proyectos.moodapp.name')}</h3>
           <p className="font-label text-xs text-primary uppercase tracking-widest mb-4">{t('proyectos.moodapp.tech')}</p>
@@ -42,7 +48,7 @@ export default function Proyectos() {
               rel="noopener noreferrer"
               onMouseEnter={() => sfx.playHover()}
               onClick={() => sfx.playSelect()}
-              className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 text-primary text-[10px] uppercase tracking-widest font-label hover:bg-primary/20 transition-all cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-container text-on-primary text-[10px] uppercase tracking-widest font-label font-bold shadow-md hover:brightness-110 transition-all cursor-pointer"
             >
               <Globe size={12} /> {t('proyectos.moodapp.live')}
             </a>
@@ -98,7 +104,13 @@ export default function Proyectos() {
             <div className="w-12 h-12 bg-primary/10 border border-primary/30 flex items-center justify-center">
               <ShoppingCart className="text-primary" size={24} />
             </div>
-            <span className="font-label text-[9px] uppercase tracking-widest text-primary border border-primary/30 px-2 py-1">COMPLETED</span>
+            <div className="flex items-center gap-2">
+              <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 font-mono text-[9px] uppercase tracking-wider font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                SERVIDOR EN VIVO
+              </span>
+              <span className="font-label text-[9px] uppercase tracking-widest text-primary border border-primary/30 px-2 py-1">COMPLETED</span>
+            </div>
           </div>
           <h3 className="font-headline text-2xl font-bold text-on-surface mb-2">{t('proyectos.emotionshop.name')}</h3>
           <p className="font-label text-xs text-primary uppercase tracking-widest mb-4">{t('proyectos.emotionshop.tech')}</p>
@@ -112,7 +124,7 @@ export default function Proyectos() {
               rel="noopener noreferrer"
               onMouseEnter={() => sfx.playHover()}
               onClick={() => sfx.playSelect()}
-              className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 text-primary text-[10px] uppercase tracking-widest font-label hover:bg-primary/20 transition-all cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-container text-on-primary text-[10px] uppercase tracking-widest font-label font-bold shadow-md hover:brightness-110 transition-all cursor-pointer"
             >
               <Globe size={12} /> {t('proyectos.emotionshop.live')}
             </a>

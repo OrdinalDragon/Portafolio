@@ -17,6 +17,7 @@ import Contacto from './Contacto';
 import Proyectos from './Proyectos';
 import Estadisticas from './Estadisticas';
 import DragonCompanion from './DragonCompanion';
+import AchievementBanner from './AchievementBanner';
 
 export default function AppRPG() {
   const { t } = useLanguage();
@@ -72,7 +73,7 @@ export default function AppRPG() {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              {screen === 'personaje' && <Personaje onStart={startAdventure} />}
+              {screen === 'personaje' && <Personaje onStart={startAdventure} onNavigate={setScreen} />}
               {screen === 'habilidades' && <Habilidades />}
               {screen === 'inventario' && <Inventario />}
               {screen === 'arena' && <ArenaCombate />}
@@ -87,8 +88,9 @@ export default function AppRPG() {
         </main>
       </div>
 
-      {/* Interactive Dragon Companion */}
-      <DragonCompanion />
+      {/* Interactive Dragon Companion & Retro Achievements */}
+      <DragonCompanion currentScreen={screen} />
+      <AchievementBanner />
 
       {/* Mobile Navigation (Bottom Bar) */}
       <nav className="lg:hidden fixed bottom-0 left-0 w-full h-16 bg-surface-container-lowest border-t border-outline-variant/15 flex items-center justify-around z-50 backdrop-blur-md bg-opacity-90 px-1 overflow-x-auto" aria-label="Mobile navigation">

@@ -6,6 +6,7 @@ import Inventario from '../components/Inventario';
 import ArenaCombate from '../components/ArenaCombate';
 import Habilidades from '../components/Habilidades';
 import DragonCompanion from '../components/DragonCompanion';
+import Misiones from '../components/Misiones';
 import { sfx } from '../utils/sfx';
 
 // Mock motion to avoid animation issues in tests
@@ -146,3 +147,92 @@ describe('DragonCompanion Component', () => {
     fireEvent.click(dragonMascot);
   });
 });
+
+describe('Misiones Component', () => {
+  it('renders active campaign and completed chronicles including Fundación Pescar', () => {
+    render(
+      <LanguageProvider defaultLang="es">
+        <Misiones />
+      </LanguageProvider>
+    );
+
+    expect(screen.getByText('MISIONES & CRÓNICAS')).toBeInTheDocument();
+    expect(screen.getByText(/Conquista del Reino Productivo/i)).toBeInTheDocument();
+    expect(screen.getByText(/Fundación Pescar/i)).toBeInTheDocument();
+    expect(screen.getByText(/Desarrollador Web Full Stack/i)).toBeInTheDocument();
+    expect(screen.getByText(/Archimago MERN/i)).toBeInTheDocument();
+    expect(screen.getByText(/4 \/ 4 Forjadas/i)).toBeInTheDocument();
+  });
+
+  it('opens sacred scroll modal on click', () => {
+    render(
+      <LanguageProvider defaultLang="es">
+        <Misiones />
+      </LanguageProvider>
+    );
+
+    const reviewButtons = screen.getAllByRole('button', { name: /Revisar Pergamino/i });
+    expect(reviewButtons.length).toBe(4);
+    fireEvent.click(reviewButtons[0]);
+
+    // Modal should be open
+    expect(screen.getByText(/Visualizando Pergamino Sagrado/i)).toBeInTheDocument();
+  });
+});
+
+describe('Bestiario Component', () => {
+  it('renders skill categories and filters by category', async () => {
+    const Bestiario = (await import('../components/Bestiario')).default;
+    render(
+      <LanguageProvider defaultLang="es">
+        <Bestiario />
+      </LanguageProvider>
+    );
+
+    expect(screen.getByPlaceholderText(/>_ Buscar conjuro/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Todas las Artes/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^Frontend$/i })).toBeInTheDocument();
+
+    // Click Frontend filter
+    fireEvent.click(screen.getByRole('button', { name: /^Frontend$/i }));
+    expect(screen.getByText('React')).toBeInTheDocument();
+    expect(screen.queryByText('Docker')).not.toBeInTheDocument();
+  });
+
+  it('filters skills using search bar', async () => {
+    const Bestiario = (await import('../components/Bestiario')).default;
+    render(
+      <LanguageProvider defaultLang="es">
+        <Bestiario />
+      </LanguageProvider>
+    );
+
+    const searchInput = screen.getByPlaceholderText(/>_ Buscar conjuro/i);
+    fireEvent.change(searchInput, { target: { value: 'Docker' } });
+
+    expect(screen.getByText('Docker')).toBeInTheDocument();
+    expect(screen.queryByText('React')).not.toBeInTheDocument();
+  });
+});
+
+describe('Historia Component', () => {
+  it('renders interactive epochs and chapters', async () => {
+    const Historia = (await import('../components/Historia')).default;
+    render(
+      <LanguageProvider defaultLang="es">
+        <Historia />
+      </LanguageProvider>
+    );
+
+    expect(screen.getByText(/El Ascenso del Héroe/i)).toBeInTheDocument();
+    expect(screen.getByText('2016')).toBeInTheDocument();
+    expect(screen.getByText('2023')).toBeInTheDocument();
+    expect(screen.getByText('2024')).toBeInTheDocument();
+    expect(screen.getByText('2026')).toBeInTheDocument();
+
+    // Click chapter 3 tab
+    fireEvent.click(screen.getByRole('button', { name: /Capítulo 3/i }));
+    expect(screen.getByText(/Capítulo III: El Reino Productivo/i)).toBeInTheDocument();
+  });
+});
+
