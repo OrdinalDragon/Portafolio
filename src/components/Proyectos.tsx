@@ -1,6 +1,7 @@
 import React from 'react';
 import { Wand2, Hammer, Cpu, Globe, Github, Settings, ShoppingCart } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { sfx } from '../utils/sfx';
 
 export default function Proyectos() {
   const { t } = useLanguage();
@@ -39,7 +40,9 @@ export default function Proyectos() {
               href="https://prototipomood.jesrepresentaciones.com.ar/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 text-primary text-[10px] uppercase tracking-widest font-label hover:bg-primary/20 transition-all"
+              onMouseEnter={() => sfx.playHover()}
+              onClick={() => sfx.playSelect()}
+              className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 text-primary text-[10px] uppercase tracking-widest font-label hover:bg-primary/20 transition-all cursor-pointer"
             >
               <Globe size={12} /> {t('proyectos.moodapp.live')}
             </a>
@@ -47,7 +50,9 @@ export default function Proyectos() {
               href="https://github.com/OrdinalDragon/Mood"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-[10px] uppercase tracking-widest font-label hover:text-primary hover:border-primary/30 transition-all"
+              onMouseEnter={() => sfx.playHover()}
+              onClick={() => sfx.playSelect()}
+              className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-[10px] uppercase tracking-widest font-label hover:text-primary hover:border-primary/30 transition-all cursor-pointer"
             >
               <Github size={12} /> {t('proyectos.moodapp.repo')}
             </a>
@@ -75,7 +80,9 @@ export default function Proyectos() {
               href="https://github.com/OrdinalDragon/Banco.net"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-[10px] uppercase tracking-widest font-label hover:text-primary hover:border-primary/30 transition-all"
+              onMouseEnter={() => sfx.playHover()}
+              onClick={() => sfx.playSelect()}
+              className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-[10px] uppercase tracking-widest font-label hover:text-primary hover:border-primary/30 transition-all cursor-pointer"
             >
               <Github size={12} /> {t('proyectos.bank.repo')}
             </a>
@@ -103,7 +110,9 @@ export default function Proyectos() {
               href="https://emotionshop.jesrepresentaciones.com.ar/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 text-primary text-[10px] uppercase tracking-widest font-label hover:bg-primary/20 transition-all"
+              onMouseEnter={() => sfx.playHover()}
+              onClick={() => sfx.playSelect()}
+              className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 text-primary text-[10px] uppercase tracking-widest font-label hover:bg-primary/20 transition-all cursor-pointer"
             >
               <Globe size={12} /> {t('proyectos.emotionshop.live')}
             </a>
@@ -111,7 +120,9 @@ export default function Proyectos() {
               href="https://github.com/OrdinalDragon/E-commerce"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-[10px] uppercase tracking-widest font-label hover:text-primary hover:border-primary/30 transition-all"
+              onMouseEnter={() => sfx.playHover()}
+              onClick={() => sfx.playSelect()}
+              className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-[10px] uppercase tracking-widest font-label hover:text-primary hover:border-primary/30 transition-all cursor-pointer"
             >
               <Github size={12} /> {t('proyectos.emotionshop.repo')}
             </a>
@@ -139,9 +150,11 @@ export default function Proyectos() {
               href="https://github.com/OrdinalDragon/Portafolio"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-[10px] uppercase tracking-widest font-label hover:text-primary hover:border-primary/30 transition-all"
+              onMouseEnter={() => sfx.playHover()}
+              onClick={() => sfx.playSelect()}
+              className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-[10px] uppercase tracking-widest font-label hover:text-primary hover:border-primary/30 transition-all cursor-pointer"
             >
-              <Github size={12} /> {t('proyectos.moodapp.repo')}
+              <Github size={12} /> {t('proyectos.portfolio.name')}
             </a>
           </div>
         </div>

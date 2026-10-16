@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { 
   User, Layers, Swords, History, BookOpen, Hammer,
-  FileText, X
+  FileText, X, Package, ShieldAlert
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { sfx } from '../utils/sfx';
 import type { Screen } from '../types';
 
 export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setActiveModal }: { 
@@ -29,7 +30,9 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
   const navItems = [
     { id: 'personaje', label: t('sidebar.nav.character'), icon: User },
     { id: 'habilidades', label: t('sidebar.nav.skills'), icon: Layers },
-    { id: 'misiones', label: t('sidebar.nav.missions'), icon: Swords },
+    { id: 'inventario', label: t('sidebar.nav.inventory'), icon: Package },
+    { id: 'arena', label: t('sidebar.nav.arena'), icon: Swords },
+    { id: 'misiones', label: t('sidebar.nav.missions'), icon: ShieldAlert },
     { id: 'historia', label: t('sidebar.nav.story'), icon: History },
     { id: 'bestiario', label: t('sidebar.nav.bestiary'), icon: BookOpen },
     { id: 'proyectos', label: t('sidebar.nav.projects'), icon: Hammer },
@@ -88,7 +91,9 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
           {navItems.map((item) => (
             <button
               key={item.id}
+              onMouseEnter={() => sfx.playHover()}
               onClick={() => {
+                sfx.playSelect();
                 setScreen(item.id as Screen);
                 onClose();
               }}
@@ -107,7 +112,9 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
 
         <div className="p-6 border-t border-outline-variant/10 space-y-3">
           <button 
+            onMouseEnter={() => sfx.playHover()}
             onClick={() => {
+              sfx.playSelect();
               setScreen('estadisticas');
               onClose();
             }}
@@ -117,7 +124,9 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
             {t('sidebar.stats')}
           </button>
           <button 
+            onMouseEnter={() => sfx.playHover()}
             onClick={() => {
+              sfx.playSelect();
               setScreen('contacto');
               onClose();
             }}

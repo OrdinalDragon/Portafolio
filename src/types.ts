@@ -1,1 +1,1 @@
-export type Screen = 'personaje' | 'habilidades' | 'misiones' | 'historia' | 'bestiario' | 'contacto' | 'proyectos' | 'estadisticas';
+export type Screen = 'personaje' | 'habilidades' | 'misiones' | 'historia' | 'bestiario' | 'contacto' | 'proyectos' | 'estadisticas' | 'inventario' | 'arena';

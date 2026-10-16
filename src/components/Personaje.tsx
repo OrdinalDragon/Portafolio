@@ -1,9 +1,15 @@
 import React from 'react';
 import { Flame, Zap } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { sfx } from '../utils/sfx';
 
 export default function Personaje({ onStart }: { onStart: () => void }) {
   const { t } = useLanguage();
+
+  const handleStart = () => {
+    sfx.playLevelUp();
+    onStart();
+  };
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 dragon-texture min-h-full flex flex-col items-center justify-center text-center py-2 overflow-hidden w-full map-bg relative">
@@ -81,7 +87,8 @@ export default function Personaje({ onStart }: { onStart: () => void }) {
         </div>
 
         <button 
-          onClick={onStart}
+          onClick={handleStart}
+          onMouseEnter={() => sfx.playHover()}
           className="px-6 sm:px-8 md:px-10 py-2 sm:py-3 md:py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline text-sm sm:text-base md:text-lg font-bold tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,145,0,0.4)] cursor-pointer relative overflow-hidden group"
         >
           <span className="relative z-10 uppercase">{t('personaje.start')}</span>

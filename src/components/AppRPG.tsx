@@ -8,12 +8,15 @@ import Sidebar from './Sidebar';
 import TopNav from './TopNav';
 import Personaje from './Personaje';
 import Habilidades from './Habilidades';
+import Inventario from './Inventario';
+import ArenaCombate from './ArenaCombate';
 import Bestiario from './Bestiario';
 import Misiones from './Misiones';
 import Historia from './Historia';
 import Contacto from './Contacto';
 import Proyectos from './Proyectos';
 import Estadisticas from './Estadisticas';
+import DragonCompanion from './DragonCompanion';
 
 export default function AppRPG() {
   const { t } = useLanguage();
@@ -33,7 +36,7 @@ export default function AppRPG() {
   };
 
   return (
-    <div className="h-dvh flex flex-col bg-background text-on-surface selection:bg-primary-container selection:text-on-primary overflow-hidden">
+    <div className="h-dvh flex flex-col bg-background text-on-surface selection:bg-primary-container selection:text-on-primary overflow-hidden relative">
       <TopNav activeScreen={screen} setScreen={setScreen} onMenuClick={() => setIsSidebarOpen(true)} />
       
       <AnimatePresence>
@@ -71,6 +74,8 @@ export default function AppRPG() {
             >
               {screen === 'personaje' && <Personaje onStart={startAdventure} />}
               {screen === 'habilidades' && <Habilidades />}
+              {screen === 'inventario' && <Inventario />}
+              {screen === 'arena' && <ArenaCombate />}
               {screen === 'misiones' && <Misiones />}
               {screen === 'historia' && <Historia />}
               {screen === 'bestiario' && <Bestiario />}
@@ -82,24 +87,33 @@ export default function AppRPG() {
         </main>
       </div>
 
+      {/* Interactive Dragon Companion */}
+      <DragonCompanion />
+
       {/* Mobile Navigation (Bottom Bar) */}
-      <nav className="lg:hidden fixed bottom-0 left-0 w-full h-16 bg-surface-container-lowest border-t border-outline-variant/15 flex items-center justify-around z-50 backdrop-blur-md bg-opacity-90" aria-label="Mobile navigation">
-        <button onClick={() => setScreen('personaje')} aria-current={screen === 'personaje' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer ${screen === 'personaje' ? 'text-primary' : 'text-on-surface/40'}`}>
+      <nav className="lg:hidden fixed bottom-0 left-0 w-full h-16 bg-surface-container-lowest border-t border-outline-variant/15 flex items-center justify-around z-50 backdrop-blur-md bg-opacity-90 px-1 overflow-x-auto" aria-label="Mobile navigation">
+        <button onClick={() => setScreen('personaje')} aria-current={screen === 'personaje' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer shrink-0 px-2 ${screen === 'personaje' ? 'text-primary' : 'text-on-surface/40'}`}>
           <span className="text-[10px] uppercase font-label">{t('mobilenav.home')}</span>
         </button>
-        <button onClick={() => setScreen('habilidades')} aria-current={screen === 'habilidades' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer ${screen === 'habilidades' ? 'text-primary' : 'text-on-surface/40'}`}>
+        <button onClick={() => setScreen('habilidades')} aria-current={screen === 'habilidades' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer shrink-0 px-2 ${screen === 'habilidades' ? 'text-primary' : 'text-on-surface/40'}`}>
           <span className="text-[10px] uppercase font-label">{t('mobilenav.skills')}</span>
         </button>
-        <button onClick={() => setScreen('misiones')} aria-current={screen === 'misiones' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer ${screen === 'misiones' ? 'text-primary' : 'text-on-surface/40'}`}>
+        <button onClick={() => setScreen('inventario')} aria-current={screen === 'inventario' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer shrink-0 px-2 ${screen === 'inventario' ? 'text-primary' : 'text-on-surface/40'}`}>
+          <span className="text-[10px] uppercase font-label">{t('mobilenav.inventory')}</span>
+        </button>
+        <button onClick={() => setScreen('arena')} aria-current={screen === 'arena' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer shrink-0 px-2 ${screen === 'arena' ? 'text-primary' : 'text-on-surface/40'}`}>
+          <span className="text-[10px] uppercase font-label">{t('mobilenav.arena')}</span>
+        </button>
+        <button onClick={() => setScreen('misiones')} aria-current={screen === 'misiones' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer shrink-0 px-2 ${screen === 'misiones' ? 'text-primary' : 'text-on-surface/40'}`}>
           <span className="text-[10px] uppercase font-label">{t('mobilenav.logs')}</span>
         </button>
-        <button onClick={() => setScreen('historia')} aria-current={screen === 'historia' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer ${screen === 'historia' ? 'text-primary' : 'text-on-surface/40'}`}>
+        <button onClick={() => setScreen('historia')} aria-current={screen === 'historia' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer shrink-0 px-2 ${screen === 'historia' ? 'text-primary' : 'text-on-surface/40'}`}>
           <span className="text-[10px] uppercase font-label">{t('mobilenav.map')}</span>
         </button>
-        <button onClick={() => setScreen('bestiario')} aria-current={screen === 'bestiario' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer ${screen === 'bestiario' ? 'text-primary' : 'text-on-surface/40'}`}>
+        <button onClick={() => setScreen('bestiario')} aria-current={screen === 'bestiario' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer shrink-0 px-2 ${screen === 'bestiario' ? 'text-primary' : 'text-on-surface/40'}`}>
           <span className="text-[10px] uppercase font-label">{t('mobilenav.beasts')}</span>
         </button>
-        <button onClick={() => setScreen('proyectos')} aria-current={screen === 'proyectos' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer ${screen === 'proyectos' ? 'text-primary' : 'text-on-surface/40'}`}>
+        <button onClick={() => setScreen('proyectos')} aria-current={screen === 'proyectos' ? 'page' : undefined} className={`flex flex-col items-center gap-1 cursor-pointer shrink-0 px-2 ${screen === 'proyectos' ? 'text-primary' : 'text-on-surface/40'}`}>
           <span className="text-[10px] uppercase font-label">{t('mobilenav.forge')}</span>
         </button>
       </nav>
