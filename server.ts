@@ -53,7 +53,7 @@ async function startServer() {
 
       const mailOptions = {
         from: `"${email}" <${process.env.SMTP_USER}>`,
-        to: process.env.CONTACT_EMAIL || "ngsrepresentaciones@gmail.com",
+        to: process.env.CONTACT_EMAIL || "nicoschernetzki@gmail.com",
         subject: `[DragonStack Contact] ${subject}`,
         text: `From: ${email}\n\nMessage:\n${message}`,
         replyTo: email,

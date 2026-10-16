@@ -12,7 +12,6 @@ export default function Estadisticas() {
 
   const base = import.meta.env.BASE_URL;
   const cvPdf = lang === 'en' ? `${base}Nicolas_Schernetzki_CV_Eng.pdf` : `${base}Nicolas_Schernetzki_CV_Esp.pdf`;
-  const cvDocx = lang === 'en' ? `${base}Nicolas_Schernetzki_CV_Eng.docx` : `${base}Nicolas_Schernetzki_CV_Esp.docx`;
 
   const handleDownload = useCallback(async (url: string, _filename: string) => {
     window.open(url, '_blank');
@@ -209,7 +208,7 @@ export default function Estadisticas() {
       {/* CV Download & Preview - Language aware */}
       <div className="mt-8 space-y-4">
         <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant text-center">{t('estadisticas.download.sub')}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Preview Button */}
           <button
             onClick={() => setPreviewPdf(cvPdf)}
@@ -235,20 +234,6 @@ export default function Estadisticas() {
               <p className="font-headline font-bold text-primary uppercase tracking-widest text-sm">{t('estadisticas.download.pdf')}</p>
             </div>
             <ExternalLink size={16} className="text-primary/60 group-hover:text-primary transition-colors" />
-          </button>
-
-          {/* DOCX Download */}
-          <button
-            onClick={() => handleDownload(cvDocx, '')}
-            className="group flex items-center gap-4 bg-surface-container-lowest border border-outline-variant/30 p-6 hover:border-primary/30 transition-all cursor-pointer text-left"
-          >
-            <div className="w-12 h-12 bg-surface-container-highest border border-outline-variant/30 flex items-center justify-center flex-shrink-0">
-              <FileText className="text-on-surface-variant" size={24} />
-            </div>
-            <div className="flex-1">
-              <p className="font-headline font-bold text-on-surface uppercase tracking-widest text-sm">{t('estadisticas.download.docx')}</p>
-            </div>
-            <ExternalLink size={16} className="text-on-surface-variant/60 group-hover:text-primary transition-colors" />
           </button>
         </div>
       </div>

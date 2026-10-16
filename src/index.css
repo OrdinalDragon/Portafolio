@@ -22,10 +22,10 @@
   --color-surface-container-high: #e5dccb;
   --color-surface-container-highest: #dccfba;
   --color-surface-container-lowest: #fbf8f2;
-  --color-on-surface: #2b2621;
-  --color-on-surface-variant: #5c5247;
-  --color-outline: #7a6f60;
-  --color-outline-variant: #d0c3b2;
+  --color-on-surface: #201b16;
+  --color-on-surface-variant: #4a4035;
+  --color-outline: #6e6252;
+  --color-outline-variant: #bfae9b;
   --color-error: #ba1a1a;
 }
 
@@ -71,13 +71,18 @@
   body {
     @apply bg-background text-on-surface font-body;
     height: 100%;
-    background-image: radial-gradient(circle at 50% 50%, rgba(255, 145, 0, 0.07) 0%, transparent 70%);
+    background-image: radial-gradient(circle at 50% 30%, rgba(217, 119, 6, 0.08) 0%, transparent 70%),
+                      radial-gradient(circle at 80% 80%, rgba(180, 83, 9, 0.04) 0%, transparent 50%);
     background-attachment: fixed;
     font-size: 16px;
     line-height: 1.6;
     overflow-x: hidden;
     margin: 0;
     padding: 0;
+  }
+
+  .dark body {
+    background-image: radial-gradient(circle at 50% 50%, rgba(255, 145, 0, 0.07) 0%, transparent 70%);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -424,6 +429,29 @@
   animation: pixel-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+/* Retro Browser Frame Mockup */
+.browser-frame {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 145, 0, 0.3);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  background: #181818;
+}
+
+:root:not(.dark) .browser-frame {
+  border: 1px solid rgba(179, 84, 30, 0.25);
+  box-shadow: 0 12px 30px -10px rgba(74, 40, 15, 0.15), 0 3px 10px rgba(0, 0, 0, 0.04);
+  background: #ffffff;
+}
+
+.xp-glow {
+  box-shadow: 0 0 10px rgba(255, 145, 0, 0.7), 0 0 20px rgba(255, 145, 0, 0.35);
+}
+
+:root:not(.dark) .xp-glow {
+  box-shadow: 0 0 10px rgba(179, 84, 30, 0.6), 0 0 20px rgba(217, 119, 6, 0.3);
+}
+
 /* Hard offset pixel shadow for game-like buttons/cards */
 .pixel-shadow {
   box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 0.35), 7px 7px 0 0 rgba(255, 145, 0, 0.35);
@@ -441,15 +469,17 @@
 }
 
 :root:not(.dark) .pixel-shadow {
-  box-shadow: 5px 5px 0 0 rgba(43, 38, 33, 0.18), 7px 7px 0 0 rgba(255, 145, 0, 0.4);
+  box-shadow: 4px 4px 0 0 rgba(74, 40, 15, 0.22), 6px 6px 0 0 rgba(179, 84, 30, 0.45);
 }
 
 :root:not(.dark) .pixel-shadow:hover {
-  box-shadow: 7px 7px 0 0 rgba(43, 38, 33, 0.18), 9px 9px 0 0 rgba(255, 145, 0, 0.4);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 rgba(74, 40, 15, 0.28), 8px 8px 0 0 rgba(179, 84, 30, 0.55);
 }
 
 :root:not(.dark) .pixel-shadow:active {
-  box-shadow: 1px 1px 0 0 rgba(43, 38, 33, 0.18), 2px 2px 0 0 rgba(255, 145, 0, 0.4);
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 0 rgba(74, 40, 15, 0.25), 2px 2px 0 0 rgba(179, 84, 30, 0.45);
 }
 
 /* Pixelated tripolar corners for section frames */
@@ -476,10 +506,10 @@
 :root:not(.dark) .scanlines {
   background-image: repeating-linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.03) 0px,
-    rgba(0, 0, 0, 0.03) 1px,
+    rgba(179, 84, 30, 0.02) 0px,
+    rgba(179, 84, 30, 0.02) 1px,
     transparent 1px,
-    transparent 3px
+    transparent 4px
   );
 }
 
@@ -500,7 +530,7 @@
     opacity: 0;
   }
   15% {
-    opacity: 0.7;
+    opacity: 0.75;
   }
   100% {
     transform: translateY(-80vh) rotate(180deg);
@@ -548,8 +578,24 @@
   }
 }
 
+@keyframes pulse-dot-light {
+  0% {
+    box-shadow: 0 0 0 0 rgba(179, 84, 30, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(179, 84, 30, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(179, 84, 30, 0);
+  }
+}
+
 .pulse-dot {
   animation: pulse-dot 2.2s ease-out infinite;
+}
+
+:root:not(.dark) .pulse-dot {
+  animation: pulse-dot-light 2.2s ease-out infinite;
 }
 
 /* Expanding glow ring around the primary "Live demo" buttons */
@@ -562,21 +608,21 @@
   }
 }
 
-:root:not(.dark) .glow-pulse {
-  animation: glow-pulse-light 1.8s ease-out infinite;
-}
-
 @keyframes glow-pulse-light {
   0% {
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 0 0 rgba(179, 84, 30, 0.45);
   }
   100% {
-    box-shadow: 0 0 0 12px rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0 12px rgba(179, 84, 30, 0);
   }
 }
 
 .glow-pulse {
   animation: glow-pulse 1.8s ease-out infinite;
+}
+
+:root:not(.dark) .glow-pulse {
+  animation: glow-pulse-light 1.8s ease-out infinite;
 }
 
 @keyframes tip-in {
