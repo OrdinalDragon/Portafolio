@@ -4,20 +4,22 @@ import { sfx } from './sfx';
 export interface Achievement {
   id: string;
   title: string;
+  titleEn: string;
   desc: string;
+  descEn: string;
   icon: string;
   xp: number;
   unlockedAt?: number;
 }
 
 export const ALL_ACHIEVEMENTS: Achievement[] = [
-  { id: 'start_quest', title: 'El Despertar', desc: 'Comenzaste la travesía en la Ficha del Personaje.', icon: '⚔️', xp: 200 },
-  { id: 'bug_hunter', title: 'Cazador de Bugs', desc: 'Derrotaste a un demonio de servidor en la Arena de Combate.', icon: '🐛', xp: 500 },
-  { id: 'relic_master', title: 'Maestro de Reliquias', desc: 'Equipaste 3 o más artefactos legendarios en el Inventario.', icon: '🎒', xp: 300 },
-  { id: 'pescar_scroll', title: 'Archivero de Pescar', desc: 'Examinaste el pergamino oficial de Fundación Pescar.', icon: '📜', xp: 400 },
-  { id: 'skill_strategist', title: 'Estratega del Código', desc: 'Asignaste todos tus puntos de talento en el Árbol de Habilidades.', icon: '🌟', xp: 350 },
-  { id: 'dragon_friend', title: 'Amigo de los Dragones', desc: 'Interactuaste 5 veces con la mascota OrdinalDragon.', icon: '🐉', xp: 250 },
-  { id: 'lore_master', title: 'Cronista del Reino', desc: 'Leíste la Historia completa de Nicolás Schernetzki.', icon: '📖', xp: 200 },
+  { id: 'start_quest', title: 'El Despertar', titleEn: 'The Awakening', desc: 'Comenzaste la travesía en la Ficha del Personaje.', descEn: 'Began the journey on the Character Sheet.', icon: '⚔️', xp: 200 },
+  { id: 'bug_hunter', title: 'Cazador de Bugs', titleEn: 'Bug Hunter', desc: 'Derrotaste a un demonio de servidor en la Arena de Combate.', descEn: 'Defeated a server daemon in the Battle Arena.', icon: '🐛', xp: 500 },
+  { id: 'relic_master', title: 'Maestro de Reliquias', titleEn: 'Relic Master', desc: 'Equipaste 3 o más artefactos legendarios en el Inventario.', descEn: 'Equipped 3 or more legendary artifacts in your Inventory.', icon: '🎒', xp: 300 },
+  { id: 'pescar_scroll', title: 'Archivero de Pescar', titleEn: 'Pescar Chronicler', desc: 'Examinaste el pergamino oficial de Fundación Pescar.', descEn: 'Inspected the official scroll of Fundación Pescar.', icon: '📜', xp: 400 },
+  { id: 'skill_strategist', title: 'Estratega del Código', titleEn: 'Code Strategist', desc: 'Asignaste todos tus puntos de talento en el Árbol de Habilidades.', descEn: 'Allocated all your talent points in the Skill Tree.', icon: '🌟', xp: 350 },
+  { id: 'dragon_friend', title: 'Amigo de los Dragones', titleEn: 'Dragon Ally', desc: 'Interactuaste 5 veces con la mascota OrdinalDragon.', descEn: 'Interacted 5 times with the OrdinalDragon pet.', icon: '🐉', xp: 250 },
+  { id: 'lore_master', title: 'Cronista del Reino', titleEn: 'Realm Chronicler', desc: 'Leíste la Historia completa de Nicolas Schernetzki.', descEn: 'Read the full chronicle of Nicolas Schernetzki.', icon: '📖', xp: 200 },
 ];
 
 const STORAGE_KEYS = {

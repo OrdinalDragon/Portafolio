@@ -12,6 +12,7 @@ interface Boss {
   id: string;
   name: string;
   subtitle: string;
+  subtitleEn: string;
   maxHp: number;
   icon: string;
   attackPower: number;
@@ -22,6 +23,7 @@ const BOSSES: Boss[] = [
     id: 'null-bug',
     name: 'NullReferenceException',
     subtitle: 'El Demonio de los Objetos No Inicializados',
+    subtitleEn: 'The Daemon of Uninitialized Objects',
     maxHp: 400,
     icon: '🐛',
     attackPower: 90,
@@ -30,6 +32,7 @@ const BOSSES: Boss[] = [
     id: 'race-condition',
     name: 'Async Race Condition',
     subtitle: 'Espectro de las Promesas Desincronizadas',
+    subtitleEn: 'Wraith of Desynchronized Promises',
     maxHp: 600,
     icon: '🌀',
     attackPower: 125,
@@ -38,6 +41,7 @@ const BOSSES: Boss[] = [
     id: 'server-500',
     name: 'The 500 Internal Server Dragon',
     subtitle: 'Bestia Titánica de Producción en Caída',
+    subtitleEn: 'Titanic Beast of Collapsing Production',
     maxHp: 850,
     icon: '🐉',
     attackPower: 160,
@@ -53,7 +57,7 @@ interface FloatingText {
 }
 
 export default function ArenaCombate() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const [combatBonuses, setCombatBonuses] = useState(() => rpgState.getCombatBonuses());
   const [defeatedBosses, setDefeatedBosses] = useState<string[]>(() => rpgState.getBossesDefeated());
@@ -72,8 +76,10 @@ export default function ArenaCombate() {
   const [playerHp, setPlayerHp] = useState(1000);
   const [playerMp, setPlayerMp] = useState(maxPlayerMp);
   const [shieldActive, setShieldActive] = useState(false);
-  const [battleLogs, setBattleLogs] = useState<string[]>([
-    '¡El combate ha comenzado! Selecciona una acción en tu consola de batalla.',
+  const [battleLogs, setBattleLogs] = useState<string[]>(() => [
+    lang === 'en'
+      ? 'Combat has begun! Select an action in your battle console.'
+      : '¡El combate ha comenzado! Selecciona una acción en tu consola de batalla.',
   ]);
   const [turn, setTurn] = useState<'player' | 'boss'>('player');
   const [battleState, setBattleState] = useState<'fighting' | 'won' | 'lost'>('fighting');
@@ -112,7 +118,11 @@ export default function ArenaCombate() {
     setTurn('player');
     setActiveMenu('main');
     setFloatingTexts([]);
-    setBattleLogs([`¡Desafiaste a ${boss.name}! Prepara tus pruebas y defensas.`]);
+    setBattleLogs([
+      lang === 'en'
+        ? `You challenged ${boss.name}! Prepare your test suite and shields.`
+        : `¡Desafiaste a ${boss.name}! Prepara tus pruebas y defensas.`,
+    ]);
     sfx.playSelect();
   };
 
@@ -125,7 +135,11 @@ export default function ArenaCombate() {
       setBattleState('won');
       sfx.playVictory();
       rpgState.registerBossDefeat(selectedBoss.id);
-      addLog(`🏆 ¡Victoria! ${selectedBoss.name} ha sido erradicado del codebase.`);
+      addLog(
+        lang === 'en'
+          ? `🏆 Victory! ${selectedBoss.name} has been eradicated from the codebase.`
+          : `🏆 ¡Victoria! ${selectedBoss.name} ha sido erradicado del codebase.`
+      );
       return;
     }
 
@@ -139,9 +153,17 @@ export default function ArenaCombate() {
       if (shieldActive) {
         damage = Math.floor(damage * 0.3);
         setShieldActive(false);
-        addLog(`🛡️ Tu Try/Catch redujo el impacto a solo ${damage} de daño.`);
+        addLog(
+          lang === 'en'
+            ? `🛡️ Your Try/Catch reduced the impact to just ${damage} damage.`
+            : `🛡️ Tu Try/Catch redujo el impacto a solo ${damage} de daño.`
+        );
       } else {
-        addLog(`💥 ${selectedBoss.name} atacó causando ${damage} de daño (${combatBonuses.defensePercent}% mitigado por armadura).`);
+        addLog(
+          lang === 'en'
+            ? `💥 ${selectedBoss.name} attacked dealing ${damage} damage (${combatBonuses.defensePercent}% absorbed by armor).`
+            : `💥 ${selectedBoss.name} atacó causando ${damage} de daño (${combatBonuses.defensePercent}% mitigado por armadura).`
+        );
       }
 
       triggerPlayerShake();
@@ -152,7 +174,11 @@ export default function ArenaCombate() {
         if (nextHp <= 0) {
           setBattleState('lost');
           sfx.playHover();
-          addLog('💀 Caíste en combate. Refactoriza y vuelve a intentarlo.');
+          addLog(
+            lang === 'en'
+              ? '💀 You fell in combat. Refactor and try again.'
+              : '💀 Caíste en combate. Refactoriza y vuelve a intentarlo.'
+          );
         } else {
           setTurn('player');
         }
@@ -172,15 +198,19 @@ export default function ArenaCombate() {
 
       sfx.playAttack();
       triggerBossShake();
-      spawnFloatingText(isCrit ? `💥 CRÍTICO -${dmg}` : `-${dmg}`, 'boss', isCrit ? '#f59e0b' : '#ff9100', isCrit);
-      addLog(`⚔️ Ejecutaste 'Unit Test Suite': causó ${dmg} de daño${isCrit ? ' (¡GOLPE CRÍTICO!)' : ''}.`);
+      spawnFloatingText(isCrit ? `💥 CRIT -${dmg}` : `-${dmg}`, 'boss', isCrit ? '#f59e0b' : '#ff9100', isCrit);
+      addLog(
+        lang === 'en'
+          ? `⚔️ Executed 'Unit Test Suite': dealt ${dmg} damage${isCrit ? ' (CRITICAL HIT!)' : ''}.`
+          : `⚔️ Ejecutaste 'Unit Test Suite': causó ${dmg} de daño${isCrit ? ' (¡GOLPE CRÍTICO!)' : ''}.`
+      );
       const nextBossHp = Math.max(bossHp - dmg, 0);
       setBossHp(nextBossHp);
       setActiveMenu('main');
       handleBossTurn(nextBossHp);
     } else if (type === 'refactor') {
       if (playerMp < 40) {
-        addLog('⚠️ Maná insuficiente para Refactor.');
+        addLog(lang === 'en' ? '⚠️ Insufficient Mana for Refactor.' : '⚠️ Maná insuficiente para Refactor.');
         return;
       }
       const isCrit = Math.random() * 100 < combatBonuses.critChance;
@@ -190,8 +220,12 @@ export default function ArenaCombate() {
       setPlayerMp((mp) => mp - 40);
       sfx.playAttack();
       triggerBossShake();
-      spawnFloatingText(isCrit ? `💥 CRÍTICO -${dmg}` : `-${dmg}`, 'boss', isCrit ? '#f59e0b' : '#ff9100', isCrit);
-      addLog(`⚡ 'Refactor Arquitectónico Limpio': causó ${dmg} de daño${isCrit ? ' (¡GOLPE CRÍTICO!)' : ''}!`);
+      spawnFloatingText(isCrit ? `💥 CRIT -${dmg}` : `-${dmg}`, 'boss', isCrit ? '#f59e0b' : '#ff9100', isCrit);
+      addLog(
+        lang === 'en'
+          ? `⚡ 'Clean Architectural Refactor': dealt ${dmg} damage${isCrit ? ' (CRITICAL HIT!)' : ''}!`
+          : `⚡ 'Refactor Arquitectónico Limpio': causó ${dmg} de daño${isCrit ? ' (¡GOLPE CRÍTICO!)' : ''}!`
+      );
       const nextBossHp = Math.max(bossHp - dmg, 0);
       setBossHp(nextBossHp);
       setActiveMenu('main');
@@ -205,7 +239,7 @@ export default function ArenaCombate() {
 
     if (type === 'ts') {
       if (playerMp < 50) {
-        addLog('⚠️ Maná insuficiente para TypeScript Strict.');
+        addLog(lang === 'en' ? '⚠️ Insufficient Mana for TypeScript Strict.' : '⚠️ Maná insuficiente para TypeScript Strict.');
         return;
       }
       setPlayerMp((mp) => mp - 50);
@@ -213,7 +247,11 @@ export default function ArenaCombate() {
       const dmg = 160 + combatBonuses.damageBonus;
       triggerBossShake();
       spawnFloatingText(`-${dmg} (STUN)`, 'boss', '#a855f7');
-      addLog(`🔮 'TypeScript Strict Mode': Causó ${dmg} de daño y aturdió al enemigo.`);
+      addLog(
+        lang === 'en'
+          ? `🔮 'TypeScript Strict Mode': Dealt ${dmg} damage and stunned the target.`
+          : `🔮 'TypeScript Strict Mode': Causó ${dmg} de daño y aturdió al enemigo.`
+      );
       const nextBossHp = Math.max(bossHp - dmg, 0);
       setBossHp(nextBossHp);
       setActiveMenu('main');
@@ -224,13 +262,17 @@ export default function ArenaCombate() {
         rpgState.registerBossDefeat(selectedBoss.id);
       } else {
         setTimeout(() => {
-          addLog(`🌀 ${selectedBoss.name} está aturdido por los tipos y pierde su turno.`);
+          addLog(
+            lang === 'en'
+              ? `🌀 ${selectedBoss.name} is stunned by static types and skips their turn.`
+              : `🌀 ${selectedBoss.name} está aturdido por los tipos y pierde su turno.`
+          );
           setTurn('player');
         }, 600);
       }
     } else if (type === 'async') {
       if (playerMp < 70) {
-        addLog('⚠️ Maná insuficiente para Workers Asíncronos.');
+        addLog(lang === 'en' ? '⚠️ Insufficient Mana for Async Workers.' : '⚠️ Maná insuficiente para Workers Asíncronos.');
         return;
       }
       setPlayerMp((mp) => mp - 70);
@@ -239,8 +281,12 @@ export default function ArenaCombate() {
       let dmg = 280 + combatBonuses.damageBonus;
       if (isCrit) dmg = Math.floor(dmg * 1.5);
       triggerBossShake();
-      spawnFloatingText(isCrit ? `🚀 CRÍTICO -${dmg}` : `-${dmg}`, 'boss', '#06b6d4', isCrit);
-      addLog(`🚀 'Lluvia de Microservicios Concurrentes': ¡Impacto masivo de ${dmg}${isCrit ? ' (CRÍTICO!)' : ''}!`);
+      spawnFloatingText(isCrit ? `🚀 CRIT -${dmg}` : `-${dmg}`, 'boss', '#06b6d4', isCrit);
+      addLog(
+        lang === 'en'
+          ? `🚀 'Concurrent Microservices Barrage': Massive impact of ${dmg}${isCrit ? ' (CRITICAL!)' : ''}!`
+          : `🚀 'Lluvia de Microservicios Concurrentes': ¡Impacto masivo de ${dmg}${isCrit ? ' (CRÍTICO!)' : ''}!`
+      );
       const nextBossHp = Math.max(bossHp - dmg, 0);
       setBossHp(nextBossHp);
       setActiveMenu('main');
@@ -255,12 +301,16 @@ export default function ArenaCombate() {
     if (type === 'shield') {
       setShieldActive(true);
       sfx.playDefend();
-      addLog('🛡️ Activaste bloque Try / Catch: El próximo golpe será mitigado un 70%.');
+      addLog(
+        lang === 'en'
+          ? '🛡️ Activated Try/Catch block: Next attack will be mitigated by 70%.'
+          : '🛡️ Activaste bloque Try / Catch: El próximo golpe será mitigado un 70%.'
+      );
       setActiveMenu('main');
       handleBossTurn(bossHp);
     } else if (type === 'docker') {
       if (playerMp < 30) {
-        addLog('⚠️ Maná insuficiente para Docker Restart.');
+        addLog(lang === 'en' ? '⚠️ Insufficient Mana for Docker Restart.' : '⚠️ Maná insuficiente para Docker Restart.');
         return;
       }
       setPlayerMp((mp) => mp - 30);
@@ -268,7 +318,11 @@ export default function ArenaCombate() {
       setPlayerHp((hp) => Math.min(hp + heal, 1000));
       spawnFloatingText(`+${heal} HP`, 'player', '#10b981');
       sfx.playLevelUp();
-      addLog(`🐳 'Docker Container Restart': Restauraste ${heal} HP.`);
+      addLog(
+        lang === 'en'
+          ? `🐳 'Docker Container Restart': Restored ${heal} HP.`
+          : `🐳 'Docker Container Restart': Restauraste ${heal} HP.`
+      );
       setActiveMenu('main');
       handleBossTurn(bossHp);
     }
@@ -281,7 +335,11 @@ export default function ArenaCombate() {
     setPlayerMp((mp) => Math.min(mp + 150, maxPlayerMp));
     spawnFloatingText('+250 HP / +150 MP', 'player', '#10b981');
     sfx.playLevelUp();
-    addLog('☕ Bebiste una Taza de Café Espresso: +250 HP y +150 MP.');
+    addLog(
+      lang === 'en'
+        ? '☕ Drank a Cup of Espresso Coffee: +250 HP and +150 MP.'
+        : '☕ Bebiste una Taza de Café Espresso: +250 HP y +150 MP.'
+    );
     setActiveMenu('main');
     handleBossTurn(bossHp);
   };
@@ -292,10 +350,10 @@ export default function ArenaCombate() {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
         <div>
           <span className="font-mono text-xs uppercase tracking-widest text-primary block">
-            // ARENA DE COMBATE
+            {lang === 'en' ? '// COMBAT ARENA' : '// ARENA DE COMBATE'}
           </span>
           <h1 className="font-headline text-3xl sm:text-4xl font-bold uppercase text-on-surface">
-            Depurador de Bugs
+            {lang === 'en' ? 'Bug Debugger' : 'Depurador de Bugs'}
           </h1>
         </div>
 
@@ -325,8 +383,12 @@ export default function ArenaCombate() {
       <div className="mb-6 px-4 py-2.5 rounded-lg bg-surface-container-low/90 backdrop-blur-sm border border-outline-variant/30 flex items-center justify-between text-xs font-mono shadow-md">
         <div className="flex items-center gap-2 text-on-surface">
           <Award size={14} className="text-primary" />
-          <span className="text-primary font-bold">Reliquias Activas:</span>
-          <span className="hidden sm:inline text-on-surface-variant">Bonos transferidos desde tu inventario</span>
+          <span className="text-primary font-bold">
+            {lang === 'en' ? 'Active Relics:' : 'Reliquias Activas:'}
+          </span>
+          <span className="hidden sm:inline text-on-surface-variant">
+            {lang === 'en' ? 'Bonuses transferred from inventory' : 'Bonos transferidos desde tu inventario'}
+          </span>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-primary font-bold">+{combatBonuses.damageBonus} ATK</span>
@@ -369,13 +431,13 @@ export default function ArenaCombate() {
             </div>
             <div>
               <span className="font-mono text-[10px] uppercase tracking-widest text-error font-bold block mb-0.5">
-                JEFE DE SERVIDOR
+                {lang === 'en' ? 'SERVER BOSS' : 'JEFE DE SERVIDOR'}
               </span>
               <h2 className="font-headline text-xl sm:text-2xl font-bold text-on-surface">
                 {selectedBoss.name}
               </h2>
               <p className="font-body text-xs text-on-surface-variant italic">
-                {selectedBoss.subtitle}
+                {lang === 'en' ? selectedBoss.subtitleEn : selectedBoss.subtitle}
               </p>
             </div>
           </div>
@@ -383,7 +445,7 @@ export default function ArenaCombate() {
           {/* Boss HP Bar */}
           <div className="w-full sm:w-64 space-y-1">
             <div className="flex justify-between font-mono text-xs text-on-surface-variant">
-              <span>HP JEFE</span>
+              <span>{lang === 'en' ? 'BOSS HP' : 'HP JEFE'}</span>
               <span className="font-bold text-error">{bossHp} / {selectedBoss.maxHp}</span>
             </div>
             <div className="h-3 bg-surface-container-high rounded-full overflow-hidden p-0.5 border border-outline-variant/30">
@@ -425,9 +487,11 @@ export default function ArenaCombate() {
             </div>
             <div>
               <h4 className="font-headline text-sm font-bold text-on-surface">
-                Nicolás Schernetzki (Nivel 30 Hero)
+                Nicolas Schernetzki {lang === 'en' ? '(Level 30 Hero)' : '(Nivel 30 Héroe)'}
               </h4>
-              <p className="font-mono text-[10px] text-primary">Arquitecto Full-Stack</p>
+              <p className="font-mono text-[10px] text-primary">
+                {lang === 'en' ? 'Full-Stack Architect' : 'Arquitecto Full-Stack'}
+              </p>
             </div>
           </div>
 
@@ -469,13 +533,15 @@ export default function ArenaCombate() {
             {battleState !== 'fighting' ? (
               <div className="text-center py-4 space-y-3">
                 <p className="font-headline text-lg font-bold">
-                  {battleState === 'won' ? '🎉 ¡BUG RESUELTO CON ÉXITO!' : '💀 EL SERVIDOR CAYÓ'}
+                  {battleState === 'won'
+                    ? (lang === 'en' ? '🎉 BUG RESOLVED SUCCESSFULLY!' : '🎉 ¡BUG RESUELTO CON ÉXITO!')
+                    : (lang === 'en' ? '💀 THE SERVER WENT DOWN' : '💀 EL SERVIDOR CAYÓ')}
                 </p>
                 <button
                   onClick={() => resetBattle(selectedBoss)}
                   className="px-6 py-2.5 bg-primary text-on-primary font-label font-bold text-xs uppercase tracking-widest rounded-lg hover:brightness-110 shadow-md cursor-pointer"
                 >
-                  Reiniciar Combate
+                  {lang === 'en' ? 'Restart Combat' : 'Reiniciar Combate'}
                 </button>
               </div>
             ) : activeMenu === 'main' ? (
@@ -490,7 +556,7 @@ export default function ArenaCombate() {
                   className="flex items-center gap-2 p-3 rounded-lg bg-surface-container-lowest border border-outline-variant/30 hover:border-primary text-on-surface hover:text-primary transition-all font-label text-xs uppercase font-bold tracking-wider cursor-pointer disabled:opacity-50"
                 >
                   <Swords size={16} className="text-primary" />
-                  <span>Atacar</span>
+                  <span>{lang === 'en' ? 'Attack' : 'Atacar'}</span>
                 </button>
                 <button
                   type="button"
@@ -502,7 +568,7 @@ export default function ArenaCombate() {
                   className="flex items-center gap-2 p-3 rounded-lg bg-surface-container-lowest border border-outline-variant/30 hover:border-secondary text-on-surface hover:text-secondary transition-all font-label text-xs uppercase font-bold tracking-wider cursor-pointer disabled:opacity-50"
                 >
                   <Zap size={16} className="text-secondary" />
-                  <span>Hechizos</span>
+                  <span>{lang === 'en' ? 'Spells' : 'Hechizos'}</span>
                 </button>
                 <button
                   type="button"
@@ -520,7 +586,7 @@ export default function ArenaCombate() {
                   className="flex items-center gap-2 p-3 rounded-lg bg-surface-container-lowest border border-outline-variant/30 hover:border-amber-400 text-on-surface hover:text-amber-400 transition-all font-label text-xs uppercase font-bold tracking-wider cursor-pointer disabled:opacity-50"
                 >
                   <Coffee size={16} className="text-amber-400" />
-                  <span>Café Espresso</span>
+                  <span>{lang === 'en' ? 'Espresso Coffee' : 'Café Espresso'}</span>
                 </button>
               </div>
             ) : activeMenu === 'attack' ? (
@@ -530,20 +596,22 @@ export default function ArenaCombate() {
                   className="w-full flex items-center justify-between p-2.5 rounded-lg bg-surface-container-lowest border border-outline-variant/30 hover:border-primary text-xs font-mono cursor-pointer"
                 >
                   <span className="font-bold text-on-surface">Unit Test Suite</span>
-                  <span className="text-on-surface-variant">0 MP · ~120 Daño</span>
+                  <span className="text-on-surface-variant">0 MP · ~120 {lang === 'en' ? 'Dmg' : 'Daño'}</span>
                 </button>
                 <button
                   onClick={() => handleAttack('refactor')}
                   className="w-full flex items-center justify-between p-2.5 rounded-lg bg-surface-container-lowest border border-outline-variant/30 hover:border-primary text-xs font-mono cursor-pointer"
                 >
-                  <span className="font-bold text-on-surface">Refactor Limpio</span>
-                  <span className="text-secondary">40 MP · ~220 Daño</span>
+                  <span className="font-bold text-on-surface">
+                    {lang === 'en' ? 'Clean Refactor' : 'Refactor Limpio'}
+                  </span>
+                  <span className="text-secondary">40 MP · ~220 {lang === 'en' ? 'Dmg' : 'Daño'}</span>
                 </button>
                 <button
                   onClick={() => setActiveMenu('main')}
                   className="text-xs font-mono text-on-surface-variant hover:text-primary pt-1 cursor-pointer"
                 >
-                  ← Volver al Menú
+                  {lang === 'en' ? '← Back to Menu' : '← Volver al Menú'}
                 </button>
               </div>
             ) : (
@@ -553,7 +621,7 @@ export default function ArenaCombate() {
                   className="w-full flex items-center justify-between p-2.5 rounded-lg bg-surface-container-lowest border border-outline-variant/30 hover:border-secondary text-xs font-mono cursor-pointer"
                 >
                   <span className="font-bold text-on-surface">TypeScript Strict</span>
-                  <span className="text-secondary">50 MP · 160 Dmg + Aturdir</span>
+                  <span className="text-secondary">50 MP · 160 Dmg + {lang === 'en' ? 'Stun' : 'Aturdir'}</span>
                 </button>
                 <button
                   onClick={() => handleSpell('async')}
@@ -566,7 +634,7 @@ export default function ArenaCombate() {
                   onClick={() => setActiveMenu('main')}
                   className="text-xs font-mono text-on-surface-variant hover:text-secondary pt-1 cursor-pointer"
                 >
-                  ← Volver al Menú
+                  {lang === 'en' ? '← Back to Menu' : '← Volver al Menú'}
                 </button>
               </div>
             )}
@@ -576,7 +644,7 @@ export default function ArenaCombate() {
           <div className="md:col-span-6 bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-3.5 font-mono text-xs flex flex-col justify-between max-h-48 overflow-y-auto">
             <div className="flex items-center gap-1.5 text-[10px] text-primary uppercase font-bold border-b border-outline-variant/20 pb-1.5 mb-2">
               <Terminal size={12} />
-              <span>Registro de Consola</span>
+              <span>{lang === 'en' ? 'Console Log' : 'Registro de Consola'}</span>
             </div>
             <div className="space-y-1 overflow-y-auto">
               {battleLogs.map((log, i) => (

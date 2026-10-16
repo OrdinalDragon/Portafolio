@@ -178,19 +178,19 @@ export default function CommandPalette({
     // Quick Actions
     {
       id: 'act-cv',
-      category: 'Acciones Rápidas',
+      category: lang === 'en' ? 'Quick Actions' : 'Acciones Rápidas',
       title: t('portfolio.hero.cta.cv'),
-      subtitle: 'Descargar Nicolas_Schernetzki_CV.pdf',
+      subtitle: lang === 'en' ? 'Download Nicolas_Schernetzki_CV.pdf' : 'Descargar Nicolas_Schernetzki_CV.pdf',
       icon: FileText,
       action: () => {
         window.open(cvPdf, '_blank');
         onClose();
       },
-      keywords: ['cv', 'curriculum', 'resume', 'pdf', 'descargar'],
+      keywords: ['cv', 'curriculum', 'resume', 'pdf', 'download', 'descargar'],
     },
     {
       id: 'act-email',
-      category: 'Acciones Rápidas',
+      category: lang === 'en' ? 'Quick Actions' : 'Acciones Rápidas',
       title: t('portfolio.contact.copyEmail'),
       subtitle: 'nicoschernetzki@gmail.com',
       icon: Mail,
@@ -198,13 +198,13 @@ export default function CommandPalette({
         onCopyEmail();
         onClose();
       },
-      keywords: ['email', 'copiar', 'correo', 'mail'],
+      keywords: ['email', 'copiar', 'copy', 'correo', 'mail'],
     },
     {
       id: 'act-rpg',
-      category: 'Acciones Rápidas',
+      category: lang === 'en' ? 'Quick Actions' : 'Acciones Rápidas',
       title: t('portfolio.rpg'),
-      subtitle: 'Explora el portafolio en estética RPG retro 8-bit',
+      subtitle: lang === 'en' ? 'Explore portfolio in retro 8-bit RPG aesthetic' : 'Explora el portafolio en estética RPG retro 8-bit',
       icon: Gamepad2,
       action: () => {
         navigate('/rpg');
@@ -214,9 +214,11 @@ export default function CommandPalette({
     },
     {
       id: 'act-theme',
-      category: 'Configuración',
-      title: theme === 'dark' ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro',
-      subtitle: 'Alternar tema visual de la página',
+      category: lang === 'en' ? 'Settings' : 'Configuración',
+      title: theme === 'dark' 
+        ? (lang === 'en' ? 'Switch to Light Theme' : 'Cambiar a Modo Claro') 
+        : (lang === 'en' ? 'Switch to Dark Theme' : 'Cambiar a Modo Oscuro'),
+      subtitle: lang === 'en' ? 'Toggle visual color scheme' : 'Alternar tema visual de la página',
       icon: theme === 'dark' ? Sun : Moon,
       action: () => {
         toggleTheme();
@@ -226,9 +228,9 @@ export default function CommandPalette({
     },
     {
       id: 'act-lang',
-      category: 'Configuración',
+      category: lang === 'en' ? 'Settings' : 'Configuración',
       title: lang === 'es' ? 'Switch to English' : 'Cambiar a Español',
-      subtitle: 'Change interface language',
+      subtitle: lang === 'en' ? 'Cambiar a idioma Español' : 'Switch to English language',
       icon: Globe,
       action: () => {
         setLanguage(lang === 'es' ? 'en' : 'es');
@@ -303,7 +305,7 @@ export default function CommandPalette({
                 if (listRef.current) listRef.current.scrollTop = 0;
               }}
               onKeyDown={handleKeyDown}
-              placeholder="Escribe un comando o busca... (ej. proyectos, cv, mood)"
+              placeholder={lang === 'en' ? 'Type a command or search... (e.g. projects, cv, mood)' : 'Escribe un comando o busca... (ej. proyectos, cv, mood)'}
               className="w-full bg-transparent font-body text-sm text-on-surface placeholder:text-on-surface-variant/60 outline-none"
             />
             {query && (
@@ -324,7 +326,7 @@ export default function CommandPalette({
           <div ref={listRef} className="overflow-y-auto p-2 space-y-1 flex-1">
             {filtered.length === 0 ? (
               <div className="p-8 text-center text-on-surface-variant text-sm font-body">
-                No se encontraron comandos para &quot;{query}&quot;
+                {lang === 'en' ? `No commands found for "${query}"` : `No se encontraron comandos para "${query}"`}
               </div>
             ) : (
               filtered.map((cmd, idx) => {
@@ -378,9 +380,9 @@ export default function CommandPalette({
           <div className="px-4 py-2.5 bg-surface-container-lowest/80 border-t border-outline-variant/20 flex items-center justify-between text-[11px] font-mono text-on-surface-variant">
             <span className="flex items-center gap-2">
               <span className="px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/20">↑↓</span>
-              <span>Navegar</span>
+              <span>{lang === 'en' ? 'Navigate' : 'Navegar'}</span>
               <span className="px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/20 ml-2">↵</span>
-              <span>Ejecutar</span>
+              <span>{lang === 'en' ? 'Execute' : 'Ejecutar'}</span>
             </span>
             <span className="font-bold text-primary">OrdinalDragon · Command</span>
           </div>

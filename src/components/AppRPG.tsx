@@ -19,12 +19,15 @@ import Estadisticas from './Estadisticas';
 import DragonCompanion from './DragonCompanion';
 import AchievementBanner from './AchievementBanner';
 import RPGBackground from './RPGBackground';
+import PrivacyTermsModal from './PrivacyTermsModal';
+import { sfx } from '../utils/sfx';
 
 export default function AppRPG() {
   const { t } = useLanguage();
   const [screen, setScreen] = useState<Screen>('personaje');
   const [questAlert, setQuestAlert] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | null>(null);
   const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -62,7 +65,7 @@ export default function AppRPG() {
           setScreen={setScreen} 
           isOpen={isSidebarOpen} 
           onClose={() => setIsSidebarOpen(false)} 
-          setActiveModal={() => {}} 
+          setActiveModal={setActiveModal} 
         />
         
         <main ref={mainRef} className="flex-1 min-h-0 lg:ml-64 p-0 overflow-auto">
@@ -129,7 +132,35 @@ export default function AppRPG() {
         <div className="text-on-surface/40 text-center mb-2 md:mb-0">
           {t('common.footer')}
         </div>
+        <div className="flex items-center gap-4 mt-2 md:mt-0">
+          <button 
+            onClick={() => {
+              sfx.playSelect();
+              setActiveModal('privacy');
+            }}
+            className="text-on-surface/40 hover:text-primary transition-colors cursor-pointer text-[11px] uppercase tracking-wider"
+          >
+            {t('common.privacy')}
+          </button>
+          <span className="text-on-surface/20">•</span>
+          <button 
+            onClick={() => {
+              sfx.playSelect();
+              setActiveModal('terms');
+            }}
+            className="text-on-surface/40 hover:text-primary transition-colors cursor-pointer text-[11px] uppercase tracking-wider"
+          >
+            {t('common.terms')}
+          </button>
+        </div>
       </footer>
+
+      {/* Privacy and Terms RPG Modal */}
+      <PrivacyTermsModal
+        activeModal={activeModal}
+        onClose={() => setActiveModal(null)}
+        onSelectModal={setActiveModal}
+      />
     </div>
   );
 }

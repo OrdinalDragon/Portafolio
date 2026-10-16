@@ -1,5 +1,5 @@
 # 🎮 Auditoría Exhaustiva y Plan Maestro de Optimización del Modo RPG (`/#/rpg`)
-**Autor:** Antigravity (Pair Programming con Nicolás Schernetzki)  
+**Autor:** Antigravity (Pair Programming con Nicolas Schernetzki)  
 **Fecha:** Octubre 2026  
 **Estado:** Documento de Análisis y Propuesta Arquitectónica  
 
@@ -7,7 +7,7 @@
 
 ## 🧭 1. Resumen Ejecutivo y Diagnóstico Global
 
-El modo interactivo RPG de este portafolio es una de las propuestas más diferenciadoras, creativas y memorables de toda la web para reclutadores técnicos, líderes de ingeniería y visitantes. Logra transformar un currículum técnico en una **aventura interactiva retro-futurista**, manteniendo intacta la rigurosidad y el profesionalismo de la experiencia de Nicolás Schernetzki.
+El modo interactivo RPG de este portafolio es una de las propuestas más diferenciadoras, creativas y memorables de toda la web para reclutadores técnicos, líderes de ingeniería y visitantes. Logra transformar un currículum técnico en una **aventura interactiva retro-futurista**, manteniendo intacta la rigurosidad y el profesionalismo de la experiencia de Nicolas Schernetzki.
 
 Tras las recientes incorporaciones (sintetizador de sonido chiptune nativo de 8-bit, alijo de reliquias equipables, arena de combate de bugs por turnos, árbol de habilidades interactivo con gasto de puntos, mascota activa OrdinalDragon y la crónica completada de Fundación Pescar), el modo RPG ha subido de nivel notablemente.
 
@@ -25,13 +25,13 @@ Sin embargo, tras auditar pantalla por pantalla el código, los flujos de usuari
 * **Fortalezas actuales:**
   - Diseño espacioso y heroico que resolvió por completo el espacio vacío vertical.
   - Vitals dinámicos animados (HP, MP, EXP) con física suave al cargar.
-  - Retrato con alternancia de imagen (Nicolás / Dragón) y nivel 30.
+  - Retrato con alternancia de imagen (Nicolas / Dragón) y nivel 30.
   - 5 atributos técnicos interactivos con tooltips y barras de progreso.
   - Atajos directos hacia los reinos (Habilidades, Inventario, Arena, Forja).
 
 * **Áreas de mejora identificadas:**
   1. **Efecto de "Subida de Nivel" en vivo:** Permitir que al hacer clic en el botón de comenzar o al ganar batallas en la Arena, la barra de EXP suba dinámicamente de 89% a 100% disparando confeti dorado o partículas de chispas y un banner retro de *¡LEVEL UP!*.
-  2. **Selector de Arquetipo / Título de Clase:** Poder alternar con un clic el título visible de Nicolás entre tres roles:
+  2. **Selector de Arquetipo / Título de Clase:** Poder alternar con un clic el título visible de Nicolas entre tres roles:
      - 🛡️ *Archimago Full-Stack (MERN & .NET)*
      - ⚡ *Especialista Backend & APIs (C# / Node.js / FastAPI)*
      - 🎯 *Artífice Frontend & UI (React 19 / TypeScript / Tailwind)*
@@ -87,7 +87,7 @@ Sin embargo, tras auditar pantalla por pantalla el código, los flujos de usuari
 * **Fortalezas actuales:**
   - 3 jefes emblemáticos: *NullReferenceException*, *Async Race Condition* y *The 500 Internal Dragon*.
   - Menús de acción categorizados: Atacar, Hechizos, Try/Catch defensivo y Café Espresso.
-  - Barra de vida del jefe, barras de HP/MP de Nicolás, consola de registro estilo terminal y victoria fanfare.
+  - Barra de vida del jefe, barras de HP/MP de Nicolas, consola de registro estilo terminal y victoria fanfare.
 
 * **Áreas de mejora identificadas:**
   1. **Animaciones Visuales de Impacto:**
@@ -122,7 +122,7 @@ Sin embargo, tras auditar pantalla por pantalla el código, los flujos de usuari
 ---
 
 ### 6. 📖 Historia / Lore (`src/components/Historia.tsx`)
-*El relato cronológico del ascenso de Nicolás.*
+*El relato cronológico del ascenso de Nicolas.*
 
 * **Fortalezas actuales:**
   - Narrativa literaria de alta calidad que une su pasado en ventas y automatización VBA con su consolidación full-stack y dominio de inglés C1+.
@@ -161,7 +161,7 @@ Sin embargo, tras auditar pantalla por pantalla el código, los flujos de usuari
   2. **Buscador Rápido de Bestias:**
      - Una barra de búsqueda estilo terminal `>_ Ingrese conjuro...` que filtre instantáneamente en tiempo real.
   3. **Ficha de Detalle Expandible:**
-     - Al cliquear una criatura, abrir una ficha modal con su historia, proyectos donde Nicolás la utilizó y nivel de maestría.
+     - Al cliquear una criatura, abrir una ficha modal con su historia, proyectos donde Nicolas la utilizó y nivel de maestría.
 
 ---
 
@@ -194,7 +194,7 @@ Sin embargo, tras auditar pantalla por pantalla el código, los flujos de usuari
   1. **Sincronización Dinámica con Habilidades:**
      - Actualmente los números de atributos en `Estadisticas.tsx` están fijos (88, 82, 85, etc.), mientras que en `Habilidades.tsx` y `Personaje.tsx` se calculan dinámicamente con los puntos. Unificar el estado global o local para que reflejen exactamente los mismos valores.
   2. **Exportar Ficha de Personaje RPG en PDF / Imagen:**
-     - Un botón especial: *"Descargar Ficha de Personaje RPG"* que genere una tarjeta coleccionable del perfil de Nicolás.
+     - Un botón especial: *"Descargar Ficha de Personaje RPG"* que genere una tarjeta coleccionable del perfil de Nicolas.
 
 ---
 

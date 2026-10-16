@@ -16,11 +16,16 @@ interface ProjectArtifact {
   descKey: string;
   techKey: string;
   rarity: 'LEGENDARIO' | 'MÍTICO' | 'ARCANO' | 'HEROICO' | 'EN TEMPLADO';
+  rarityEn: string;
   stars: string;
   level: string;
+  levelEn: string;
   element: string;
+  elementEn: string;
   dragonSigil: string;
+  dragonSigilEn: string;
   bossDefeated: string;
+  bossDefeatedEn: string;
   category: ('live' | 'fullstack' | 'backend' | 'forge')[];
   icon: React.ElementType;
   colorClass: string;
@@ -32,11 +37,12 @@ interface ProjectArtifact {
   isForge: boolean;
   architecture: string;
   highlights: string[];
+  highlightsEn: string[];
   techTags: string[];
 }
 
 export default function Proyectos() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [activeFilter, setActiveFilter] = useState<ProjectFilter>('all');
   const [selectedArtifact, setSelectedArtifact] = useState<ProjectArtifact | null>(null);
   const [dragonFlameActive, setDragonFlameActive] = useState(false);
@@ -48,11 +54,16 @@ export default function Proyectos() {
       descKey: 'proyectos.moodapp.desc',
       techKey: 'proyectos.moodapp.tech',
       rarity: 'LEGENDARIO',
+      rarityEn: 'LEGENDARY',
       stars: '★★★★★',
       level: 'Nv. 50 Archimago Full-Stack',
+      levelEn: 'Lvl. 50 Full-Stack Archmage',
       element: 'Fuego & IA Generativa',
+      elementEn: 'Fire & Generative AI',
       dragonSigil: 'Sello del Dragón de Fuego & IA',
+      dragonSigilEn: 'Seal of the Fire & AI Dragon',
       bossDefeated: 'Leviatán de Latencia en IA (procesamiento asíncrono y streaming con Google Gemini)',
+      bossDefeatedEn: 'AI Latency Leviathan (async processing & streaming with Google Gemini)',
       category: ['live', 'fullstack'],
       icon: Wand2,
       colorClass: 'text-primary',
@@ -69,6 +80,12 @@ export default function Proyectos() {
         'Mapa interactivo, geolocalización, reseñas con puntuación y notificaciones por email.',
         'Despliegue contenerizado en Docker con Nginx reverse proxy y protección Cloudflare.'
       ],
+      highlightsEn: [
+        'AI chat (Gemini) that detects mood and recommends matching events.',
+        'Automated event scraper with periodic execution and data normalization.',
+        'Interactive map, geolocation, scored reviews, and email alerts.',
+        'Containerized Docker deployment with Nginx reverse proxy and Cloudflare defense.'
+      ],
       techTags: ['React 19', 'FastAPI', 'Gemini AI', 'MongoDB', 'Docker', 'Tailwind', 'Cloudflare']
     },
     {
@@ -77,11 +94,16 @@ export default function Proyectos() {
       descKey: 'proyectos.emotionshop.desc',
       techKey: 'proyectos.emotionshop.tech',
       rarity: 'MÍTICO',
+      rarityEn: 'MYTHIC',
       stars: '★★★★★',
       level: 'Nv. 45 Maestro MERN',
+      levelEn: 'Lvl. 45 MERN Master',
       element: 'Tierra & Nube AWS',
+      elementEn: 'Earth & AWS Cloud',
       dragonSigil: 'Sello del Dragón de la Nube AWS',
+      dragonSigilEn: 'Seal of the AWS Cloud Dragon',
       bossDefeated: 'Quimera de Almacenamiento S3 (subida multiparte directa con firmas seguras y CDN)',
+      bossDefeatedEn: 'S3 Storage Chimera (direct multipart upload with secure signatures & CDN)',
       category: ['live', 'fullstack'],
       icon: ShoppingCart,
       colorClass: 'text-purple-400',
@@ -98,6 +120,12 @@ export default function Proyectos() {
         'Carrito de compras sincronizado con estado global mediante Redux Toolkit.',
         'Panel administrativo interactivo con métricas en vivo y analíticas comerciales de ventas.'
       ],
+      highlightsEn: [
+        'Robust JWT auth with role-based access control (Admin & Customer).',
+        'Direct image upload and optimization hosted on AWS S3 buckets.',
+        'Shopping cart synchronized with global state via Redux Toolkit.',
+        'Interactive admin dashboard with live sales metrics and commercial analytics.'
+      ],
       techTags: ['React 18', 'Redux Toolkit', 'Node.js', 'Express', 'MongoDB', 'AWS S3', 'Docker']
     },
     {
@@ -106,11 +134,16 @@ export default function Proyectos() {
       descKey: 'proyectos.bank.desc',
       techKey: 'proyectos.bank.tech',
       rarity: 'ARCANO',
+      rarityEn: 'ARCANE',
       stars: '★★★★☆',
       level: 'Nv. 40 Caballero .NET',
+      levelEn: 'Lvl. 40 .NET Knight',
       element: 'Metal & .NET 8 Core',
+      elementEn: 'Metal & .NET 8 Core',
       dragonSigil: 'Sello del Dragón de Acero .NET 8',
+      dragonSigilEn: 'Seal of the Steel .NET 8 Dragon',
       bossDefeated: 'Basilisco de Excepciones Transaccionales (Unit of Work y suites de testing xUnit)',
+      bossDefeatedEn: 'Transactional Exception Basilisk (Unit of Work & xUnit test suites)',
       category: ['backend'],
       icon: Cpu,
       colorClass: 'text-cyan-400',
@@ -126,6 +159,12 @@ export default function Proyectos() {
         'Arquitectura desacoplada en capas (Domain, Data, Business, Presentation).',
         'Suite de pruebas unitarias automatizadas con xUnit, Moq y Base de Datos InMemory.'
       ],
+      highlightsEn: [
+        'Comprehensive management of bank accounts, deposits, transfers, and statements.',
+        'Cryptographic security with BCrypt password hashing and JWT authentication.',
+        'Decoupled layered architecture (Domain, Data, Business, Presentation).',
+        'Automated unit test suite with xUnit, Moq, and InMemory Database.'
+      ],
       techTags: ['C# 12', '.NET 8', 'MariaDB', 'Entity Framework', 'WinForms', 'xUnit', 'Docker']
     },
     {
@@ -134,11 +173,16 @@ export default function Proyectos() {
       descKey: 'proyectos.portfolio.desc',
       techKey: 'proyectos.portfolio.tech',
       rarity: 'HEROICO',
+      rarityEn: 'HEROIC',
       stars: '★★★★☆',
       level: 'Nv. 42 Guardián del Dragón',
+      levelEn: 'Lvl. 42 Dragon Guardian',
       element: 'Éter & Animación Motion',
+      elementEn: 'Aether & Motion Animation',
       dragonSigil: 'Sello del Dragón Ordinal Primigenio',
+      dragonSigilEn: 'Seal of the Primal Ordinal Dragon',
       bossDefeated: 'Espectro del Lag de Renderizado (Motion fluido a 60 FPS con Web Audio nativo)',
+      bossDefeatedEn: 'Render Lag Specter (smooth 60 FPS Motion with native Web Audio)',
       category: ['live', 'fullstack'],
       icon: Hammer,
       colorClass: 'text-emerald-400',
@@ -154,6 +198,12 @@ export default function Proyectos() {
         'Sistema bilingüe en tiempo real (Español / Inglés) con almacenamiento de estado reactivo.',
         'Diseño responsivo optimizado para móviles y escritorio con animaciones Framer Motion.'
       ],
+      highlightsEn: [
+        'Full gamified experience: skill tree, bestiary, combat arena, and inventory.',
+        'Retro native Web Audio synthesizer with zero external dependencies and zero latency.',
+        'Real-time bilingual system (Spanish / English) with reactive state storage.',
+        'Responsive design optimized for mobile and desktop with Framer Motion animations.'
+      ],
       techTags: ['React 19', 'TypeScript', 'Motion', 'Tailwind v4', 'Web Audio', 'Vite', 'Express']
     },
     {
@@ -162,11 +212,16 @@ export default function Proyectos() {
       descKey: 'proyectos.pricelist.desc',
       techKey: 'proyectos.pricelist.tech',
       rarity: 'EN TEMPLADO',
+      rarityEn: 'IN TEMPERING',
       stars: '⚒️⚒️⚒️',
       level: 'En Templado Activo',
+      levelEn: 'Active In Tempering',
       element: 'Fuego de la Forja',
+      elementEn: 'Forge Fire',
       dragonSigil: 'Sello del Dragón de la Forja B2B',
+      dragonSigilEn: 'Seal of the B2B Forge Dragon',
       bossDefeated: 'Gólem de la Burocracia Comercial (automatización de presupuestos y remitos instantáneos)',
+      bossDefeatedEn: 'Commercial Bureaucracy Golem (instant quotes & dispatch notes automation)',
       category: ['forge', 'fullstack'],
       icon: Settings,
       colorClass: 'text-amber-400',
@@ -180,6 +235,12 @@ export default function Proyectos() {
         'Generador automatizado de cotizaciones en PDF y presupuestos comerciales.',
         'Seguimiento de cuentas de clientes B2B con historial de pedidos.',
         'Basado en la experiencia real automatizando flujos comerciales en el rubro eléctrico.'
+      ],
+      highlightsEn: [
+        'Wholesale price list management with bulk percentage updates.',
+        'Automated PDF quote generator and commercial dispatch notes.',
+        'B2B client account tracking with full order history.',
+        'Built on hands-on experience automating business workflows in the electrical sector.'
       ],
       techTags: ['React', 'Node.js', 'Express', 'MongoDB', 'PDF Generation', 'Comercio B2B']
     }
@@ -212,7 +273,7 @@ export default function Proyectos() {
         <header className="text-center px-4 pt-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] md:text-xs font-mono uppercase tracking-widest">
             <Flame size={13} className="animate-pulse text-primary" />
-            <span>// FORJA DEL DRAGÓN ORDINAL & ARTEFACTOS</span>
+            <span>{lang === 'en' ? '// ORDINAL DRAGON FORGE & ARTIFACTS' : '// FORJA DEL DRAGÓN ORDINAL & ARTEFACTOS'}</span>
           </div>
 
           <h1 className="font-headline text-2xl sm:text-4xl md:text-5xl font-black text-on-surface uppercase italic tracking-normal sm:tracking-wider mb-3">
@@ -256,6 +317,10 @@ export default function Proyectos() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 pt-2">
           {filteredArtifacts.map((artifact) => {
             const IconComponent = artifact.icon;
+            const currentRarity = lang === 'en' ? artifact.rarityEn : artifact.rarity;
+            const currentLevel = lang === 'en' ? artifact.levelEn : artifact.level;
+            const currentDragonSigil = lang === 'en' ? artifact.dragonSigilEn : artifact.dragonSigil;
+
             return (
               <motion.div
                 key={artifact.id}
@@ -282,11 +347,11 @@ export default function Proyectos() {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${artifact.badgeClass}`}>
-                            {artifact.rarity} {artifact.stars}
+                            {currentRarity} {artifact.stars}
                           </span>
                         </div>
                         <span className="text-[10px] font-mono text-on-surface-variant block mt-0.5">
-                          {artifact.level}
+                          {currentLevel}
                         </span>
                       </div>
                     </div>
@@ -310,7 +375,7 @@ export default function Proyectos() {
                   {/* Dragon Sigil Pill */}
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-surface-container-lowest border border-outline-variant/30 text-[10px] font-mono text-primary font-bold">
                     <Flame size={11} className="text-primary animate-pulse" />
-                    <span>{artifact.dragonSigil}</span>
+                    <span>{currentDragonSigil}</span>
                   </div>
 
                   {/* Title & Description */}
@@ -418,11 +483,11 @@ export default function Proyectos() {
                         {t(selectedArtifact.nameKey)}
                       </h3>
                       <span className={`text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded border ${selectedArtifact.badgeClass}`}>
-                        {selectedArtifact.rarity}
+                        {lang === 'en' ? selectedArtifact.rarityEn : selectedArtifact.rarity}
                       </span>
                     </div>
                     <p className="text-[10px] font-mono text-on-surface-variant truncate">
-                      {selectedArtifact.level} · {selectedArtifact.dragonSigil}
+                      {lang === 'en' ? selectedArtifact.levelEn : selectedArtifact.level} · {lang === 'en' ? selectedArtifact.dragonSigilEn : selectedArtifact.dragonSigil}
                     </p>
                   </div>
                 </div>
@@ -452,10 +517,10 @@ export default function Proyectos() {
                 <div className="bg-gradient-to-r from-amber-500/10 via-surface-container-lowest to-surface-container-lowest border border-amber-500/30 p-4 rounded space-y-1.5">
                   <div className="flex items-center gap-2 text-amber-400 font-mono text-xs uppercase tracking-wider font-bold">
                     <Trophy size={14} className="text-amber-400" />
-                    <span>Desafío Dracónico Conquistado (Boss Vencido)</span>
+                    <span>{lang === 'en' ? 'Conquered Draconic Challenge (Boss Defeated)' : 'Desafío Dracónico Conquistado (Boss Vencido)'}</span>
                   </div>
                   <p className="font-mono text-xs text-on-surface">
-                    {selectedArtifact.bossDefeated}
+                    {lang === 'en' ? selectedArtifact.bossDefeatedEn : selectedArtifact.bossDefeated}
                   </p>
                 </div>
 
@@ -477,7 +542,7 @@ export default function Proyectos() {
                     <span>{t('proyectos.modal.features')}</span>
                   </div>
                   <div className="space-y-2">
-                    {selectedArtifact.highlights.map((feat, idx) => (
+                    {(lang === 'en' ? selectedArtifact.highlightsEn : selectedArtifact.highlights).map((feat, idx) => (
                       <div key={idx} className="flex items-start gap-2.5 text-xs text-on-surface font-body bg-surface-container-high/40 p-2.5 rounded border border-outline-variant/15">
                         <CheckCircle2 size={15} className="text-emerald-400 shrink-0 mt-0.5" />
                         <span className="leading-relaxed">{feat}</span>
@@ -494,14 +559,18 @@ export default function Proyectos() {
                     className="p-3 rounded bg-primary/20 border border-primary text-primary font-bold text-center text-xs flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(255,145,0,0.4)]"
                   >
                     <Flame size={16} className="animate-bounce" />
-                    <span>¡ALIENTO DRACÓNICO ACTIVADO! Furia de la forja canalizada hacia {t(selectedArtifact.nameKey)}.</span>
+                    <span>
+                      {lang === 'en' 
+                        ? `DRACONIC BREATH UNLEASHED! Forge fury channeled into ${t(selectedArtifact.nameKey)}.`
+                        : `¡ALIENTO DRACÓNICO ACTIVADO! Furia de la forja canalizada hacia ${t(selectedArtifact.nameKey)}.`}
+                    </span>
                   </motion.div>
                 )}
 
                 {/* Tech Runes */}
                 <div className="space-y-2 pt-2 border-t border-outline-variant/20">
                   <span className="font-mono text-[10px] uppercase tracking-wider text-on-surface-variant block">
-                    Tecnologías & Herramientas Forjadas
+                    {lang === 'en' ? 'Forged Technologies & Tools' : 'Tecnologías & Herramientas Forjadas'}
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedArtifact.techTags.map((tag) => (
@@ -520,7 +589,7 @@ export default function Proyectos() {
                   className="px-3.5 py-2 rounded bg-primary/10 hover:bg-primary/20 border border-primary/30 text-primary font-mono text-xs uppercase tracking-wider font-bold flex items-center gap-1.5 cursor-pointer transition-all"
                 >
                   <Flame size={14} />
-                  <span>Avivar Fuego Dracónico</span>
+                  <span>{lang === 'en' ? 'Stoke Draconic Fire' : 'Avivar Fuego Dracónico'}</span>
                 </button>
 
                 <div className="flex items-center gap-2 ml-auto">
@@ -532,7 +601,7 @@ export default function Proyectos() {
                       onClick={() => sfx.playSelect()}
                       className="flex items-center gap-2 px-3.5 py-2 bg-surface-container-lowest border border-outline-variant/40 text-on-surface text-xs uppercase tracking-wider font-mono hover:text-primary rounded cursor-pointer"
                     >
-                      <Github size={14} /> Repositorio
+                      <Github size={14} /> {t('proyectos.moodapp.repo')}
                     </a>
                   )}
                   {selectedArtifact.liveUrl && (
@@ -543,7 +612,7 @@ export default function Proyectos() {
                       onClick={() => sfx.playSelect()}
                       className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary text-xs uppercase tracking-wider font-mono font-bold rounded hover:brightness-110 shadow-lg cursor-pointer"
                     >
-                      <Globe size={14} /> Demo en Vivo
+                      <Globe size={14} /> {t('proyectos.moodapp.live')}
                     </a>
                   )}
                 </div>

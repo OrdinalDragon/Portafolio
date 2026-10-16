@@ -49,7 +49,7 @@ interface ChapterDetail {
 }
 
 export default function Historia() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [activeChapter, setActiveChapter] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<'cronica' | 'diario' | 'desafio' | 'ficha'>('cronica');
 
@@ -58,7 +58,7 @@ export default function Historia() {
     rpgState.unlockAchievement('lore_master');
   }, []);
 
-  const EPOCHS: Epoch[] = [
+  const EPOCHS_ES: Epoch[] = [
     {
       year: '2016',
       title: 'El Génesis de los Electrones',
@@ -101,7 +101,50 @@ export default function Historia() {
     },
   ];
 
-  const CHAPTERS: ChapterDetail[] = [
+  const EPOCHS_EN: Epoch[] = [
+    {
+      year: '2016',
+      title: 'Genesis of the Electrons',
+      tag: 'VBA & B2B Sales',
+      icon: Zap,
+      desc: 'Mastery of technical electrical commerce and forging first Excel VBA automation macros for 100+ B2B clients.',
+      chapterIndex: 0,
+    },
+    {
+      year: '2023',
+      title: 'UTN Academy & Pescar',
+      tag: '.NET & MERN Stack',
+      icon: Shield,
+      desc: 'University training in C#/.NET 8 and 345+ hours of intensive MERN training at Fundación Pescar.',
+      chapterIndex: 1,
+    },
+    {
+      year: '2024',
+      title: 'The Production Realm',
+      tag: 'FastAPI, AI & AWS',
+      icon: Rocket,
+      desc: 'Mood App live with Gemini AI, EmotionShop deployed on AWS, Docker containers, and CI/CD pipelines.',
+      chapterIndex: 2,
+    },
+    {
+      year: '2025',
+      title: 'The Global Lands',
+      tag: 'C1+ English & Cloud',
+      icon: Globe,
+      desc: 'Fluent mastery of the universal language, intercultural collaboration, and borderless software architecture.',
+      chapterIndex: 3,
+    },
+    {
+      year: '2026',
+      title: 'The Prophecy of Open Code',
+      tag: 'Horizon & New Guilds',
+      icon: Compass,
+      desc: 'Immediate readiness to join high-impact engineering teams and tackle massive scaling challenges.',
+      chapterIndex: 4,
+    },
+  ];
+
+  const CHAPTERS_ES: ChapterDetail[] = [
     {
       id: 0,
       roman: 'Capítulo I',
@@ -112,8 +155,8 @@ export default function Historia() {
       icon: Zap,
       quote: '"Antes de modelar el software, el mago debe comprender las necesidades de quienes habitan el reino."',
       loreParagraphs: [
-        'En los albores de su travesía, mucho antes de conjurar APIs y compilar contenedores, Nicolás Schernetzki recorría los caminos como un emisario comercial en el sector de materiales eléctricos. Atendía una cartera viva de más de 100 empresas clientes, asesorando en soluciones energéticas complejas y logrando un crecimiento sostenido del 25% anual.',
-        'Fue en ese campo de batalla real donde descubrió su vocación por la ingeniería: la necesidad de eliminar el caos de los procesos manuales. Observando cómo los comerciantes perdían incontables horas actualizando listas de precios y órdenes de compra, Nicolás tomó por primera vez la pluma del programador y forjó herramientas a medida en Excel utilizando macros VBA.',
+        'En los albores de su travesía, mucho antes de conjurar APIs y compilar contenedores, Nicolas Schernetzki recorría los caminos como un emisario comercial en el sector de materiales eléctricos. Atendía una cartera viva de más de 100 empresas clientes, asesorando en soluciones energéticas complejas y logrando un crecimiento sostenido del 25% anual.',
+        'Fue en ese campo de batalla real donde descubrió su vocación por la ingeniería: la necesidad de eliminar el caos de los procesos manuales. Observando cómo los comerciantes perdían incontables horas actualizando listas de precios y órdenes de compra, Nicolas tomó por primera vez la pluma del programador y forjó herramientas a medida en Excel utilizando macros VBA.',
         'Aquel script inicial no solo optimizó el flujo de miles de transacciones y campañas de correo segmentadas a más de 500 contactos: encendió la chispa que lo llevaría a comprender que el código es la forma más pura de crear orden, eficiencia y valor tangible.',
         'La transición no fue repentina, sino orgánica: dominar los principios de la electricidad física (voltaje, corriente, resistencia) sentó las bases para comprender la lógica de los circuitos lógicos y las estructuras de datos. Cada venta cerrada era un ejercicio de escucha activa; cada macro escrita, una lección de automatización pragmática.',
       ],
@@ -146,9 +189,9 @@ export default function Historia() {
       icon: Wand2,
       quote: '"La verdadera maestría nace de la comunión entre el rigor del backend y la magia visual del frontend."',
       loreParagraphs: [
-        'Con la convicción de convertir su instinto en maestría formal, Nicolás ingresó a las aulas de la prestigiosa Universidad Tecnológica Nacional (UTN.BA). Allí se sometió a las rigurosas disciplinas de la Programación Orientada a Objetos, LINQ, Entity Framework Core y el ecosistema C# 12 / .NET 8. Como prueba de graduación, concibió el "Simulador Bancario": un sistema integral con interfaz de escritorio Windows Forms, API REST en ASP.NET Core, persistencia relacional en MariaDB, autenticación JWT, hashing BCrypt y suites de tests unitarios con xUnit y Moq, todo aislado en contenedores Docker.',
-        'Pero el hambre de un arquitecto no conoce fronteras. En paralelo, Nicolás fue seleccionado por la alianza entre Fundación Pescar, Fundación Desarrollar y el Banco Nación para cursar más de 345 horas de especialización intensiva en el Stack MERN (MongoDB, Express, React y Node.js).',
-        'En este crisol, Nicolás no solo aprendió las técnicas más avanzadas del ciclo full-stack moderno, sino también la magia sagrada de los gremios ágiles: trabajó en equipos multidisciplinarios bajo la metodología Scrum, gestionando sprints, code reviews y ramas en Git, entregando con éxito 4 proyectos colaborativos que respondían a problemáticas reales de la sociedad.',
+        'Con la convicción de convertir su instinto en maestría formal, Nicolas ingresó a las aulas de la prestigiosa Universidad Tecnológica Nacional (UTN.BA). Allí se sometió a las rigurosas disciplinas de la Programación Orientada a Objetos, LINQ, Entity Framework Core y el ecosistema C# 12 / .NET 8. Como prueba de graduación, concibió el "Simulador Bancario": un sistema integral con interfaz de escritorio Windows Forms, API REST en ASP.NET Core, persistencia relacional en MariaDB, autenticación JWT, hashing BCrypt y suites de tests unitarios con xUnit y Moq, todo aislado en contenedores Docker.',
+        'Pero el hambre de un arquitecto no conoce fronteras. En paralelo, Nicolas fue seleccionado por la alianza entre Fundación Pescar, Fundación Desarrollar y el Banco Nación para cursar más de 345 horas de especialización intensiva en el Stack MERN (MongoDB, Express, React y Node.js).',
+        'En este crisol, Nicolas no solo aprendió las técnicas más avanzadas del ciclo full-stack moderno, sino también la magia sagrada de los gremios ágiles: trabajó en equipos multidisciplinarios bajo la metodología Scrum, gestionando sprints, code reviews y ramas en Git, entregando con éxito 4 proyectos colaborativos que respondían a problemáticas reales de la sociedad.',
         'El resultado fue una dualidad técnica envidiable: la precisión quirúrgica del backend tipado en C# unida a la velocidad de prototipado y reactividad del stack JavaScript/TypeScript.',
       ],
       archmageDiary: {
@@ -180,9 +223,9 @@ export default function Historia() {
       icon: Rocket,
       quote: '"Un artefacto sólo demuestra su verdadero poder cuando resiste los embates de la producción en vivo."',
       loreParagraphs: [
-        'Habiendo conquistado las bases teóricas y metodológicas, Nicolás avanzó hacia la frontera más desafiante: el despliegue en entornos productivos reales. Con la visión de unir arte interactivo e inteligencia artificial, forjó "Mood App", una plataforma integral que analiza el estado anímico del usuario y recomienda eventos en Buenos Aires utilizando la IA de Google Gemini. Su arquitectura combina un frontend reactivo en React 19 y Tailwind, un backend asíncrono con Python FastAPI y MongoDB, pipelines de scraping automático y contenedorización Docker con túneles Cloudflare.',
+        'Habiendo conquistado las bases teóricas y metodológicas, Nicolas avanzó hacia la frontera más desafiante: el despliegue en entornos productivos reales. Con la visión de unir arte interactivo e inteligencia artificial, forjó "Mood App", una plataforma integral que analiza el estado anímico del usuario y recomienda eventos en Buenos Aires utilizando la IA de Google Gemini. Su arquitectura combina un frontend reactivo en React 19 y Tailwind, un backend asíncrono con Python FastAPI y MongoDB, pipelines de scraping automático y contenedorización Docker con túneles Cloudflare.',
         'Sin detenerse, materializó "EmotionShop", una plataforma de comercio electrónico de grado industrial construida sobre el stack MERN con Redux Toolkit, almacenamiento multimedia en la nube de AWS S3, autenticación robusta mediante tokens JWT y un panel de administración con analíticas de ventas y métricas en tiempo real.',
-        'Ambos artefactos se encuentran desplegados y operativos 24/7 en la red mundial, demostrando la capacidad de Nicolás para llevar un requerimiento desde la primera línea de código hasta una infraestructura resiliente, monitoreada y escalable.',
+        'Ambos artefactos se encuentran desplegados y operativos 24/7 en la red mundial, demostrando la capacidad de Nicolas para llevar un requerimiento desde la primera línea de código hasta una infraestructura resiliente, monitoreada y escalable.',
         'La producción no perdona el código perezoso: cada endpoint fue optimizado para tiempos de respuesta menores a 200ms, implementando compresión gzip, índices compuestos en MongoDB y políticas estrictas de CORS y seguridad de cabeceras.',
       ],
       archmageDiary: {
@@ -214,7 +257,7 @@ export default function Historia() {
       icon: Globe,
       quote: '"El código es un lenguaje mundial; la comunicación fluida es el puente que une a los mejores gremios del planeta."',
       loreParagraphs: [
-        'En un ecosistema tecnológico interconectado, la maestría técnica debe estar respaldada por una comunicación clara y universal. Con un nivel de inglés certificado en C1+ Advanced, Nicolás redacta documentación técnica, participa en ceremonias ágiles y discute decisiones de diseño arquitectónico con la misma soltura en español como en inglés.',
+        'En un ecosistema tecnológico interconectado, la maestría técnica debe estar respaldada por una comunicación clara y universal. Con un nivel de inglés certificado en C1+ Advanced, Nicolas redacta documentación técnica, participa en ceremonias ágiles y discute decisiones de diseño arquitectónico con la misma soltura en español como en inglés.',
         'Esta habilidad le permite asimilar de inmediato las últimas especificaciones de la industria, contribuir a la comunidad open-source y colaborar sin fricciones en equipos distribuidos globalmente, cruzando husos horarios y culturas de trabajo.',
         'Ya sea debatiendo la conveniencia de microservicios frente a monolitos modulares, o redactando guías de contribución para otros desarrolladores, su enfoque prioriza siempre la claridad, la empatía y la precisión técnica.',
         'Un ingeniero global no es solo aquel que traduce palabras, sino el que comprende el contexto de negocio de clientes internacionales y transforma requerimientos ambiguos en especificaciones técnicas transparentes.',
@@ -248,7 +291,7 @@ export default function Historia() {
       icon: Compass,
       quote: '"La senda del arquitecto no tiene un destino final; cada línea escrita es el prólogo de la siguiente gran aventura."',
       loreParagraphs: [
-        'El códice de Nicolás Schernetzki permanece abierto y sus páginas en blanco aguardan los capítulos más ambiciosos. Equipado con un sólido stack frontend (React, TypeScript, Next.js), un poderoso motor backend (.NET, C#, Python FastAPI, Node.js) y devops modernos (Docker, AWS, Git/GitHub Actions), el héroe se encuentra listo para incorporarse a su próximo equipo.',
+        'El códice de Nicolas Schernetzki permanece abierto y sus páginas en blanco aguardan los capítulos más ambiciosos. Equipado con un sólido stack frontend (React, TypeScript, Next.js), un poderoso motor backend (.NET, C#, Python FastAPI, Node.js) y devops modernos (Docker, AWS, Git/GitHub Actions), el héroe se encuentra listo para incorporarse a su próximo equipo.',
         'Busca unirse a proyectos que no teman resolver problemas complejos de escalabilidad, rendimiento e impacto social. Su lema es claro: diseñar con rigor, implementar con código limpio y testeable, y entregar soluciones que hagan una diferencia palpable en la vida cotidiana de las personas.',
         'La campana de la taberna resuena y el dragón compañero alza sus alas: la expedición apenas comienza.',
         'La tecnología evoluciona a ritmo vertiginoso, pero los principios fundamentales permanecen inalterables: curiosidad incansable, respeto por los compañeros de equipo, pasión por la calidad y un compromiso inquebrantable con la excelencia.',
@@ -274,6 +317,181 @@ export default function Historia() {
     },
   ];
 
+  const CHAPTERS_EN: ChapterDetail[] = [
+    {
+      id: 0,
+      roman: 'Chapter I',
+      epochYear: '2016 - 2022',
+      title: 'Chapter I: The Age of Lightning',
+      subtitle: 'Technical Commerce and the First Automation Spells',
+      badge: 'The Awakening',
+      icon: Zap,
+      quote: '"Before shaping software, the mage must deeply understand the needs of those who inhabit the realm."',
+      loreParagraphs: [
+        'In the dawn of his journey, long before conjuring RESTful APIs and compiling Docker containers, Nicolas Schernetzki traversed the roads as a commercial technical advisor in the electrical materials industry. He managed an active portfolio of over 100 corporate clients, providing guidance on complex energy setups and achieving a consistent 25% annual sales growth.',
+        'It was on this real-world battlefield that he discovered his true calling for software engineering: the urge to eliminate manual process chaos. Observing sales reps spending countless hours manually updating price catalogs and purchase orders, Nicolas picked up the developer’s quill for the first time and forged custom tools in Excel using VBA macros.',
+        'That initial script did more than optimize thousands of commercial transactions and targeted mailing campaigns to 500+ contacts: it sparked the realization that code is the purest medium to create order, efficiency, and tangible value.',
+        'The transition was completely organic: mastering physical electricity (voltage, current, resistance) laid the groundwork for understanding logic circuits and data structures. Every closed deal was an exercise in active listening; every macro written, a lesson in pragmatic automation.',
+      ],
+      archmageDiary: {
+        entryDate: 'Commercial Cycle · Entry #214',
+        note: 'Today I built a VBA macro that calculates dynamic freight costs, tiered discounts, and multi-warehouse inventory across 3 depots in 3 seconds flat. Veteran salespeople thought it was dark magic. For me, it proved the world is full of needless friction, and a true programmer is one who dissolves that friction with elegance and empathy.',
+      },
+      bossEncounter: {
+        bossName: 'The Hydra of Desynchronized Sheets (#REF! Errors & Duplicates)',
+        threatDesc: 'Hundreds of outdated product catalogs causing economic losses and logistical chaos across multiple branches.',
+        battleStrategy: 'Excel data normalization, defensive VBA typing validation, and automated event triggers.',
+        legendaryLoot: 'B2B commercial vision, non-technical user empathy, and certainty that software exists to solve real problems.',
+      },
+      statsSheet: {
+        artifact: 'VBA Automation Scroll & Price Matrices',
+        ability: 'Business Acumen & User Empathy (+30 Charisma)',
+        rank: 'Code Initiate / B2B Technical Advisor',
+        xpGained: '+1,200 XP',
+        realm: 'Lands of Electrical Commerce',
+        keyQuest: '+25% client portfolio expansion and standardization of 3 product catalogs',
+      },
+    },
+    {
+      id: 1,
+      roman: 'Chapter II',
+      epochYear: '2023 - 2024',
+      title: 'Chapter II: The Archmage’s Forge',
+      subtitle: 'UTN.BA Academy and MERN Immersion at Fundación Pescar',
+      badge: 'Technical Mastery',
+      icon: Wand2,
+      quote: '"True mastery is born from the communion between backend rigor and frontend visual magic."',
+      loreParagraphs: [
+        'Committed to turning instinct into formal mastery, Nicolas entered the prestigious Universidad Tecnológica Nacional (UTN.BA). There he immersed himself in the disciplines of Object-Oriented Programming, LINQ, Entity Framework Core, and the C# 12 / .NET 8 ecosystem. As his capstone project, he engineered the "Banking Simulator": a complete system featuring a Windows Forms desktop client, ASP.NET Core REST API, MariaDB relational persistence, JWT authentication, BCrypt hashing, and xUnit/Moq test suites—all containerized in Docker.',
+        'Simultaneously, Nicolas was selected by Fundación Pescar, Fundación Desarrollar, and Banco Nación for over 345 hours of intensive specialization in the MERN Stack (MongoDB, Express, React, Node.js).',
+        'In this crucible, Nicolas not only mastered the modern full-stack lifecycle, but also the sacred practices of agile guilds: working in multidisciplinary teams under Scrum, running sprints, code reviews, and Git branches, successfully delivering 4 collaborative projects addressing real societal challenges.',
+        'The outcome was a formidable dual competency: the surgical precision of strongly-typed C# backend combined with the rapid prototyping and reactivity of JavaScript/TypeScript.',
+      ],
+      archmageDiary: {
+        entryDate: 'Academic Encampment · Entry #680',
+        note: 'Object-Oriented Programming is not just syntax; it is a way of ordering the universe. When I implemented the Unit of Work pattern and saw unit tests with xUnit and Moq validate every fund transfer scenario without touching the database, I understood that great software must be predictable, testable, and quiet like the night.',
+      },
+      bossEncounter: {
+        bossName: 'The Basilisk of Spaghetti Code & Transactional Concurrency',
+        threatDesc: 'Risk of banking race conditions, memory leaks from open connections, and accumulated technical debt.',
+        battleStrategy: 'Repository Pattern, native .NET 8 Dependency Injection, BCrypt encryption, and Docker container isolation.',
+        legendaryLoot: 'University Expert in .NET Title (UTN.BA) and MERN Honor Scroll (Fundación Pescar).',
+      },
+      statsSheet: {
+        artifact: '.NET 8 Core & Sacred MERN Seal of Fundación Pescar',
+        ability: 'Clean Architecture & Agile Scrum (+35 Intelligence)',
+        rank: 'University .NET Expert & Full-Stack Archmage',
+        xpGained: '+2,500 XP',
+        realm: 'Sanctuary of UTN.BA & Fundación Pescar',
+        keyQuest: '.NET Banking Simulator & 4 Group MERN Projects in Scrum',
+      },
+    },
+    {
+      id: 2,
+      roman: 'Chapter III',
+      epochYear: '2024 - 2026',
+      title: 'Chapter III: The Production Realm',
+      subtitle: 'Cloud Architecture, Artificial Intelligence & Live Microservices',
+      badge: 'The Eternal Horizon',
+      icon: Rocket,
+      quote: '"An artifact only demonstrates its true power when it withstands the harsh trials of live production."',
+      loreParagraphs: [
+        'Having conquered foundational theory and methodology, Nicolas pushed into the ultimate frontier: live production deployments. Envisioning interactive art fused with artificial intelligence, he forged "Mood App", an end-to-end platform that analyzes user mood and recommends events in Buenos Aires using Google Gemini AI. The architecture unites React 19, Tailwind, an async Python FastAPI backend with MongoDB, automated scraping pipelines, and Docker containers behind Cloudflare tunnels.',
+        'Continuing forward, he forged "EmotionShop", an enterprise-grade e-commerce platform built on the MERN stack with Redux Toolkit, AWS S3 cloud media storage, robust JWT authentication, and an administrative analytics dashboard with live sales metrics.',
+        'Both artifacts operate 24/7 on the global web, proving Nicolas’s ability to take requirements from the first line of code to a resilient, monitored, and scalable infrastructure.',
+        'Production grants no quarter to lazy code: each endpoint was tuned for sub-200ms latency, employing gzip compression, compound MongoDB indices, and strict CORS and security header policies.',
+      ],
+      archmageDiary: {
+        entryDate: 'Production Machine Room · Entry #1042',
+        note: 'Watching a live user interact with Mood App on their phone, ask Gemini AI for a rainy-night plan, and receive pinpoint geolocated suggestions while Docker balances the load silently in the background... that is the pinnacle of this craft. Live software is a breathing organism that demands disciplined care.',
+      },
+      bossEncounter: {
+        bossName: 'The Leviathan of 500 Internal Server Errors & The CORS Chimera',
+        threatDesc: 'Desynchronized async invocations, cross-origin policy blockages, and daemon crashes in production.',
+        battleStrategy: 'Cloudflare SSL tunnels, Nginx reverse proxying, Docker Compose auto-restart policies, and structured logging.',
+        legendaryLoot: '24/7 live production mastery and LLM integration expertise.',
+      },
+      statsSheet: {
+        artifact: 'Gemini AI Matrix & AWS S3 Vault',
+        ability: 'Live Deployments & Docker Microservices (+40 Dexterity)',
+        rank: 'Cloud Architect & Full-Stack Engineer',
+        xpGained: '+3,000 XP',
+        realm: 'Live Production Lands (AWS, Cloudflare & Docker)',
+        keyQuest: 'Live deployment of Mood App and EmotionShop with real users',
+      },
+    },
+    {
+      id: 3,
+      roman: 'Chapter IV',
+      epochYear: '2025 - 2026',
+      title: 'Chapter IV: The Global Lands',
+      subtitle: 'Mastery of the Universal Language and Borderless Collaboration',
+      badge: 'The International Nexus',
+      icon: Globe,
+      quote: '"Code is a worldwide language; fluent communication is the bridge uniting the best guilds on Earth."',
+      loreParagraphs: [
+        'In an interconnected technological ecosystem, engineering depth must be backed by clear and universal communication. Certified at C1+ Advanced English proficiency, Nicolas authors technical documentation, leads agile ceremonies, and navigates architectural design discussions with equal fluency in English and Spanish.',
+        'This fluency allows him to adopt the latest industry specifications immediately, contribute to the open-source community, and collaborate seamlessly across globally distributed teams, bridging time zones and work cultures.',
+        'Whether discussing microservices versus modular monoliths or drafting contributor guides for fellow developers, his philosophy prioritizes clarity, empathy, and technical precision.',
+        'A global engineer doesn’t just translate words—they understand international business context and transform ambiguous user requirements into crystalline specifications.',
+      ],
+      archmageDiary: {
+        entryDate: 'Telecommunications Spire · Entry #1250',
+        note: 'The gap between a code-monkey and a great software engineer is not how many frameworks they memorize, but their ability to listen deeply, dismantle complexity, and articulate clean solutions. In English or Spanish, clarity is the ultimate antidote to technical rework.',
+      },
+      bossEncounter: {
+        bossName: 'The Technological Tower of Babel & The Agile Misalignment Wraith',
+        threatDesc: 'Expectation divergence between international clients and engineering squads caused by language or technical ambiguity.',
+        battleStrategy: 'Self-documenting OpenAPI/Swagger contracts, atomic Pull Requests with Mermaid diagrams, and fluent C1+ English communication.',
+        legendaryLoot: 'Bilingual Engineer status ready to integrate into or lead remote global guilds.',
+      },
+      statsSheet: {
+        artifact: 'C1+ Advanced Linguistic Compass (Fluent Technical English)',
+        ability: 'Cross-Cultural Communication & Tech Leadership (+25 Charisma)',
+        rank: 'Global Engineer / International Nexus',
+        xpGained: '+1,800 XP',
+        realm: 'Distributed Realms of the Global Web',
+        keyQuest: 'C1+ English mastery and standardized technical documentation',
+      },
+    },
+    {
+      id: 4,
+      roman: 'Chapter V',
+      epochYear: '2026 and Beyond',
+      title: 'Chapter V: The Prophecy of Open Code',
+      subtitle: 'The Search for New Guilds and Large-Scale Quests',
+      badge: 'The New Path',
+      icon: Compass,
+      quote: '"The architect’s journey has no final destination; each written line is but the prologue to the next great adventure."',
+      loreParagraphs: [
+        'Nicolas Schernetzki’s codex remains open, its pristine pages awaiting the most ambitious chapters yet. Equipped with a modern frontend stack (React, TypeScript, Next.js), a powerful backend engine (.NET, C#, Python FastAPI, Node.js), and modern devops (Docker, AWS, Git/GitHub Actions), the hero stands ready to join his next engineering team.',
+        'He seeks teams unafraid to tackle challenging problems of scalability, high throughput, and positive social impact. His ethos is simple: design with rigor, implement with clean and testable code, and deliver solutions that make a tangible difference in people’s daily lives.',
+        'The tavern bell chimes and the companion dragon spreads its wings: the expedition is just getting started.',
+        'Technology evolves at breakneck speed, but foundational principles stand unwavering: relentless curiosity, respect for teammates, devotion to software craft, and an uncompromising commitment to excellence.',
+      ],
+      archmageDiary: {
+        entryDate: 'The Threshold of Tomorrow · Present Entry',
+        note: 'The tavern is quiet and OrdinalDragon circles above the map of the digital world. I fear no complex bugs, massive database migrations, or emerging paradigms. With solid fundamentals, an agile mindset, and passion for the craft, every technical hurdle is an opportunity to forge legend.',
+      },
+      bossEncounter: {
+        bossName: 'The Dragon of Complacency & Technical Stagnation',
+        threatDesc: 'The hazard of settling for superficial band-aids instead of rooting out the core causes of engineering challenges.',
+        battleStrategy: 'Insatiable curiosity, active experimentation with generative AI, clean architecture patterns, and love for well-crafted software.',
+        legendaryLoot: 'Immediate availability for world-class software engineering expeditions.',
+      },
+      statsSheet: {
+        artifact: 'Obsidian Relic Portfolio & Active Hero Sheet',
+        ability: 'Extreme Adaptability & Pursuit of Excellence (+50 All Attributes)',
+        rank: 'Legendary Full-Stack Hero Available',
+        xpGained: '+5,000 XP',
+        realm: 'The Open Horizon of Software Development',
+        keyQuest: 'Immediate onboarding onto high-impact software engineering teams',
+      },
+    },
+  ];
+
+  const EPOCHS = lang === 'en' ? EPOCHS_EN : EPOCHS_ES;
+  const CHAPTERS = lang === 'en' ? CHAPTERS_EN : CHAPTERS_ES;
   const current = CHAPTERS[activeChapter];
 
   const handleSelectEpoch = (epoch: Epoch) => {
@@ -295,7 +513,7 @@ export default function Historia() {
     }
   };
 
-  const THE_ARCHITECTS_OATH = [
+  const THE_ARCHITECTS_OATH_ES = [
     {
       num: 'I',
       title: 'El Código se Escribe para Ser Leído por Humanos',
@@ -323,19 +541,51 @@ export default function Historia() {
     },
   ];
 
+  const THE_ARCHITECTS_OATH_EN = [
+    {
+      num: 'I',
+      title: 'Code is Written to Be Read by Humans',
+      desc: 'The compiler executes any syntax; the true engineer writes self-explanatory, modular, and maintainable code.',
+    },
+    {
+      num: 'II',
+      title: 'Without Automated Tests, There is No Victory',
+      desc: 'An untested system is a temporary illusion. Test suites are the shield that prevents regressions in production.',
+    },
+    {
+      num: 'III',
+      title: 'Resilience is Non-Negotiable',
+      desc: 'Docker container isolation, defensive exception handling, and fault-tolerant API design.',
+    },
+    {
+      num: 'IV',
+      title: 'User Empathy Governs Every Decision',
+      desc: 'Sub-second load times, intuitive user interfaces, and absolute respect for the end-user experience.',
+    },
+    {
+      num: 'V',
+      title: 'Learn and Share with Every Commit',
+      desc: 'Technical humility to learn from peers, rigor to share knowledge, and continuous improvement in every iteration.',
+    },
+  ];
+
+  const THE_ARCHITECTS_OATH = lang === 'en' ? THE_ARCHITECTS_OATH_EN : THE_ARCHITECTS_OATH_ES;
+
   return (
     <div className="flex flex-col items-center scroll-bg relative min-h-full w-full max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 pb-32 text-on-surface">
       {/* Header */}
       <header className="text-center mb-8 max-w-2xl px-4">
         <span className="text-secondary font-label text-[10px] sm:text-xs uppercase tracking-[0.25em] block mb-2 font-bold">
-          // CRÓNICAS DEL ARCHIMAGO & LORE DEL HÉROE
+          {lang === 'en' ? '// ARCHMAGE CHRONICLES & HERO LORE' : '// CRÓNICAS DEL ARCHIMAGO & LORE DEL HÉROE'}
         </span>
         <h1 className="text-2xl sm:text-4xl md:text-6xl font-headline font-bold text-on-surface tracking-tight leading-none mb-3 uppercase break-words">
-          El Ascenso del Héroe
+          {lang === 'en' ? 'The Rise of the Hero' : 'El Ascenso del Héroe'}
         </h1>
         <div className="h-1 w-24 bg-gradient-to-r from-primary to-secondary mx-auto mb-4" />
         <p className="text-on-surface-variant font-body text-xs sm:text-sm italic opacity-85">
-          &quot;De la alquimia de los electrones al dominio absoluto del tejido digital.&quot;
+          {lang === 'en'
+            ? '"From the alchemy of electrons to the absolute dominion of the digital fabric."'
+            : '"De la alquimia de los electrones al dominio absoluto del tejido digital."'}
         </p>
       </header>
 
@@ -381,7 +631,7 @@ export default function Historia() {
           disabled={activeChapter === 0}
           onClick={handlePrevChapter}
           className="p-2 rounded-lg bg-surface-container border border-outline-variant/30 text-on-surface hover:text-primary disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
-          title="Capítulo Anterior"
+          title={lang === 'en' ? 'Previous Chapter' : 'Capítulo Anterior'}
         >
           <ChevronLeft size={18} />
         </button>
@@ -400,7 +650,7 @@ export default function Historia() {
                   : 'bg-surface-container-high border border-outline-variant/30 text-on-surface-variant hover:text-on-surface'
               }`}
             >
-              Capítulo {ch.id + 1}
+              {lang === 'en' ? `Chapter ${ch.id + 1}` : `Capítulo ${ch.id + 1}`}
             </button>
           ))}
         </div>
@@ -410,7 +660,7 @@ export default function Historia() {
           disabled={activeChapter === CHAPTERS.length - 1}
           onClick={handleNextChapter}
           className="p-2 rounded-lg bg-surface-container border border-outline-variant/30 text-on-surface hover:text-primary disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
-          title="Capítulo Siguiente"
+          title={lang === 'en' ? 'Next Chapter' : 'Capítulo Siguiente'}
         >
           <ChevronRight size={18} />
         </button>
@@ -470,7 +720,7 @@ export default function Historia() {
                 }`}
               >
                 <BookOpen size={14} />
-                <span>Crónica Principal</span>
+                <span>{lang === 'en' ? 'Main Chronicle' : 'Crónica Principal'}</span>
               </button>
 
               <button
@@ -486,7 +736,7 @@ export default function Historia() {
                 }`}
               >
                 <Scroll size={14} />
-                <span>Diario del Archimago</span>
+                <span>{lang === 'en' ? "Archmage's Diary" : 'Diario del Archimago'}</span>
               </button>
 
               <button
@@ -502,7 +752,7 @@ export default function Historia() {
                 }`}
               >
                 <Sword size={14} />
-                <span>Bestia Enfrentada</span>
+                <span>{lang === 'en' ? 'Conquered Beast' : 'Bestia Enfrentada'}</span>
               </button>
 
               <button
@@ -518,7 +768,7 @@ export default function Historia() {
                 }`}
               >
                 <Award size={14} />
-                <span>Ficha de Campaña</span>
+                <span>{lang === 'en' ? 'Campaign Sheet' : 'Ficha de Campaña'}</span>
               </button>
             </div>
 
@@ -557,14 +807,14 @@ export default function Historia() {
                       {current.archmageDiary.entryDate}
                     </span>
                     <span className="font-mono text-[10px] text-on-surface-variant italic">
-                      Fragmento del Manuscrito Secreto
+                      {lang === 'en' ? 'Secret Manuscript Fragment' : 'Fragmento del Manuscrito Secreto'}
                     </span>
                   </div>
                   <blockquote className="font-serif italic text-sm sm:text-base text-on-surface leading-relaxed border-l-2 border-secondary/50 pl-4 py-1">
                     &quot;{current.archmageDiary.note}&quot;
                   </blockquote>
                   <div className="text-right font-mono text-xs text-primary font-bold">
-                    — Nicolás Schernetzki, Archimago Full-Stack
+                    {lang === 'en' ? '— Nicolas Schernetzki, Full-Stack Archmage' : '— Nicolas Schernetzki, Archimago Full-Stack'}
                   </div>
                 </motion.div>
               )}
@@ -580,7 +830,7 @@ export default function Historia() {
                     <Skull size={24} className="text-error shrink-0" />
                     <div>
                       <span className="font-mono text-[10px] uppercase tracking-widest text-error font-bold block">
-                        AMENAZA DE INGENIERÍA VENCIDA
+                        {lang === 'en' ? 'ENGINEERING THREAT VANQUISHED' : 'AMENAZA DE INGENIERÍA VENCIDA'}
                       </span>
                       <h4 className="font-headline text-lg sm:text-xl font-bold text-on-surface">
                         {current.bossEncounter.bossName}
@@ -591,7 +841,7 @@ export default function Historia() {
                   <div className="space-y-3 text-xs sm:text-sm font-mono">
                     <div className="bg-surface-container-high/60 p-3 rounded border border-outline-variant/20">
                       <span className="text-[10px] text-error uppercase font-bold block mb-1">
-                        El Desafío en el Reino:
+                        {lang === 'en' ? 'Realm Challenge:' : 'El Desafío en el Reino:'}
                       </span>
                       <p className="text-on-surface-variant font-body">
                         {current.bossEncounter.threatDesc}
@@ -600,7 +850,7 @@ export default function Historia() {
 
                     <div className="bg-surface-container-high/60 p-3 rounded border border-outline-variant/20">
                       <span className="text-[10px] text-secondary uppercase font-bold block mb-1">
-                        Estrategia & Conjuros de Código:
+                        {lang === 'en' ? 'Strategy & Code Spells:' : 'Estrategia & Conjuros de Código:'}
                       </span>
                       <p className="text-on-surface-variant font-body">
                         {current.bossEncounter.battleStrategy}
@@ -609,7 +859,7 @@ export default function Historia() {
 
                     <div className="bg-surface-container-high/60 p-3 rounded border border-primary/20">
                       <span className="text-[10px] text-primary uppercase font-bold block mb-1">
-                        Recompensa Legendaria:
+                        {lang === 'en' ? 'Legendary Reward:' : 'Recompensa Legendaria:'}
                       </span>
                       <p className="text-primary font-body font-bold">
                         {current.bossEncounter.legendaryLoot}
@@ -630,7 +880,7 @@ export default function Historia() {
                     <div className="flex items-center gap-2">
                       <Scroll size={18} className="text-primary" />
                       <h3 className="font-headline text-xs sm:text-sm font-bold uppercase tracking-wider text-on-surface">
-                        Registro de Campaña · Ficha de Hechos Notables
+                        {lang === 'en' ? 'Campaign Record · Notable Feats Log' : 'Registro de Campaña · Ficha de Hechos Notables'}
                       </h3>
                     </div>
                     <span className="font-mono text-xs text-amber-400 font-bold">
@@ -641,7 +891,7 @@ export default function Historia() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
                     <div className="bg-surface-container-high/60 p-3 rounded border border-outline-variant/20">
                       <span className="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">
-                        Artefacto Obtenido
+                        {lang === 'en' ? 'Obtained Artifact' : 'Artefacto Obtenido'}
                       </span>
                       <span className="text-primary font-bold">
                         {current.statsSheet.artifact}
@@ -650,7 +900,7 @@ export default function Historia() {
 
                     <div className="bg-surface-container-high/60 p-3 rounded border border-outline-variant/20">
                       <span className="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">
-                        Habilidad Desbloqueada
+                        {lang === 'en' ? 'Unlocked Skill' : 'Habilidad Desbloqueada'}
                       </span>
                       <span className="text-secondary font-bold">
                         {current.statsSheet.ability}
@@ -659,7 +909,7 @@ export default function Historia() {
 
                     <div className="bg-surface-container-high/60 p-3 rounded border border-outline-variant/20">
                       <span className="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">
-                        Rango del Héroe
+                        {lang === 'en' ? 'Hero Rank' : 'Rango del Héroe'}
                       </span>
                       <span className="text-on-surface font-bold">
                         {current.statsSheet.rank}
@@ -668,7 +918,7 @@ export default function Historia() {
 
                     <div className="bg-surface-container-high/60 p-3 rounded border border-outline-variant/20">
                       <span className="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">
-                        Reino / Escenario
+                        {lang === 'en' ? 'Realm / Stage' : 'Reino / Escenario'}
                       </span>
                       <span className="text-on-surface font-bold">
                         {current.statsSheet.realm}
@@ -679,7 +929,7 @@ export default function Historia() {
                   <div className="pt-2 flex items-center gap-2 text-[11px] font-mono text-on-surface-variant">
                     <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
                     <span>
-                      <strong>Hito Clave:</strong> {current.statsSheet.keyQuest}
+                      <strong>{lang === 'en' ? 'Key Milestone:' : 'Hito Clave:'}</strong> {current.statsSheet.keyQuest}
                     </span>
                   </div>
                 </motion.div>
@@ -695,7 +945,7 @@ export default function Historia() {
                 className="flex items-center gap-2 text-xs font-mono text-on-surface-variant hover:text-primary disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
               >
                 <ChevronLeft size={16} />
-                <span>Capítulo Anterior</span>
+                <span>{lang === 'en' ? 'Previous Chapter' : 'Capítulo Anterior'}</span>
               </button>
 
               <span className="font-mono text-xs text-primary font-bold">
@@ -708,7 +958,7 @@ export default function Historia() {
                 onClick={handleNextChapter}
                 className="flex items-center gap-2 text-xs font-mono text-on-surface-variant hover:text-primary disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
               >
-                <span>Capítulo Siguiente</span>
+                <span>{lang === 'en' ? 'Next Chapter' : 'Capítulo Siguiente'}</span>
                 <ChevronRight size={16} />
               </button>
             </div>
@@ -720,13 +970,15 @@ export default function Historia() {
       <section className="w-full mt-12 bg-surface-container border-2 border-outline-variant/30 rounded-2xl p-6 sm:p-10 shadow-xl">
         <div className="text-center max-w-xl mx-auto mb-8">
           <span className="font-mono text-xs text-primary uppercase font-bold tracking-widest block mb-1">
-            // EL JURAMENTO DEL ARQUITECTO
+            {lang === 'en' ? "// THE ARCHITECT'S OATH" : '// EL JURAMENTO DEL ARQUITECTO'}
           </span>
           <h3 className="font-headline text-2xl sm:text-3xl font-bold uppercase text-on-surface">
-            Los Cinco Mandamientos Sagrados del Código
+            {lang === 'en' ? 'The Five Sacred Commandments of Code' : 'Los Cinco Mandamientos Sagrados del Código'}
           </h3>
           <p className="font-body text-xs sm:text-sm text-on-surface-variant mt-2 italic">
-            Principios inmutables que Nicolás Schernetzki defiende ante cada repositorio y proyecto.
+            {lang === 'en'
+              ? 'Immutable principles that Nicolas Schernetzki champions in every repository and project.'
+              : 'Principios inmutables que Nicolas Schernetzki defiende ante cada repositorio y proyecto.'}
           </p>
         </div>
 

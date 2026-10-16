@@ -18,6 +18,7 @@ import Lightbox from './Lightbox';
 import DragonEmbers from './DragonEmbers';
 import Magnetic from './Magnetic';
 import CommandPalette from './CommandPalette';
+import PrivacyTermsModal from './PrivacyTermsModal';
 
 type ProjectStatus = 'completed' | 'progress';
 
@@ -511,6 +512,7 @@ export default function ScrollPortfolio() {
   const [diagramOpen, setDiagramOpen] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [commandOpen, setCommandOpen] = useState(false);
+  const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | null>(null);
 
   // Global keyboard shortcut: Ctrl+K / Cmd+K to toggle Command Palette
   useEffect(() => {
@@ -627,7 +629,7 @@ export default function ScrollPortfolio() {
               </div>
               <div className="flex flex-col">
                 <span className="font-headline font-bold text-sm sm:text-base tracking-tight text-on-surface group-hover:text-primary transition-colors">
-                  Nicolás Schernetzki
+                  Nicolas Schernetzki
                 </span>
                 <span className="text-[11px] text-on-surface-variant font-mono leading-none">
                   Full-Stack Engineer
@@ -1581,9 +1583,27 @@ export default function ScrollPortfolio() {
       {/* ============ FOOTER ============ */}
       <footer className="py-12 border-t-2 border-outline-variant/20 bg-surface-container-lowest/80 relative">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-mono text-xs text-on-surface-variant text-center sm:text-left">
-            © {new Date().getFullYear()} Nicolas Schernetzki. {t('portfolio.footer')}
-          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
+            <p className="font-mono text-xs text-on-surface-variant">
+              © {new Date().getFullYear()} Nicolas Schernetzki. {t('portfolio.footer')}
+            </p>
+            <div className="flex items-center gap-3">
+              <span className="text-outline-variant/40 hidden sm:inline">•</span>
+              <button
+                onClick={() => setActiveModal('privacy')}
+                className="font-mono text-xs text-on-surface-variant/80 hover:text-primary transition-colors cursor-pointer"
+              >
+                {t('sidebar.privacy')}
+              </button>
+              <span className="text-outline-variant/40">•</span>
+              <button
+                onClick={() => setActiveModal('terms')}
+                className="font-mono text-xs text-on-surface-variant/80 hover:text-primary transition-colors cursor-pointer"
+              >
+                {t('sidebar.terms')}
+              </button>
+            </div>
+          </div>
           <div className="flex items-center gap-4">
             <a href="https://github.com/OrdinalDragon" target="_blank" rel="noopener noreferrer" className="text-on-surface-variant hover:text-primary transition-colors" aria-label="GitHub">
               <Github size={20} />
@@ -1651,6 +1671,13 @@ export default function ScrollPortfolio() {
         onScrollTo={scrollTo}
         onCopyEmail={handleCopyEmail}
         cvPdf={cvPdf}
+      />
+
+      {/* Privacy and Terms Modal */}
+      <PrivacyTermsModal
+        activeModal={activeModal}
+        onClose={() => setActiveModal(null)}
+        onSelectModal={setActiveModal}
       />
     </div>
   );

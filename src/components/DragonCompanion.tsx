@@ -3,17 +3,18 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Flame, X } from 'lucide-react';
 import { sfx } from '../utils/sfx';
 import { rpgState } from '../utils/rpgState';
+import { useLanguage } from '../i18n/LanguageContext';
 import type { Screen } from '../types';
 
 const SCREEN_QUOTES: Record<string, string[]> = {
   personaje: [
-    '¡Saludos, aventurero! Estás ante la ficha heroica de Nicolás Schernetzki.',
+    '¡Saludos, aventurero! Estás ante la ficha heroica de Nicolas Schernetzki.',
     'Nivel 30 con especialización dual en Stack MERN y .NET 8.',
     'Tip: ¡Comienza la aventura para explorar sus habilidades y proyectos!',
   ],
   habilidades: [
     '¡Tienes puntos de talento disponibles! Haz clic en los nodos con signo + para asignarlos.',
-    'Cada punto que asignes potencia en tiempo real los atributos de Nicolás.',
+    'Cada punto que asignes potencia en tiempo real los atributos de Nicolas.',
     'Tip: ¡Puedes reiniciar los puntos cuando quieras para probar otra configuración!',
   ],
   inventario: [
@@ -50,8 +51,58 @@ const SCREEN_QUOTES: Record<string, string[]> = {
     '¡Puedes descargar el CV en PDF o DOCX en español e inglés!',
   ],
   contacto: [
-    '¿Tienes un proyecto o vacante en tu gremio? ¡Envía un cuervo digital a Nicolás!',
+    '¿Tienes un proyecto o vacante en tu gremio? ¡Envía un cuervo digital a Nicolas!',
     'Disponible para roles Full-Stack, Backend o Frontend.',
+  ],
+};
+
+const SCREEN_QUOTES_EN: Record<string, string[]> = {
+  personaje: [
+    'Greetings, adventurer! You stand before the heroic sheet of Nicolas Schernetzki.',
+    'Level 30 with dual specialization in MERN Stack and .NET 8.',
+    'Tip: Begin the quest to explore his skill tree and forged projects!',
+  ],
+  habilidades: [
+    'You have talent points available! Click any node with a + sign to allocate them.',
+    'Each point you invest enhances Nicolas\'s attributes in real time.',
+    'Tip: You can reset and reassign talent points whenever you wish!',
+  ],
+  inventario: [
+    'Equip the TypeScript Sword and Docker Armor to boost your combat stats!',
+    'Equipped relics grant attack power and damage mitigation in the Battle Arena.',
+    'The Sacred Scroll lets you download the official CV in PDF format!',
+  ],
+  arena: [
+    'Watch out for the NullReferenceException! Use Try/Catch to mitigate heavy damage.',
+    'Running low on mana? An Espresso Coffee will restore you immediately!',
+    'Your equipped inventory relics grant bonus damage and critical strike chance!',
+  ],
+  misiones: [
+    'Behold the completed chronicle of Fundación Pescar with 391 hours of training!',
+    '4 out of 4 sacred scrolls forged and verified. Click any to inspect!',
+    'The active campaign targets the conquest of the production tech industry.',
+  ],
+  historia: [
+    'From electrical materials sales and Excel VBA macros to modern full-stack software.',
+    'The self-taught journey fueled by a genuine passion for engineering systems.',
+    'A true archmage never ceases to master new computational runes.',
+  ],
+  bestiario: [
+    '27 digital code entities classified and tamed in production environments.',
+    'Filter by school of magic to quickly locate the technologies you need.',
+    'TypeScript stands as the sacred sentinel preventing runtime disasters.',
+  ],
+  proyectos: [
+    'The Artifact Forge! Both Mood App and EmotionShop have live production servers.',
+    'Deployed with Docker, Nginx, Cloudflare and real cloud databases.',
+  ],
+  estadisticas: [
+    'The numbers speak: over 638 hours of training and 100+ B2B commercial accounts.',
+    'You can download the CV in PDF or DOCX in both English and Spanish!',
+  ],
+  contacto: [
+    'Have an open quest or position in your guild? Send a digital raven to Nicolas!',
+    'Available for Full-Stack, Backend, or Frontend engineering roles.',
   ],
 };
 
@@ -61,14 +112,23 @@ const GENERAL_QUOTES = [
   'Un buen café recarga 100 puntos de Maná al desarrollador.',
 ];
 
+const GENERAL_QUOTES_EN = [
+  'OrdinalDragon at your command! Guarding the architecture against bugs.',
+  'Clean code, strict types, and zero compiler warnings.',
+  'A fine espresso restores 100 Mana points to the developer.',
+];
+
 export default function DragonCompanion({ currentScreen }: { currentScreen?: Screen }) {
+  const { lang } = useLanguage();
   const [quoteIdx, setQuoteIdx] = useState(0);
   const [isRoaring, setIsRoaring] = useState(false);
   const [showBubble, setShowBubble] = useState(true);
   const [minimized, setMinimized] = useState(false);
 
-  // Pick quotes list based on active screen
-  const quotes = (currentScreen && SCREEN_QUOTES[currentScreen]) || GENERAL_QUOTES;
+  // Pick quotes list based on active screen & language
+  const quotesMap = lang === 'en' ? SCREEN_QUOTES_EN : SCREEN_QUOTES;
+  const generalList = lang === 'en' ? GENERAL_QUOTES_EN : GENERAL_QUOTES;
+  const quotes = (currentScreen && quotesMap[currentScreen]) || generalList;
 
   useEffect(() => {
     // When screen changes, reset quote index to first contextual quote and show bubble
@@ -95,7 +155,7 @@ export default function DragonCompanion({ currentScreen }: { currentScreen?: Scr
           sfx.playSelect();
         }}
         className="fixed bottom-20 right-4 z-40 w-10 h-10 rounded-full bg-primary/20 border border-primary text-primary flex items-center justify-center hover:scale-110 shadow-lg cursor-pointer"
-        title="Despertar Dragón"
+        title={lang === 'en' ? 'Wake Dragon' : 'Despertar Dragón'}
       >
         <Flame size={18} className="animate-pulse" />
       </button>
@@ -141,7 +201,7 @@ export default function DragonCompanion({ currentScreen }: { currentScreen?: Scr
           type="button"
           onClick={() => setMinimized(true)}
           className="text-on-surface-variant/50 hover:text-on-surface text-[10px] cursor-pointer"
-          title="Minimizar mascota"
+          title={lang === 'en' ? 'Minimize companion' : 'Minimizar mascota'}
         >
           <X size={14} />
         </button>
@@ -149,7 +209,7 @@ export default function DragonCompanion({ currentScreen }: { currentScreen?: Scr
         <motion.button
           type="button"
           onClick={handleClick}
-          title="Haz clic para interactuar con OrdinalDragon"
+          title={lang === 'en' ? 'Click to interact with OrdinalDragon' : 'Haz clic para interactuar con OrdinalDragon'}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.92 }}
           animate={isRoaring ? { scale: [1, 1.3, 0.9, 1.1, 1], rotate: [0, -10, 10, -5, 0] } : {}}

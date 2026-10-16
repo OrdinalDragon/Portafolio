@@ -51,7 +51,7 @@ describe('Personaje Component', () => {
       </LanguageProvider>
     );
 
-    expect(screen.getByText('NICOLÁS SCHERNETZKI')).toBeInTheDocument();
+    expect(screen.getByText('NICOLAS SCHERNETZKI')).toBeInTheDocument();
     expect(screen.getByText('Start')).toBeInTheDocument();
   });
 
@@ -177,3 +177,90 @@ describe('ScrollPortfolio Component', () => {
     expect(screen.getByText('Foco de Aprendizaje Activo')).toBeInTheDocument();
   });
 });
+
+import PrivacyTermsModal from '../components/PrivacyTermsModal';
+
+describe('PrivacyTermsModal Component', () => {
+  it('does not render anything when activeModal is null', () => {
+    const { container } = render(
+      <LanguageProvider defaultLang="es">
+        <PrivacyTermsModal activeModal={null} onClose={() => {}} />
+      </LanguageProvider>
+    );
+    expect(container.firstChild).toBeNull();
+  });
+
+  it('renders Privacy Scroll when activeModal is "privacy"', () => {
+    const handleClose = vi.fn();
+    render(
+      <LanguageProvider defaultLang="es">
+        <PrivacyTermsModal activeModal="privacy" onClose={handleClose} />
+      </LanguageProvider>
+    );
+
+    expect(screen.getByText('El Pergamino de Privacidad')).toBeInTheDocument();
+    expect(screen.getByText(/Sellado por el Guardián del Código/i)).toBeInTheDocument();
+    expect(screen.getByText(/I. Recolección de Esencia/i)).toBeInTheDocument();
+    expect(screen.getByText('He leído el Pacto')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('He leído el Pacto'));
+    expect(handleClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders Terms of Service when activeModal is "terms"', () => {
+    const handleClose = vi.fn();
+    const handleSelectModal = vi.fn();
+    render(
+      <LanguageProvider defaultLang="es">
+        <PrivacyTermsModal activeModal="terms" onClose={handleClose} onSelectModal={handleSelectModal} />
+      </LanguageProvider>
+    );
+
+    expect(screen.getByText('Pacto de Servicio')).toBeInTheDocument();
+    expect(screen.getByText(/Leyes de la Ciudadela de Código/i)).toBeInTheDocument();
+    expect(screen.getByText(/I. Uso de la Magia/i)).toBeInTheDocument();
+
+    // Test tab switcher
+    const privacyTabs = screen.getAllByText('Privacy');
+    if (privacyTabs.length > 0) {
+      fireEvent.click(privacyTabs[0]);
+      expect(handleSelectModal).toHaveBeenCalledWith('privacy');
+    }
+  });
+
+  it('renders Privacy and Terms in English when defaultLang is "en"', () => {
+    const handleClose = vi.fn();
+    render(
+      <LanguageProvider defaultLang="en">
+        <PrivacyTermsModal activeModal="privacy" onClose={handleClose} onSelectModal={() => {}} />
+      </LanguageProvider>
+    );
+
+    expect(screen.getByText('The Privacy Scroll')).toBeInTheDocument();
+    expect(screen.getByText(/Sealed by the Code Guardian/i)).toBeInTheDocument();
+    expect(screen.getByText(/I. Essence Collection/i)).toBeInTheDocument();
+    expect(screen.getByText('I have read the Pact')).toBeInTheDocument();
+  });
+});
+
+describe('English-First Localization Audit', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it('defaults to English when localStorage is completely empty', () => {
+    function LangDetector() {
+      const { lang } = useLanguage();
+      return <span data-testid="detected-lang">{lang}</span>;
+    }
+
+    render(
+      <LanguageProvider>
+        <LangDetector />
+      </LanguageProvider>
+    );
+
+    expect(screen.getByTestId('detected-lang').textContent).toBe('en');
+  });
+});
+

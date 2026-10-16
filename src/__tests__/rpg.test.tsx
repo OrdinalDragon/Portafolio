@@ -140,7 +140,11 @@ describe('Habilidades Component (with Point Allocation)', () => {
 
 describe('DragonCompanion Component', () => {
   it('renders floating companion and handles roar interaction', () => {
-    render(<DragonCompanion />);
+    render(
+      <LanguageProvider defaultLang="es">
+        <DragonCompanion />
+      </LanguageProvider>
+    );
 
     const dragonMascot = screen.getByTitle('Haz clic para interactuar con OrdinalDragon');
     expect(dragonMascot).toBeInTheDocument();

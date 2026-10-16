@@ -128,7 +128,7 @@ export default function Estadisticas() {
         <header className="text-center px-4 pt-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] md:text-xs font-mono uppercase tracking-widest">
             <Sparkle size={12} className="animate-spin" style={{ animationDuration: '6s' }} />
-            <span>// PERGAMINOS & BITÁCORA DEL HÉROE</span>
+            <span>{lang === 'en' ? '// SCROLLS & HERO LOG' : '// PERGAMINOS & BITÁCORA DEL HÉROE'}</span>
           </div>
           <h1 className="font-headline text-2xl sm:text-4xl md:text-5xl font-black text-on-surface uppercase italic tracking-normal sm:tracking-wider mb-2">
             {t('estadisticas.title')}
@@ -152,16 +152,16 @@ export default function Estadisticas() {
                   <ShieldCheck size={16} />
                   {t('estadisticas.attributes')}
                 </h2>
-                <span className="text-[10px] font-mono text-on-surface-variant uppercase">Sincronizado</span>
+                <span className="text-[10px] font-mono text-on-surface-variant uppercase">{lang === 'en' ? 'Synchronized' : 'Sincronizado'}</span>
               </div>
               
               <div className="space-y-3.5">
                 {[
-                  { label: t('habilidades.attr.str'), val: dynAttrs.str, color: 'from-red-500 to-rose-600', sub: 'Backend & Lógica' },
-                  { label: t('habilidades.attr.agi'), val: dynAttrs.agi, color: 'from-amber-500 to-yellow-400', sub: 'Frontend & UI' },
-                  { label: t('habilidades.attr.int'), val: dynAttrs.int, color: 'from-purple-500 to-indigo-500', sub: 'Arquitectura & POO' },
-                  { label: t('habilidades.attr.dex'), val: dynAttrs.dex, color: 'from-emerald-500 to-teal-400', sub: 'DevOps & Cloud' },
-                  { label: t('habilidades.attr.cha'), val: dynAttrs.cha, color: 'from-sky-500 to-cyan-400', sub: 'B2B & Negocio' }
+                  { label: t('habilidades.attr.str'), val: dynAttrs.str, color: 'from-red-500 to-rose-600', sub: lang === 'en' ? 'Backend & Logic' : 'Backend & Lógica' },
+                  { label: t('habilidades.attr.agi'), val: dynAttrs.agi, color: 'from-amber-500 to-yellow-400', sub: lang === 'en' ? 'Frontend & UI' : 'Frontend & UI' },
+                  { label: t('habilidades.attr.int'), val: dynAttrs.int, color: 'from-purple-500 to-indigo-500', sub: lang === 'en' ? 'Architecture & OOP' : 'Arquitectura & POO' },
+                  { label: t('habilidades.attr.dex'), val: dynAttrs.dex, color: 'from-emerald-500 to-teal-400', sub: lang === 'en' ? 'DevOps & Cloud' : 'DevOps & Cloud' },
+                  { label: t('habilidades.attr.cha'), val: dynAttrs.cha, color: 'from-sky-500 to-cyan-400', sub: lang === 'en' ? 'B2B & Business' : 'B2B & Negocio' }
                 ].map((stat, i) => (
                   <div key={i}>
                     <div className="flex justify-between items-baseline text-[10px] uppercase font-mono mb-1">
@@ -186,24 +186,24 @@ export default function Estadisticas() {
               <div className="flex items-center gap-2 border-b border-primary/20 pb-2">
                 <Award size={16} className="text-primary animate-pulse" />
                 <h2 className="font-headline text-primary font-bold uppercase text-xs tracking-wider">
-                  Bonos de Reliquias Activas
+                  {lang === 'en' ? 'Active Relic Bonuses' : 'Bonos de Reliquias Activas'}
                 </h2>
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <div className="bg-surface-container-lowest/80 border border-outline-variant/20 p-2.5 rounded">
-                  <span className="text-[9px] text-on-surface-variant block uppercase tracking-wider">Poder de Ataque</span>
+                  <span className="text-[9px] text-on-surface-variant block uppercase tracking-wider">{lang === 'en' ? 'Attack Power' : 'Poder de Ataque'}</span>
                   <span className="text-primary font-bold text-sm">+{combatBonuses.damageBonus} ATK</span>
                 </div>
                 <div className="bg-surface-container-lowest/80 border border-outline-variant/20 p-2.5 rounded">
-                  <span className="text-[9px] text-on-surface-variant block uppercase tracking-wider">Mitigación</span>
+                  <span className="text-[9px] text-on-surface-variant block uppercase tracking-wider">{lang === 'en' ? 'Mitigation' : 'Mitigación'}</span>
                   <span className="text-secondary font-bold text-sm">+{combatBonuses.defensePercent}% DEF</span>
                 </div>
                 <div className="bg-surface-container-lowest/80 border border-outline-variant/20 p-2.5 rounded">
-                  <span className="text-[9px] text-on-surface-variant block uppercase tracking-wider">Golpe Crítico</span>
+                  <span className="text-[9px] text-on-surface-variant block uppercase tracking-wider">{lang === 'en' ? 'Critical Strike' : 'Golpe Crítico'}</span>
                   <span className="text-amber-400 font-bold text-sm">{combatBonuses.critChance}% CRT</span>
                 </div>
                 <div className="bg-surface-container-lowest/80 border border-outline-variant/20 p-2.5 rounded">
-                  <span className="text-[9px] text-on-surface-variant block uppercase tracking-wider">Reserva de Maná</span>
+                  <span className="text-[9px] text-on-surface-variant block uppercase tracking-wider">{lang === 'en' ? 'Mana Pool' : 'Reserva de Maná'}</span>
                   <span className="text-blue-400 font-bold text-sm">+{combatBonuses.maxMpBonus} MP</span>
                 </div>
               </div>
@@ -241,7 +241,7 @@ export default function Estadisticas() {
                   <Sparkles size={14} className="text-primary" />
                   {t('estadisticas.power')}
                 </h2>
-                <span className="text-[10px] font-mono text-primary font-bold">4 Verificados</span>
+                <span className="text-[10px] font-mono text-primary font-bold">{lang === 'en' ? '4 Verified' : '4 Verificados'}</span>
               </div>
               
               <div className="space-y-2.5">
@@ -294,7 +294,7 @@ export default function Estadisticas() {
                 </h2>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 flex items-center gap-1.5 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                  En Actividad
+                  {lang === 'en' ? 'Active' : 'En Actividad'}
                 </span>
               </div>
 
@@ -359,7 +359,13 @@ export default function Estadisticas() {
                     </p>
 
                     <div className="flex flex-wrap gap-1.5 pt-2 border-t border-outline-variant/15">
-                      {['Excel VBA', 'Automatización de Tareas', '100+ Clientes B2B', 'Email Marketing', 'Catálogos & Precios'].map((tech) => (
+                      {[
+                        'Excel VBA', 
+                        lang === 'en' ? 'Task Automation' : 'Automatización de Tareas', 
+                        lang === 'en' ? '100+ B2B Clients' : '100+ Clientes B2B', 
+                        'Email Marketing', 
+                        lang === 'en' ? 'Catalogs & Pricing' : 'Catálogos & Precios'
+                      ].map((tech) => (
                         <span key={tech} className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-container-highest/80 text-on-surface border border-outline-variant/20">
                           {tech}
                         </span>
@@ -379,7 +385,7 @@ export default function Estadisticas() {
                   {t('estadisticas.education')}
                 </h2>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-primary font-bold">
-                  Formación Continua
+                  {lang === 'en' ? 'Continuing Education' : 'Formación Continua'}
                 </span>
               </div>
 
@@ -390,7 +396,7 @@ export default function Estadisticas() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 font-bold">
-                        ★ 345 Horas Académicas
+                        {lang === 'en' ? '★ 345 Academic Hours' : '★ 345 Horas Académicas'}
                       </span>
                       <span className="text-[10px] font-mono text-on-surface-variant">2024 - 2025</span>
                     </div>
@@ -408,13 +414,13 @@ export default function Estadisticas() {
                   <button
                     onClick={() => {
                       sfx.playSelect();
-                      setSelectedCertTitle('Desarrollador Web Full Stack MERN - Fundación Pescar');
+                      setSelectedCertTitle(lang === 'en' ? 'Full Stack MERN Web Developer - Pescar Foundation' : 'Desarrollador Web Full Stack MERN - Fundación Pescar');
                       setSelectedCertPdf('pescar_nico.pdf');
                     }}
                     className="w-full py-2 px-3 rounded bg-primary/10 hover:bg-primary/20 border border-primary/30 text-primary font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer"
                   >
                     <Eye size={14} />
-                    Ver Certificado Pescar
+                    {lang === 'en' ? 'View Pescar Certificate' : 'Ver Certificado Pescar'}
                   </button>
                 </div>
 
@@ -423,7 +429,7 @@ export default function Estadisticas() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 font-bold">
-                        Diplomatura Universitaria
+                        {lang === 'en' ? 'University Diploma' : 'Diplomatura Universitaria'}
                       </span>
                       <span className="text-[10px] font-mono text-on-surface-variant">2023 - 2024</span>
                     </div>
@@ -441,13 +447,13 @@ export default function Estadisticas() {
                   <button
                     onClick={() => {
                       sfx.playSelect();
-                      setSelectedCertTitle('Diplomatura Programación .NET - UTN.BA');
+                      setSelectedCertTitle(lang === 'en' ? '.NET Programming Diploma - UTN.BA' : 'Diplomatura Programación .NET - UTN.BA');
                       setSelectedCertPdf('net.pdf');
                     }}
                     className="w-full py-2 px-3 rounded bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-400 font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer"
                   >
                     <Eye size={14} />
-                    Ver Certificado .NET
+                    {lang === 'en' ? 'View .NET Certificate' : 'Ver Certificado .NET'}
                   </button>
                 </div>
 
@@ -462,11 +468,11 @@ export default function Estadisticas() {
                     {t('estadisticas.download.sub')}
                   </h3>
                   <p className="font-mono text-[11px] text-on-surface-variant">
-                    Nicolás Schernetzki · Full-Stack Developer ({lang === 'en' ? 'English Version' : 'Versión en Español'})
+                    Nicolas Schernetzki · Full-Stack Developer ({lang === 'en' ? 'English Version' : 'Versión en Español'})
                   </p>
                 </div>
                 <span className="text-[10px] font-mono text-primary uppercase tracking-widest px-2 py-1 bg-primary/10 border border-primary/20 rounded self-start sm:self-auto">
-                  PDF Optimizado ATS
+                  {lang === 'en' ? 'ATS-Optimized PDF' : 'PDF Optimizado ATS'}
                 </span>
               </div>
 
@@ -487,7 +493,7 @@ export default function Estadisticas() {
                       {t('estadisticas.download.preview')}
                     </p>
                     <p className="text-[10px] font-mono text-on-surface-variant">
-                      Abrir visor interactivo
+                      {lang === 'en' ? 'Open interactive viewer' : 'Abrir visor interactivo'}
                     </p>
                   </div>
                 </button>
@@ -505,7 +511,7 @@ export default function Estadisticas() {
                       {t('estadisticas.download.pdf')}
                     </p>
                     <p className="text-[10px] font-mono text-on-surface-variant">
-                      Descarga directa en nueva pestaña
+                      {lang === 'en' ? 'Direct download in new tab' : 'Descarga directa en nueva pestaña'}
                     </p>
                   </div>
                 </button>
@@ -548,7 +554,7 @@ export default function Estadisticas() {
                       {t('estadisticas.download.preview')}
                     </h3>
                     <p className="text-[10px] font-mono text-on-surface-variant truncate">
-                      Nicolás Schernetzki · Curriculum Vitae
+                      Nicolas Schernetzki · Curriculum Vitae
                     </p>
                   </div>
                 </div>
@@ -588,7 +594,7 @@ export default function Estadisticas() {
                     <div className="flex flex-col items-center justify-center h-full p-8 text-center text-on-surface space-y-4">
                       <FileText size={48} className="text-primary/60" />
                       <p className="text-sm font-mono text-on-surface-variant max-w-md">
-                        Tu navegador no admite la previsualización directa de PDF en este marco.
+                        {lang === 'en' ? 'Your browser does not support direct PDF preview in this frame.' : 'Tu navegador no admite la previsualización directa de PDF en este marco.'}
                       </p>
                       <a 
                         href={pdfBlobUrl} 
@@ -596,14 +602,14 @@ export default function Estadisticas() {
                         onClick={() => sfx.playSelect()}
                         className="px-6 py-2.5 bg-primary text-on-primary font-mono text-xs uppercase tracking-widest hover:bg-primary/80 transition-all rounded shadow-lg"
                       >
-                        Descargar Archivo PDF
+                        {lang === 'en' ? 'Download PDF File' : 'Descargar Archivo PDF'}
                       </a>
                     </div>
                   </object>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full gap-3 text-on-surface-variant">
                     <Sparkles className="animate-spin text-primary" size={28} />
-                    <p className="font-mono text-xs uppercase tracking-widest">Cargando Pergamino...</p>
+                    <p className="font-mono text-xs uppercase tracking-widest">{lang === 'en' ? 'Loading Scroll...' : 'Cargando Pergamino...'}</p>
                   </div>
                 )}
               </div>
@@ -642,7 +648,7 @@ export default function Estadisticas() {
                       {selectedCertTitle}
                     </h3>
                     <p className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
-                      <CheckCircle2 size={10} /> Credencial Verificada Oficial
+                      <CheckCircle2 size={10} /> {lang === 'en' ? 'Official Verified Credential' : 'Credencial Verificada Oficial'}
                     </p>
                   </div>
                 </div>
@@ -656,7 +662,7 @@ export default function Estadisticas() {
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 border border-primary/30 rounded text-[10px] uppercase tracking-wider font-mono text-primary hover:bg-primary/20 transition-all"
                   >
                     <ExternalLink size={12} />
-                    <span className="hidden sm:inline">Abrir en pestaña</span>
+                    <span className="hidden sm:inline">{lang === 'en' ? 'Open in tab' : 'Abrir en pestaña'}</span>
                   </a>
                   <button 
                     onClick={() => {
@@ -682,7 +688,7 @@ export default function Estadisticas() {
                     <div className="flex flex-col items-center justify-center h-full p-8 text-center text-on-surface space-y-4">
                       <Award size={48} className="text-primary/60" />
                       <p className="text-sm font-mono text-on-surface-variant max-w-md">
-                        Tu navegador no admite la previsualización directa del certificado en este marco.
+                        {lang === 'en' ? 'Your browser does not support direct certificate preview in this frame.' : 'Tu navegador no admite la previsualización directa del certificado en este marco.'}
                       </p>
                       <a 
                         href={certBlobUrl} 
@@ -690,14 +696,14 @@ export default function Estadisticas() {
                         onClick={() => sfx.playSelect()}
                         className="px-6 py-2.5 bg-primary text-on-primary font-mono text-xs uppercase tracking-widest hover:bg-primary/80 transition-all rounded shadow-lg"
                       >
-                        Descargar Certificado
+                        {lang === 'en' ? 'Download Certificate' : 'Descargar Certificado'}
                       </a>
                     </div>
                   </object>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full gap-3 text-on-surface-variant">
                     <Sparkles className="animate-spin text-primary" size={28} />
-                    <p className="font-mono text-xs uppercase tracking-widest">Cargando Certificado...</p>
+                    <p className="font-mono text-xs uppercase tracking-widest">{lang === 'en' ? 'Loading Certificate...' : 'Cargando Certificado...'}</p>
                   </div>
                 )}
               </div>

@@ -24,7 +24,7 @@ export interface CertificateChronicle {
 }
 
 export default function Misiones() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [selectedPdf, setSelectedPdf] = useState<string | null>(null);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
 
@@ -212,7 +212,9 @@ export default function Misiones() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="bg-surface-container-low/80 p-3.5 rounded-lg border-l-4 border-emerald-500">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-label text-[9px] uppercase text-emerald-400 font-bold">Completado</span>
+                    <span className="font-label text-[9px] uppercase text-emerald-400 font-bold">
+                      {lang === 'en' ? 'Completed' : 'Completado'}
+                    </span>
                     <CheckCircle2 size={13} className="text-emerald-400" />
                   </div>
                   <div className="font-headline text-xs font-bold text-on-surface">{t('misiones.subtask1')}</div>
@@ -283,8 +285,12 @@ export default function Misiones() {
                   </div>
                   <div className="flex-1">
                     <div className="flex justify-between text-xs font-mono font-bold mb-1">
-                      <span className="text-on-surface-variant uppercase">Pergaminos Sellados</span>
-                      <span className="text-emerald-400 font-bold">4 Oficiales</span>
+                      <span className="text-on-surface-variant uppercase">
+                        {lang === 'en' ? 'Sealed Scrolls' : 'Pergaminos Sellados'}
+                      </span>
+                      <span className="text-emerald-400 font-bold">
+                        {lang === 'en' ? '4 Official' : '4 Oficiales'}
+                      </span>
                     </div>
                     <div className="h-2 bg-surface-container-lowest rounded-full overflow-hidden border border-outline-variant/15">
                       <div className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 w-[100%]" />
@@ -296,7 +302,7 @@ export default function Misiones() {
 
             <div className="mt-8 pt-4 border-t border-outline-variant/15">
               <p className="font-mono text-[11px] text-on-surface-variant text-center">
-                Idiomas: Español (Nativo) · Inglés (C1+ Advanced)
+                {lang === 'en' ? 'Languages: Spanish (Native) · English (C1+ Advanced)' : 'Idiomas: Español (Nativo) · Inglés (C1+ Advanced)'}
               </p>
             </div>
           </div>
@@ -312,11 +318,13 @@ export default function Misiones() {
                 {t('misiones.completed')}
               </h2>
               <p className="font-body text-xs sm:text-sm text-on-surface-variant mt-0.5">
-                Certificados y credenciales oficiales rubricadas por instituciones educativas y evaluadores profesionales.
+                {lang === 'en' 
+                  ? 'Official certificates and credentials endorsed by educational institutions and professional reviewers.'
+                  : 'Certificados y credenciales oficiales rubricadas por instituciones educativas y evaluadores profesionales.'}
               </p>
             </div>
             <span className="hidden sm:inline-block font-mono text-xs text-primary font-bold">
-              4 / 4 Forjadas
+              {lang === 'en' ? '4 / 4 Forged' : '4 / 4 Forjadas'}
             </span>
           </div>
 
@@ -384,7 +392,7 @@ export default function Misiones() {
                   {/* Action Button: Review Sacred Scroll */}
                   <div className="pt-4 border-t border-outline-variant/15 flex items-center justify-between">
                     <span className="flex items-center gap-1.5 font-mono text-[11px] text-emerald-400 font-bold">
-                      <CheckCircle2 size={14} /> Certificado Oficial
+                      <CheckCircle2 size={14} /> {lang === 'en' ? 'Official Certificate' : 'Certificado Oficial'}
                     </span>
 
                     <button 

@@ -16,9 +16,27 @@ interface PersonajeProps {
 }
 
 const PASSIVE_PERKS = [
-  { title: 'Tipado Sagrado', desc: 'TypeScript estricto previene bugs antes de que lleguen a runtime.', icon: Shield },
-  { title: 'Contenedores Herméticos', desc: 'Docker garantiza despliegues idénticos en dev y producción.', icon: Layers },
-  { title: 'Automatización Pragmática', desc: 'Experiencia real automatizando procesos comerciales y planillas.', icon: Terminal },
+  { 
+    title: 'Tipado Sagrado', 
+    titleEn: 'Sacred Typing',
+    desc: 'TypeScript estricto previene bugs antes de que lleguen a runtime.', 
+    descEn: 'Strict TypeScript prevents bugs before reaching runtime.',
+    icon: Shield 
+  },
+  { 
+    title: 'Contenedores Herméticos', 
+    titleEn: 'Hermetic Containers',
+    desc: 'Docker garantiza despliegues idénticos en dev y producción.', 
+    descEn: 'Docker guarantees identical deployments in dev and production.',
+    icon: Layers 
+  },
+  { 
+    title: 'Automatización Pragmática', 
+    titleEn: 'Pragmatic Automation',
+    desc: 'Experiencia real automatizando procesos comerciales y planillas.', 
+    descEn: 'Real-world experience automating business processes and spreadsheets.',
+    icon: Terminal 
+  },
 ];
 
 export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
@@ -35,11 +53,61 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
   }, []);
 
   const attributesList = [
-    { key: 'str', labelKey: 'personaje.str', sub: 'Backend & Lógica', val: dynAttrs.str, max: 100, icon: Cpu, color: 'text-red-400', barColor: 'from-red-500 to-rose-600', desc: '.NET 8, C#, Node.js, Express, FastAPI, APIs RESTful' },
-    { key: 'agi', labelKey: 'personaje.agi', sub: 'Frontend & UI', val: dynAttrs.agi, max: 100, icon: Code, color: 'text-amber-400', barColor: 'from-amber-500 to-yellow-400', desc: 'React 19, TypeScript, Tailwind CSS, Vite, Redux' },
-    { key: 'int', labelKey: 'personaje.int', sub: 'Arquitectura & POO', val: dynAttrs.int, max: 100, icon: Zap, color: 'text-purple-400', barColor: 'from-purple-500 to-indigo-500', desc: 'Clean Architecture, Patrones, Entity Framework, MongoDB, SQL' },
-    { key: 'dex', label: 'Destreza', sub: 'DevOps & Entorno', val: dynAttrs.dex, max: 100, icon: Layers, color: 'text-emerald-400', barColor: 'from-emerald-500 to-teal-400', desc: 'Docker, Git, CI/CD, Linux, AWS, Cloudflare' },
-    { key: 'cha', label: 'Carisma', sub: 'Negocio & Soft Skills', val: dynAttrs.cha, max: 100, icon: Briefcase, color: 'text-sky-400', barColor: 'from-sky-500 to-cyan-400', desc: '100+ Clientes B2B, Automatización VBA, Scrum, Comunicación' },
+    { 
+      key: 'str', 
+      labelKey: 'personaje.str', 
+      sub: lang === 'en' ? 'Backend & Logic' : 'Backend & Lógica', 
+      val: dynAttrs.str, 
+      max: 100, 
+      icon: Cpu, 
+      color: 'text-red-400', 
+      barColor: 'from-red-500 to-rose-600', 
+      desc: lang === 'en' ? '.NET 8, C#, Node.js, Express, FastAPI, RESTful APIs' : '.NET 8, C#, Node.js, Express, FastAPI, APIs RESTful' 
+    },
+    { 
+      key: 'agi', 
+      labelKey: 'personaje.agi', 
+      sub: lang === 'en' ? 'Frontend & UI' : 'Frontend & UI', 
+      val: dynAttrs.agi, 
+      max: 100, 
+      icon: Code, 
+      color: 'text-amber-400', 
+      barColor: 'from-amber-500 to-yellow-400', 
+      desc: 'React 19, TypeScript, Tailwind CSS, Vite, Redux' 
+    },
+    { 
+      key: 'int', 
+      labelKey: 'personaje.int', 
+      sub: lang === 'en' ? 'Architecture & OOP' : 'Arquitectura & POO', 
+      val: dynAttrs.int, 
+      max: 100, 
+      icon: Zap, 
+      color: 'text-purple-400', 
+      barColor: 'from-purple-500 to-indigo-500', 
+      desc: lang === 'en' ? 'Clean Architecture, Design Patterns, Entity Framework, MongoDB, SQL' : 'Clean Architecture, Patrones, Entity Framework, MongoDB, SQL' 
+    },
+    { 
+      key: 'dex', 
+      label: lang === 'en' ? 'Dexterity' : 'Destreza', 
+      sub: lang === 'en' ? 'DevOps & Environment' : 'DevOps & Entorno', 
+      val: dynAttrs.dex, 
+      max: 100, 
+      icon: Layers, 
+      color: 'text-emerald-400', 
+      barColor: 'from-emerald-500 to-teal-400', 
+      desc: 'Docker, Git, CI/CD, Linux, AWS, Cloudflare' 
+    },
+    { 
+      key: 'cha', 
+      label: lang === 'en' ? 'Charisma' : 'Carisma', 
+      sub: lang === 'en' ? 'Business & Soft Skills' : 'Negocio & Soft Skills', 
+      val: dynAttrs.cha, 
+      max: 100, 
+      icon: Briefcase, 
+      color: 'text-sky-400', 
+      barColor: 'from-sky-500 to-cyan-400', 
+      desc: lang === 'en' ? '100+ B2B Clients, VBA Automation, Scrum, Communication' : '100+ Clientes B2B, Automatización VBA, Scrum, Comunicación' 
+    },
   ];
 
   // Avatar cycle effect
@@ -109,7 +177,9 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
           </h1>
 
           <p className="font-body text-xs sm:text-sm md:text-base text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
-            Bienvenido al panel heroico interactivo de Nicolás Schernetzki. Explora sus estadísticas de batalla, fortalezas técnicas y dominios full-stack forjados en código real.
+            {lang === 'en' 
+              ? "Welcome to Nicolas Schernetzki's interactive heroic dashboard. Explore battle stats, technical proficiencies, and full-stack domains forged in production code."
+              : 'Bienvenido al panel heroico interactivo de Nicolas Schernetzki. Explora sus estadísticas de batalla, fortalezas técnicas y dominios full-stack forjados en código real.'}
           </p>
         </motion.header>
 
@@ -134,7 +204,7 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
                   <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-surface-container-highest border-2 border-primary-container p-1 shadow-[0_0_25px_rgba(255,145,0,0.4)] overflow-hidden relative">
                     <motion.img 
                       src={`${import.meta.env.BASE_URL}profile.webp`} 
-                      alt="Nicolás Schernetzki" 
+                      alt="Nicolas Schernetzki" 
                       animate={{ opacity: showDragonAvatar ? 0 : 1, scale: showDragonAvatar ? 0.95 : 1 }}
                       transition={{ duration: 0.5 }}
                       className="w-full h-full object-cover rounded-xl absolute inset-0"
@@ -182,7 +252,7 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
                     {t('personaje.role')}
                   </p>
                   <p className="font-mono text-[10px] text-on-surface-variant">
-                    Clase: MERN & .NET 8 Architect (Tier 3)
+                    {lang === 'en' ? 'Class: MERN & .NET 8 Architect (Tier 3)' : 'Clase: MERN & .NET 8 Architect (Tier 3)'}
                   </p>
                 </div>
               </div>
@@ -231,7 +301,9 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
                     <span className="text-on-surface-variant uppercase font-semibold">
                       {t('personaje.exp')}
                     </span>
-                    <span className="text-primary font-bold">89% (Hacia Nivel 31)</span>
+                    <span className="text-primary font-bold">
+                      {lang === 'en' ? '89% (Towards Level 31)' : '89% (Hacia Nivel 31)'}
+                    </span>
                   </div>
                   <div className="h-2 bg-surface-container-high rounded-full overflow-hidden p-0.5 border border-outline-variant/20">
                     <motion.div 
@@ -247,7 +319,7 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
               {/* Class Passives Perks */}
               <div className="w-full space-y-2">
                 <h4 className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">
-                  Rasgos Pasivos Activos
+                  {lang === 'en' ? 'Active Passive Perks' : 'Rasgos Pasivos Activos'}
                 </h4>
                 <div className="grid grid-cols-1 gap-2">
                   {PASSIVE_PERKS.map((perk, i) => (
@@ -257,8 +329,12 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
                     >
                       <perk.icon size={15} className="text-primary shrink-0" />
                       <div className="overflow-hidden">
-                        <p className="font-headline text-xs font-bold text-on-surface">{perk.title}</p>
-                        <p className="font-body text-[10px] text-on-surface-variant line-clamp-1">{perk.desc}</p>
+                        <p className="font-headline text-xs font-bold text-on-surface">
+                          {lang === 'en' ? perk.titleEn : perk.title}
+                        </p>
+                        <p className="font-body text-[10px] text-on-surface-variant line-clamp-1">
+                          {lang === 'en' ? perk.descEn : perk.desc}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -275,13 +351,17 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
                   <div>
                     <h3 className="font-headline text-base sm:text-lg font-bold uppercase tracking-wider text-on-surface flex items-center gap-2">
                       <Award size={18} className="text-primary" />
-                      Pilares de Poder & Atributos
+                      {lang === 'en' ? 'Pillars of Power & Attributes' : 'Pilares de Poder & Atributos'}
                     </h3>
                     <p className="font-body text-xs text-on-surface-variant">
-                      Pasa el cursor sobre un atributo para inspeccionar su maestría técnica en producción.
+                      {lang === 'en' 
+                        ? 'Hover over an attribute to inspect production technical mastery.'
+                        : 'Pasa el cursor sobre un atributo para inspeccionar su maestría técnica en producción.'}
                     </p>
                   </div>
-                  <span className="font-mono text-xs text-primary font-bold">Tier: Legendario</span>
+                  <span className="font-mono text-xs text-primary font-bold">
+                    {lang === 'en' ? 'Tier: Legendary' : 'Tier: Legendario'}
+                  </span>
                 </div>
 
                 <div className="space-y-3">
@@ -343,36 +423,52 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
               {/* Quick Realm Teleporters Grid */}
               <div className="space-y-2 pt-2 border-t border-outline-variant/20">
                 <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold block mb-1">
-                  Acceso Rápido a los Reinos
+                  {lang === 'en' ? 'Quick Realm Access' : 'Acceso Rápido a los Reinos'}
                 </span>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <button 
                     onClick={() => handleTeleport('habilidades')}
                     className="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-outline-variant/20 hover:border-primary text-center transition-all cursor-pointer group"
                   >
-                    <p className="font-headline text-xs font-bold text-on-surface group-hover:text-primary">Habilidades</p>
-                    <p className="font-mono text-[9px] text-on-surface-variant">6 pts libres</p>
+                    <p className="font-headline text-xs font-bold text-on-surface group-hover:text-primary">
+                      {lang === 'en' ? 'Skills' : 'Habilidades'}
+                    </p>
+                    <p className="font-mono text-[9px] text-on-surface-variant">
+                      {lang === 'en' ? '6 free pts' : '6 pts libres'}
+                    </p>
                   </button>
                   <button 
                     onClick={() => handleTeleport('inventario')}
                     className="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-outline-variant/20 hover:border-primary text-center transition-all cursor-pointer group"
                   >
-                    <p className="font-headline text-xs font-bold text-on-surface group-hover:text-primary">Inventario</p>
-                    <p className="font-mono text-[9px] text-on-surface-variant">8 reliquias</p>
+                    <p className="font-headline text-xs font-bold text-on-surface group-hover:text-primary">
+                      {lang === 'en' ? 'Inventory' : 'Inventario'}
+                    </p>
+                    <p className="font-mono text-[9px] text-on-surface-variant">
+                      {lang === 'en' ? '8 relics' : '8 reliquias'}
+                    </p>
                   </button>
                   <button 
                     onClick={() => handleTeleport('arena')}
                     className="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-outline-variant/20 hover:border-primary text-center transition-all cursor-pointer group"
                   >
-                    <p className="font-headline text-xs font-bold text-on-surface group-hover:text-primary">Arena de Bugs</p>
-                    <p className="font-mono text-[9px] text-on-surface-variant">3 Jefes</p>
+                    <p className="font-headline text-xs font-bold text-on-surface group-hover:text-primary">
+                      {lang === 'en' ? 'Bug Arena' : 'Arena de Bugs'}
+                    </p>
+                    <p className="font-mono text-[9px] text-on-surface-variant">
+                      {lang === 'en' ? '3 Bosses' : '3 Jefes'}
+                    </p>
                   </button>
                   <button 
                     onClick={() => handleTeleport('proyectos')}
                     className="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-outline-variant/20 hover:border-primary text-center transition-all cursor-pointer group"
                   >
-                    <p className="font-headline text-xs font-bold text-on-surface group-hover:text-primary">Forja</p>
-                    <p className="font-mono text-[9px] text-on-surface-variant">Proyectos</p>
+                    <p className="font-headline text-xs font-bold text-on-surface group-hover:text-primary">
+                      {lang === 'en' ? 'Forge' : 'Forja'}
+                    </p>
+                    <p className="font-mono text-[9px] text-on-surface-variant">
+                      {lang === 'en' ? 'Projects' : 'Proyectos'}
+                    </p>
                   </button>
                 </div>
               </div>
@@ -384,8 +480,14 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
           {/* Epic Main Start Button */}
           <div className="mt-8 pt-6 border-t border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-center sm:text-left">
-              <p className="font-headline font-bold text-sm text-on-surface">¿Listo para comenzar la travesía?</p>
-              <p className="font-body text-xs text-on-surface-variant">Inicia el recorrido guiado por las habilidades y proyectos de Nicolás.</p>
+              <p className="font-headline font-bold text-sm text-on-surface">
+                {lang === 'en' ? 'Ready to embark on the journey?' : '¿Listo para comenzar la travesía?'}
+              </p>
+              <p className="font-body text-xs text-on-surface-variant">
+                {lang === 'en' 
+                  ? "Begin the guided tour through Nicolas's skills and projects."
+                  : 'Inicia el recorrido guiado por las habilidades y proyectos de Nicolas.'}
+              </p>
             </div>
 
             <motion.button 
@@ -401,7 +503,6 @@ export default function Personaje({ onStart, onNavigate }: PersonajeProps) {
               <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-[-20deg]" />
             </motion.button>
           </div>
-
         </motion.div>
 
       </div>

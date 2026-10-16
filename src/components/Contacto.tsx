@@ -8,7 +8,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { sfx } from '../utils/sfx';
 
 export default function Contacto() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [formData, setFormData] = useState({ email: '', subject: '', message: '' });
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -158,8 +158,8 @@ export default function Contacto() {
             <button
               onClick={handleCopyEmail}
               className="p-2 rounded bg-surface-container-lowest/80 border border-outline-variant/30 text-on-surface-variant hover:text-cyan-400 hover:border-cyan-400/40 transition-colors shrink-0 cursor-pointer ml-2"
-              title="Copiar correo"
-              aria-label="Copiar correo electrónico"
+              title={lang === 'en' ? 'Copy email' : 'Copiar correo'}
+              aria-label={lang === 'en' ? 'Copy email address' : 'Copiar correo electrónico'}
             >
               {copiedEmail ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
             </button>
@@ -167,7 +167,7 @@ export default function Contacto() {
 
           {/* GitHub */}
           <a
-            href="https://github.com/nicoscherno"
+            href="https://github.com/OrdinalDragon"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => sfx.playSelect()}
@@ -178,10 +178,10 @@ export default function Contacto() {
             </div>
             <div className="truncate">
               <p className="font-mono text-xs uppercase tracking-wider text-purple-400 font-bold">
-                Forja en GitHub
+                {lang === 'en' ? 'Forge on GitHub' : 'Forja en GitHub'}
               </p>
               <p className="text-[10px] font-mono text-on-surface-variant truncate">
-                github.com/nicoscherno
+                github.com/OrdinalDragon
               </p>
             </div>
           </a>
@@ -194,7 +194,9 @@ export default function Contacto() {
               <Compass size={14} />
               {t('contacto.quick.title')}
             </span>
-            <span className="text-[10px] font-mono text-on-surface-variant">Auto-completa el asunto</span>
+            <span className="text-[10px] font-mono text-on-surface-variant">
+              {lang === 'en' ? 'Auto-fills subject' : 'Auto-completa el asunto'}
+            </span>
           </div>
 
           <div className="flex flex-wrap gap-2">

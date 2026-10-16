@@ -136,7 +136,9 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
           </button>
           <div className="flex justify-center gap-4 pt-2">
             <button 
+              onMouseEnter={() => sfx.playHover()}
               onClick={() => {
+                sfx.playSelect();
                 setActiveModal('privacy');
                 onClose();
               }}
@@ -145,7 +147,9 @@ export default function Sidebar({ activeScreen, setScreen, isOpen, onClose, setA
               {t('sidebar.privacy')}
             </button>
             <button 
+              onMouseEnter={() => sfx.playHover()}
               onClick={() => {
+                sfx.playSelect();
                 setActiveModal('terms');
                 onClose();
               }}

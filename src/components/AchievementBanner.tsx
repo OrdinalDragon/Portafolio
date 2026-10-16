@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Trophy, X, Sparkles, CheckCircle2 } from 'lucide-react';
 import { rpgState, ALL_ACHIEVEMENTS, type Achievement } from '../utils/rpgState';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function AchievementBanner() {
+  const { lang } = useLanguage();
   const [currentBanner, setCurrentBanner] = useState<Achievement | null>(null);
   const [showTrophyModal, setShowTrophyModal] = useState(false);
   const [unlockedIds, setUnlockedIds] = useState<string[]>(rpgState.getUnlockedAchievements());
@@ -47,21 +49,21 @@ export default function AchievementBanner() {
             <div className="flex-1 overflow-hidden">
               <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase font-bold text-primary tracking-widest">
                 <Trophy size={12} className="animate-bounce" />
-                <span>¡Logro Desbloqueado!</span>
+                <span>{lang === 'en' ? 'Achievement Unlocked!' : '¡Logro Desbloqueado!'}</span>
                 <span className="ml-auto text-secondary font-bold">+{currentBanner.xp} XP</span>
               </div>
               <h4 className="font-headline text-sm font-bold text-on-surface truncate">
-                {currentBanner.title}
+                {lang === 'en' ? currentBanner.titleEn : currentBanner.title}
               </h4>
               <p className="font-body text-xs text-on-surface-variant line-clamp-1">
-                {currentBanner.desc}
+                {lang === 'en' ? currentBanner.descEn : currentBanner.desc}
               </p>
             </div>
 
             <button
               onClick={() => setCurrentBanner(null)}
               className="text-on-surface-variant hover:text-on-surface p-1 cursor-pointer shrink-0"
-              aria-label="Cerrar notificación"
+              aria-label={lang === 'en' ? 'Close notification' : 'Cerrar notificación'}
             >
               <X size={16} />
             </button>
@@ -90,7 +92,7 @@ export default function AchievementBanner() {
                 <div className="flex items-center gap-2">
                   <Trophy className="text-primary" size={22} />
                   <h3 className="font-headline text-lg font-bold uppercase text-on-surface">
-                    Sala de Trofeos & Logros
+                    {lang === 'en' ? 'Trophy Room & Achievements' : 'Sala de Trofeos & Logros'}
                   </h3>
                 </div>
                 <button
@@ -116,13 +118,15 @@ export default function AchievementBanner() {
                       <div className="text-2xl w-10 text-center">{ach.icon}</div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <h5 className="font-headline text-xs font-bold">{ach.title}</h5>
+                          <h5 className="font-headline text-xs font-bold">
+                            {lang === 'en' ? ach.titleEn : ach.title}
+                          </h5>
                           <span className="font-mono text-[10px] text-primary font-bold">
                             +{ach.xp} XP
                           </span>
                         </div>
                         <p className="font-body text-[11px] text-on-surface-variant leading-snug">
-                          {ach.desc}
+                          {lang === 'en' ? ach.descEn : ach.desc}
                         </p>
                       </div>
                       {isUnlocked && (

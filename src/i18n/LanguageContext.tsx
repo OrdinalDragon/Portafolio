@@ -20,9 +20,6 @@ function getInitialLanguage(): Language {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored === 'en' || stored === 'es') return stored;
-    if (typeof navigator !== 'undefined' && navigator.language?.toLowerCase().startsWith('es')) {
-      return 'es';
-    }
   } catch {
     // ignore localStorage errors
   }
